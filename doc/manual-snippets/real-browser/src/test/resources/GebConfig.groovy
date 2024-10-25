@@ -27,7 +27,7 @@ Testcontainers.exposeHostPorts(8080)
 
 driver = {
     def container = new BrowserWebDriverContainer<>()
-            .withCapabilities(new ChromeOptions())
+            .withCapabilities(new ChromeOptions().addArguments('--remote-allow-origins=*'))
             .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.SKIP, null)
 
     container.start()
