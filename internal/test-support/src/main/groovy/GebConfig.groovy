@@ -122,6 +122,8 @@ if (System.getProperty("geb.local.driver") == "chrome") {
     driver = {
         def chromeOptions = new ChromeOptions()
                 .addArguments('headless')
+                .addArguments('--remote-allow-origins=*') // TODO: Can be removed Selenium > 4.8.2
+                .addArguments('--no-sandbox')
         new ChromeDriver(chromeOptions)
     }
 }
