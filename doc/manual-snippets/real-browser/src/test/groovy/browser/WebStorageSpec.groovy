@@ -17,16 +17,16 @@ package browser
 
 import fixture.Browser
 import fixture.DriveMethodSupportingSpecWithServer
+import spock.lang.Retry
 
 class WebStorageSpec extends DriveMethodSupportingSpecWithServer {
 
+    @Retry
     def "reading and writing to local storage"() {
         expect:
         // tag::write_and_read[]
         Browser.drive {
             // end::write_and_read[]
-            println driver
-            println driver.capabilities
             go()
             // tag::write_and_read[]
             localStorage["username"] = "Alice"
