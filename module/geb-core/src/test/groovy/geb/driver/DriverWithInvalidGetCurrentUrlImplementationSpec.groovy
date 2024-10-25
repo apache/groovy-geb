@@ -76,9 +76,7 @@ class DriverWithInvalidGetCurrentUrlImplementation extends RemoteWebDriver {
 
     DriverWithInvalidGetCurrentUrlImplementation(URL remoteAddress, String currentUrl) {
         super(remoteAddress, new ChromeOptions()
-                .addArguments('headless')
-                .addArguments('--remote-allow-origins=*') // TODO: Can be removed Selenium > 4.8.2
-                .addArguments('--no-sandbox'))
+                .addArguments('headless'))
         this.currentUrl = currentUrl
     }
 
