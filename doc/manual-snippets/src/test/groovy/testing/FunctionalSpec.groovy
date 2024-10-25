@@ -37,6 +37,7 @@ class FunctionalSpec extends GebSpec {
     CallbackHttpServer callbackServer = new CallbackHttpServer(browser.config)
 
     def setupSpec() {
+        browser.driver = null
         callbackServer.start()
         callbackServer.html { HttpServletRequest request ->
             if (request.requestURI.endsWith("/login")) {

@@ -21,14 +21,13 @@ import org.testcontainers.Testcontainers
 import org.testcontainers.containers.BrowserWebDriverContainer
 import org.testcontainers.utility.ResourceReaper
 
-import static org.testcontainers.containers.BrowserWebDriverContainer.getDockerImageForCapabilities
-
 reportsDir = "build/geb"
 
 Testcontainers.exposeHostPorts(8080)
 
 driver = {
-    def container = new BrowserWebDriverContainer<>(getDockerImageForCapabilities(new ChromeOptions(), "3.141.59-oxygen"))
+    def container = new BrowserWebDriverContainer<>()
+            .withCapabilities(new ChromeOptions())
             .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.SKIP, null)
 
     container.start()

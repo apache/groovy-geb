@@ -27,20 +27,22 @@ import static ratpack.jackson.Jackson.json
 
 class CloudDriverFactorySpec extends Specification {
 
-    private static final String TEST_CAPABILITY_NAME = "testCapability"
+    private static final String TEST_CAPABILITY_NAME = "geb:testCapability"
 
     @AutoCleanup
     EmbeddedApp mockWebDriverServer = EmbeddedApp.of {
         it.handlers {
             it.post("session") {
                 it.render(
-                    it.parse(fromJson(NewSessionCommand)).map { command ->
-                        json(
-                            sessionId: UUID.randomUUID(),
-                            value: command.desiredCapabilities,
-                            status: 0
-                        )
-                    }
+                        it.parse(fromJson(NewSessionCommand)).map { command ->
+                            json(
+                                    value: [
+                                            sessionId: UUID.randomUUID(),
+                                            capabilities: command.capabilities.firstMatch[0],
+                                            status: 0
+                                    ]
+                            )
+                        }
                 )
             }
         }
@@ -79,7 +81,7 @@ class CloudDriverFactorySpec extends Specification {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class NewSessionCommand {
-        Map<String, Object> desiredCapabilities
+        Map<String, Object> capabilities
     }
 
 }

@@ -22,7 +22,6 @@ import geb.driver.LambdaTestDriverFactory
 import geb.driver.SauceLabsDriverFactory
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeDriverLogLevel
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.testcontainers.Testcontainers
@@ -122,10 +121,7 @@ if (dockerizedDriver) {
 if (System.getProperty("geb.local.driver") == "chrome") {
     driver = {
         def chromeOptions = new ChromeOptions()
-                .setLogLevel(ChromeDriverLogLevel.ALL)
                 .addArguments('headless')
-                .addArguments('--remote-allow-origins=*') // TODO: Can be removed Selenium > 4.8.2
-                .addArguments('--no-sandbox')
         new ChromeDriver(chromeOptions)
     }
 }
