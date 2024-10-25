@@ -25,6 +25,8 @@ class WebStorageSpec extends DriveMethodSupportingSpecWithServer {
         // tag::write_and_read[]
         Browser.drive {
             // end::write_and_read[]
+            println driver
+            println driver.capabilities
             go()
             // tag::write_and_read[]
             localStorage["username"] = "Alice"
