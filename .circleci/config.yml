@@ -30,7 +30,7 @@ jobs:
             - .gradle-home
   manual:
     docker:
-      - image: gebish/ci:v13
+      - image: selenium/standalone-firefox
         environment:
           GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
           GRADLE_USER_HOME: ".gradle-home"
