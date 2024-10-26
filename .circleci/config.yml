@@ -29,8 +29,14 @@ jobs:
           paths:
             - .gradle-home
   manual:
-    machine:
-      image: ubuntu-2204:2024.05.1
+    docker:
+      - image: gebish/ci:v13
+        environment:
+          DOCKER_HOST: "tcp://localhost:2375"
+          GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
+          GRADLE_USER_HOME: ".gradle-home"
+      - image: docker:dind
+        command: ["dockerd", "-H", "tcp://0.0.0.0:2375", "--tls=false"]
     resource_class: large
     steps:
       - checkout
@@ -42,10 +48,10 @@ jobs:
       - run:
           command: |
             export WORKING_DIRECTORY=`pwd`
-            docker network create dind
-            docker run -d --network dind -e DOCKER_TLS_CERTDIR="" --privileged --name dind  docker:dind
-            sleep 20
-            docker run --network dind -v ${WORKING_DIRECTORY}:/home/circleci/workspace -w /home/circleci/workspace -e DOCKER_HOST="tcp://dind:2375" -e OCI_WRITER_KEY_PASSPHRASE=$OCI_WRITER_KEY_PASSPHRASE gebish/ci:v13 /bin/bash -c "Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 & export DISPLAY=:99 ; GRADLE_OPTS=\"-Xmx1024m -XX:MaxMetaspaceSize=256m\" GRADLE_USER_HOME=\".gradle-home\" ./gradlew --no-daemon --max-workers 4 --parallel -Pci :doc:manual-snippets:check :doc:manual-snippets:fixtures:check :doc:manual-snippets:real-browser:check :doc:manual:build :doc:asciidoctor-extension:check"
+            sleep 5
+            Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
+            export DISPLAY=:99
+            ./gradlew --no-daemon --max-workers 4 --parallel -Pci :doc:manual-snippets:check :doc:manual-snippets:fixtures:check :doc:manual-snippets:real-browser:check :doc:manual:build :doc:asciidoctor-extension:check
       - run: &collectTestResults
           name: Copy all test results to a directory
           when: always
