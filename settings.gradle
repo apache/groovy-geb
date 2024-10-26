@@ -1,5 +1,6 @@
 plugins {
     id "org.kordamp.gradle.oci-build-cache" version "0.6.0"
+    id("org.gradle.toolchains.foojay-resolver") version "0.8.0"
 }
 
 include "module",
@@ -58,6 +59,16 @@ buildCache {
                 userId = 'ocid1.user.oc1..aaaaaaaa463rzwweyef2fcby47wz73i6eyp7hwd6skx7bdgf2ie6ido35tla'
                 keyfile = new File('.oci/reader.pem')
                 fingerprint = '20:b5:2b:b1:c7:ab:da:2d:82:e9:81:1b:63:f8:59:16'
+            }
+        }
+    }
+}
+
+toolchainManagement {
+    jvm {
+        javaRepositories {
+            repository("foojay") {
+                resolverClass = org.gradle.toolchains.foojay.FoojayToolchainResolver
             }
         }
     }
