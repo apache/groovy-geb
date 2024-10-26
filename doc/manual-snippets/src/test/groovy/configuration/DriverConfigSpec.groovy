@@ -17,13 +17,17 @@ package configuration
 
 import geb.driver.CachingDriverFactory
 import geb.test.StandaloneWebDriverServer
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.remote.RemoteWebDriver
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import java.lang.reflect.Constructor
 
 class DriverConfigSpec extends Specification implements InlineConfigurationLoader {
 
@@ -33,6 +37,18 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
 
     def setupSpec() {
         CachingDriverFactory.clearCacheAndQuitDriver()
+
+        FirefoxDriver.metaClass.constructor = { ->
+            new FirefoxDriver(new FirefoxOptions().addArguments("--headless"))
+        }
+
+        Constructor<RemoteWebDriver> ctor = RemoteWebDriver.getConstructor(URL, Capabilities)
+        RemoteWebDriver.metaClass.constructor = { url, Capabilities options ->
+            if (options in FirefoxOptions) {
+                options.addArguments("--headless")
+            }
+            ctor.newInstance(url, options)
+        }
     }
 
     def "configuring driver using closure"() {
