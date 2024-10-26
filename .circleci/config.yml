@@ -91,7 +91,7 @@ jobs:
             - .gradle-home
   local-cross-browser:
     docker:
-      - image: gebish/ci:v13
+      - image: selenium/standalone-chromium
     resource_class: large
     environment:
         GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
