@@ -82,7 +82,7 @@ jobs:
             - gradle-home-dockerised-crossbrowser
       - run:
           command: |
-            ./gradlew --no-daemon --max-workers 4 --parallel -Pci allDockerisedCrossBrowserTests"
+            ./gradlew --no-daemon --max-workers 4 --parallel -Pci allDockerisedCrossBrowserTests
       - run: *collectTestResults
       - store_test_results:
           path: ~/test-results/
