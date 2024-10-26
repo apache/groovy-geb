@@ -115,7 +115,7 @@ jobs:
             - .gradle-home
   saucelabs:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
     resource_class: large
     environment:
         GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
@@ -172,7 +172,7 @@ jobs:
 #            - .gradle-home
   non-ie:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
     resource_class: large
     environment:
         GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
@@ -198,7 +198,7 @@ jobs:
             - .gradle-home
   ie:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
     resource_class: large
     environment:
         GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
@@ -224,7 +224,7 @@ jobs:
             - .gradle-home
   upload:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
     resource_class: large
     environment:
         GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
@@ -245,7 +245,7 @@ jobs:
             - .gradle-home
   publish-site:
     docker:
-      - image: gebish/ci:v13
+      - image: alpine/git
     steps:
       - checkout
       - run:
@@ -254,7 +254,7 @@ jobs:
             git push -f heroku master
   trigger-example-projects-4.x:
     docker:
-      - image: gebish/ci:v13
+      - image: alpine/curl
     steps:
       - run:
           command: |
@@ -264,7 +264,7 @@ jobs:
             curl -H "Authorization: Bearer ${APPVEYOR_TOKEN}" -H "Content-type: application/json" -X POST https://ci.appveyor.com/api/builds -d '{"accountName": "erdi", "projectSlug": "geb-example-gradle", "branch": "4.x"}'
   trigger-example-projects-master:
     docker:
-      - image: gebish/ci:v13
+      - image: alpine/curl
     steps:
       - run:
           command: |
