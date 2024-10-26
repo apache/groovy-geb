@@ -2,7 +2,7 @@ version: 2
 jobs:
   check:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
     resource_class: large
     environment:
       GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
