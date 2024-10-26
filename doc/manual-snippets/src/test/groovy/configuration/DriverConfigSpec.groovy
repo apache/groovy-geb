@@ -37,17 +37,17 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
 
     def setupSpec() {
         CachingDriverFactory.clearCacheAndQuitDriver()
-        
+
         FirefoxDriver.metaClass.constructor = { ->
             new FirefoxDriver(new FirefoxOptions().addArguments("--headless"))
         }
 
         Constructor<RemoteWebDriver> ctor = RemoteWebDriver.getConstructor(URL, Capabilities)
         RemoteWebDriver.metaClass.constructor = { url, Capabilities options ->
-            if(options in FirefoxOptions) {
+            if (options in FirefoxOptions) {
                 options.addArguments("--headless")
             }
-            return ctor.newInstance(url, options)
+            ctor.newInstance(url, options)
         }
     }
 
