@@ -46,9 +46,6 @@ jobs:
             - gradle-home-manual-machine
       - run:
           command: |
-            export WORKING_DIRECTORY=`pwd`
-#            Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
-#            export DISPLAY=:99
             ./gradlew --no-daemon --max-workers 4 --parallel -Pci :doc:manual-snippets:check :doc:manual-snippets:fixtures:check :doc:manual-snippets:real-browser:check :doc:manual:build :doc:asciidoctor-extension:check
       - run: &collectTestResults
           name: Copy all test results to a directory
