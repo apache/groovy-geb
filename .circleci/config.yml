@@ -63,7 +63,7 @@ jobs:
             - .gradle-home
   dockerised-cross-browser:
     docker:
-      - image: gebish/ci:v13
+      - image: eclipse-temurin:21-jdk
         environment:
           GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
           GRADLE_USER_HOME: ".gradle-home"
