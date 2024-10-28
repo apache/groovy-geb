@@ -34,6 +34,7 @@ jobs:
         environment:
           GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
           GRADLE_USER_HOME: ".gradle-home"
+          SE_START_XVFB: "true"
     resource_class: large
     steps:
       - checkout
