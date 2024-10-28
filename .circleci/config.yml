@@ -47,6 +47,8 @@ jobs:
             - gradle-home-manual-machine-master
             - gradle-home-manual-machine
       - run:
+          command: /opt/bin/start-xvfb.sh
+      - run:
           command: |
             ./gradlew --no-daemon --max-workers 4 --parallel -Pci :doc:manual-snippets:check :doc:manual-snippets:fixtures:check :doc:manual-snippets:real-browser:check :doc:manual:build :doc:asciidoctor-extension:check
       - run: &collectTestResults
