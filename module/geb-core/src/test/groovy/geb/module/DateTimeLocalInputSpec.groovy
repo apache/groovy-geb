@@ -18,13 +18,12 @@ package geb.module
 import geb.test.GebSpecWithCallbackServer
 import geb.test.browsers.Chrome
 import geb.test.browsers.RequiresRealBrowser
-import spock.lang.Ignore
 
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Chrome
 @RequiresRealBrowser // maybe due to https://sourceforge.net/p/htmlunit/bugs/1923/
-@Ignore("https://github.com/geb/geb/issues/188")
 class DateTimeLocalInputSpec extends GebSpecWithCallbackServer {
 
     def setup() {
@@ -47,7 +46,7 @@ class DateTimeLocalInputSpec extends GebSpecWithCallbackServer {
         input.dateTime = dateTime
 
         then:
-        input.dateTime == dateTime
+        input.dateTime == truncated(dateTime)
 
         where:
         dateTime = LocalDateTime.now()
@@ -58,7 +57,7 @@ class DateTimeLocalInputSpec extends GebSpecWithCallbackServer {
         input.dateTime = dateTime.toString()
 
         then:
-        input.dateTime == dateTime
+        input.dateTime == truncated(dateTime)
 
         where:
         dateTime = LocalDateTime.now()
@@ -72,10 +71,14 @@ class DateTimeLocalInputSpec extends GebSpecWithCallbackServer {
         input.dateTime = dateTime.plusDays(1)
 
         then:
-        input.dateTime == dateTime.plusDays(1)
+        input.dateTime == truncated(dateTime.plusDays(1))
 
         where:
         dateTime = LocalDateTime.now()
+    }
+    
+    private static LocalDateTime truncated(LocalDateTime ldt) {
+        return ldt.truncatedTo(ChronoUnit.MILLIS)
     }
 
 }

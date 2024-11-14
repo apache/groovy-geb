@@ -15,18 +15,36 @@
  */
 package geb.module
 
-import java.time.LocalDateTime
+import groovy.util.logging.Slf4j
 
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+
+import static java.time.temporal.ChronoField.*
+
+@Slf4j
 class DateTimeLocalInput extends AbstractInput {
 
+    private static final DateTimeFormatter DATE_TIME_FORMAT = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ISO_LOCAL_DATE)
+            .appendLiteral('T')
+            .appendValue(HOUR_OF_DAY, 2)
+            .appendLiteral(':')
+            .appendValue(MINUTE_OF_HOUR, 2)
+            .appendLiteral(':')
+            .appendValue(SECOND_OF_MINUTE, 2)
+            .appendFraction(MILLI_OF_SECOND, 0, 3, true)
+            .toFormatter()
+    
     final String inputType = 'datetime-local'
 
     void setDateTime(LocalDateTime dateTime) {
-        value(dateTime.toString())
+        value(reformat(dateTime))
     }
 
     void setDateTime(String iso8601FormattedDateTime) {
-        value(iso8601FormattedDateTime)
+        setDateTime(LocalDateTime.parse(iso8601FormattedDateTime))
     }
 
     LocalDateTime getDateTime() {
@@ -39,4 +57,13 @@ class DateTimeLocalInput extends AbstractInput {
         super.isTypeValid(type) || type == "text"
     }
 
+    private static String reformat(LocalDateTime localDateTime) {
+        String inputValue = localDateTime.format(DATE_TIME_FORMAT)
+        if(localDateTime.toString() != inputValue) {
+            log.warn("The datetime value {} was truncated to {} as it was being used to set the value of a <input type=\"datetime-local\" />",
+                    localDateTime, 
+                    inputValue)
+        }
+        return inputValue
+    }
 }
