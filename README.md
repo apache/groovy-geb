@@ -12,5 +12,9 @@ Please see [CONTRIBUTING.md](https://github.com/geb/geb/blob/master/CONTRIBUTING
 
 ## Submitting issues
 
-If you'd like to submit an issue against Geb then please use [the issue tracker for geb/issues GitHub project](https://github.com/geb/issues/issues).
-Please avoid submitting usage questions as issues and use [the user mailing list](https://groups.google.com/forum/#!forum/geb-user) instead.
+If you'd like to submit an issue against Geb then please use the [Geb GitHub issue tracker](https://github.com/apache/groovy-geb/issues).
+Please avoid submitting usage questions as issues
+and instead join and ask your question on the `geb-users@groovy.apache.org` mailing list:
+[Browse](https://lists.apache.org/list.html?groovy-users@groovy.apache.org)
+[Subscribe](geb-users-subscribe@groovy.apache.org)
+[Unsubscribe](geb-users-unsubscribe@groovy.apache.org)

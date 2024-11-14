@@ -16,7 +16,7 @@ For example to run all the automated tests and quality checks for the entire pro
     
 ## IDE import
 
-The project is setup to work with IntelliJ IDEA, simply import it using the native IntelliJ IDEA import for Gradle projects.
+The project is set up to work with IntelliJ IDEA, simply import it using the native IntelliJ IDEA import for Gradle projects.
 
 If you use a different IDE or editor you're on your own.    
 
@@ -54,7 +54,7 @@ You will then find the compiled HTML in the directory `doc/manual/build/apiDoc`
 
 ## Contributing features/patches
 
-The source code for all of the modules is contained in the `module/` directory.
+The source code for all the modules is contained in the `module/` directory.
 
 To run the tests and quality checks after making your change to a module, you can run…
 
@@ -70,7 +70,7 @@ Please remember to include relevant updates to the manual with your changes.
 
 ## Coding style guidelines
 
-The following are some general guide lines to observe when contributing code:
+The following are some general guidelines to observe when contributing code:
 
 1. All source files must have the appropriate ASLv2 license header
 1. All source files use an indent of 4 spaces
@@ -82,7 +82,7 @@ The build processes checks that most of the above conditions have been met.
 ## Code changes
 
 Code can be submitted via GitHub pull requests.
-When a pull request is send it triggers a CI build to verify the the test and quality checks still pass.
+When a pull request is send it triggers a CI build to verify the test and quality checks still pass.
 
 ## Proposing new features
 
@@ -92,11 +92,15 @@ This is to avoid you spending your valuable time working on a feature that the p
 ## Fixing bugs
 
 If you would like to fix a bug, please [raise an issue](https://github.com/geb/issues/issues) before sending a pull request so it can be discussed.
-If the fix is trivial or non controversial then this is not usually necessary.
+If the fix is trivial or non-controversial then this is not usually necessary.
 
 ## Development Mailing List
 
-If you want to do some work on Geb and want some help, you can join the `geb-dev@googlegroups.com` mailing list via [Google Groups](https://groups.google.com/d/forum/geb-dev).
+If you want to do some work on Geb and want some help,
+you can join the `geb-dev@groovy.apache.org` mailing list:
+[Browse](https://lists.apache.org/list.html?groovy-dev@groovy.apache.org)
+[Subscribe](mailto:geb-dev-subscribe@groovy.apache.org)
+[Unsubscribe](mailto:geb-dev-unsubscribe@groovy.apache.org)
 
 ## Licensing and attribution
 
