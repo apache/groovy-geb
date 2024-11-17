@@ -76,7 +76,7 @@ class DateTimeLocalInputSpec extends GebSpecWithCallbackServer {
         where:
         dateTime = LocalDateTime.now()
     }
-    
+
     private static LocalDateTime truncated(LocalDateTime ldt) {
         return ldt.truncatedTo(ChronoUnit.MILLIS)
     }

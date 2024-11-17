@@ -26,6 +26,7 @@ import static java.time.temporal.ChronoField.*
 @Slf4j
 class DateTimeLocalInput extends AbstractInput {
 
+    /* codenarc-disable */
     private static final DateTimeFormatter DATE_TIME_FORMAT = new DateTimeFormatterBuilder()
             .append(DateTimeFormatter.ISO_LOCAL_DATE)
             .appendLiteral('T')
@@ -36,15 +37,22 @@ class DateTimeLocalInput extends AbstractInput {
             .appendValue(SECOND_OF_MINUTE, 2)
             .appendFraction(MILLI_OF_SECOND, 0, 3, true)
             .toFormatter()
-    
+    /* codenarc-enable */
+
     final String inputType = 'datetime-local'
 
     void setDateTime(LocalDateTime dateTime) {
-        value(reformat(dateTime))
+        value(formatForBrowser(dateTime))
     }
 
+    // codenarc-disable StaticMethodsBeforeInstanceMethods
+    static String formatForBrowser(LocalDateTime localDateTime) {
+        return localDateTime.format(DATE_TIME_FORMAT)
+    }
+    // codenarc-enable
+
     void setDateTime(String iso8601FormattedDateTime) {
-        setDateTime(LocalDateTime.parse(iso8601FormattedDateTime))
+        dateTime = LocalDateTime.parse(iso8601FormattedDateTime)
     }
 
     LocalDateTime getDateTime() {
@@ -55,15 +63,5 @@ class DateTimeLocalInput extends AbstractInput {
     @Override
     protected boolean isTypeValid(String type) {
         super.isTypeValid(type) || type == "text"
-    }
-
-    private static String reformat(LocalDateTime localDateTime) {
-        String inputValue = localDateTime.format(DATE_TIME_FORMAT)
-        if(localDateTime.toString() != inputValue) {
-            log.warn("The datetime value {} was truncated to {} as it was being used to set the value of a <input type=\"datetime-local\" />",
-                    localDateTime, 
-                    inputValue)
-        }
-        return inputValue
     }
 }

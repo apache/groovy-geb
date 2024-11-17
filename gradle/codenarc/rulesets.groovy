@@ -167,6 +167,9 @@ ruleset {
         UnnecessarySemicolon {
             doNotApplyToFileNames = 'PageOrientedSpec.groovy, StrongTypingSpec.groovy'
         }
+        UnnecessaryReturnKeyword {
+            enabled = false
+        }
     }
     ruleset('rulesets/unused.xml')
 }
