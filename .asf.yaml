@@ -25,7 +25,23 @@ github:
     # Enable projects for project management boards
     projects: true
   del_branch_on_merge: true
-  #labels:
+  labels:
+    - groovy
+    - apache
+    - selenium
+    - webdriver
+    - java
+    - functional-testing
+    - browser-testing
+    - end-to-end-testing
+    - e2e-testing
+    - test-automation
+    - test
+    - devtools
+    - testing-framework
+    - testing-library
+    - open-source
+    - bdd-style-testing-framework
   enabled_merge_buttons:
     merge:  false
     rebase: true
