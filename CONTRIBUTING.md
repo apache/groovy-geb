@@ -3,6 +3,10 @@
 Contributions are always welcome to Geb!
 If you'd like to contribute (and we hope you do) please take a look at the following guidelines and instructions.
 
+## Contributor License Agreement (CLA)
+
+To become a committer, you need to sign the [Apache Individual Contributor Agreement (ICLA)](https://www.apache.org/licenses/icla.pdf). If you work for a company, your company may need to sign also a [Corporate Contributor License Agreement]([https://www.apache.org/licenses/ccla.pdf](https://www.apache.org/licenses/cla-corporate.pdf). For small ad-hoc PRs no contributor license agreement is needed.
+
 ## Build Environment
 
 Geb builds with [Gradle](http://www.gradle.org/). 
