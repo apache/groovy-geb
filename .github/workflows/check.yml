@@ -19,6 +19,7 @@ on:
   push:
     branches:
       - master
+      - task/213-github-actions-for-ci
   pull_request:
 
 jobs:
