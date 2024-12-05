@@ -1,0 +1,71 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    container:
+      image: eclipse-temurin:21-jdk
+    env:
+      GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
+      GRADLE_USER_HOME: .gradle-home
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Restore Gradle cache
+        uses: actions/cache@v4
+        with:
+          path: .gradle-home
+          key: gradle-home-check-${{ github.ref }}
+          restore-keys: |
+            gradle-home-check-${{ github.ref }}
+            gradle-home-check-master
+            gradle-home-check
+
+      - name: Run Gradle tasks
+        run: ./gradlew --no-daemon --max-workers 4 --parallel -Pci module:check internal:check integration:check doc:site:check --continue
+
+      - name: Copy all test results to a directory
+        run: |
+          mkdir -p ~/test-results/junit/
+          find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+
+      - name: Store test results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ~/test-results/
+
+      - name: Store build reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: build/reports
+
+      - name: Save Gradle cache
+        uses: actions/cache@v4
+        with:
+          path: .gradle-home
+          key: gradle-home-check-${{ github.ref }}-${{ github.run_id }}
