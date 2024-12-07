@@ -9,3 +9,16 @@ configurations {
 artifacts {
     sources tasks.named("sourcesJar")
 }
+
+tasks.withType(Jar).configureEach {jar ->
+    metaInf {
+        if (jar.name == 'sourcesJar') {
+            from("${rootProject.projectDir}/licenses/LICENSE-BASE") {
+                rename 'LICENSE-BASE', 'LICENSE'
+            }
+            from("${rootProject.projectDir}/notices/NOTICE-BASE") {
+                rename 'NOTICE-BASE', 'NOTICE'
+            }
+        }
+    }
+}
