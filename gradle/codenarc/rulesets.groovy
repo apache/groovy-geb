@@ -122,7 +122,7 @@ ruleset {
     }
     ruleset('rulesets/generic.xml') {
         RequiredString {
-            string = 'Copyright'
+            string = 'Apache License, Version 2.0'
             violationMessage = 'Copyright header not found'
         }
     }
