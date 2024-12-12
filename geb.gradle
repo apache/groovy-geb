@@ -67,9 +67,9 @@ nexusPublishing {
     }
 }
 
-extensions.findByName("gradleEnterprise")?.buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
+extensions.findByName("develocity")?.buildScan {
+    termsOfUseUrl = 'https://gradle.com/terms-of-service'
+    termsOfUseAgree = 'yes'
 }
 
 tasks.register("stage", Sync) {

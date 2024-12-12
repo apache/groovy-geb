@@ -22,11 +22,7 @@ permissions:
 
 jobs:
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     env:
       DEVELOCITY_ACCESS_KEY: ${{ secrets.GE_ACCESS_TOKEN }}
     steps:
@@ -40,3 +36,11 @@ jobs:
       - name: Check licenses with rat
         run: ./gradlew rat
         timeout-minutes: 60
+      - name: Check licenses with license plugin
+        run: ./gradlew checkLicense
+        timeout-minutes: 60
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: build/reports/
