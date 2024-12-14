@@ -1,3 +1,8 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+endif::[]
 [[configuration]]
 = Configuration
 

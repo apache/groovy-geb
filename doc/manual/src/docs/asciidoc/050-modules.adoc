@@ -1,3 +1,8 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+endif::[]
 [[modules]]
 = Modules
 
@@ -429,14 +434,14 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used this way…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=example,indent=0]
+include::{rb-snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=example,indent=0]
 ----
 
 === `DateTimeLocalInput`
@@ -447,14 +452,14 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used this way…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=example,indent=0]
+include::{rb-snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=example,indent=0]
 ----
 
 === `TimeInput`
@@ -465,21 +470,21 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used either with a `java.time.LocalTime` object…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_time,indent=0]
+include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_time,indent=0]
 ----
 
 …or with a string…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_string,indent=0]
+include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_string,indent=0]
 ----
 
 === `MonthInput`
@@ -490,21 +495,21 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used either with a `java.time.YearMonth` object…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_month,indent=0]
+include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_month,indent=0]
 ----
 
 …or with a string…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_string,indent=0]
+include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_string,indent=0]
 ----
 
 === `WeekInput`
@@ -515,21 +520,21 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used either with a `org.threeten.extra.YearWeek` object…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_week,indent=0]
+include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_week,indent=0]
 ----
 
 …or with a string…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_string,indent=0]
+include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_string,indent=0]
 ----
 
 === `EmailInput`
@@ -594,14 +599,14 @@ Given the html…
 
 [source,html]
 ----
-include::{snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
 It can be used this way…
 
 [source,groovy]
 ----
-include::{snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=example,indent=0]
+include::{rb-snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=example,indent=0]
 ----
 
 === `UrlInput`

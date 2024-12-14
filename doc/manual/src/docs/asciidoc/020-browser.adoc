@@ -1,3 +1,7 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+endif::[]
 [[browser]]
 = The `Browser`
 
@@ -469,7 +473,7 @@ Both of them can be used to read and write values to the underlying storage as i
 
 [source,groovy,indent=0]
 ----
-include::{snippets-dir}/browser/WebStorageSpec.groovy[tag=write_and_read]
+include::{rb-snippets-dir}/browser/WebStorageSpec.groovy[tag=write_and_read]
 ----
 
 Both `localStorage` and `sessionStorage` properties are of `geb.webstorage.WebStorage` type - please refer to link:api/geb/webstorage/WebStorage.html[its javadoc] for information about other operations that are supported apart from reading and writing values.

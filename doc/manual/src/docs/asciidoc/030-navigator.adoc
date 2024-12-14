@@ -1,3 +1,8 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+endif::[]
 [[navigator]]
 = Interacting with content
 
@@ -94,14 +99,14 @@ Let's consider a simple link:https://vuejs.org/[Vue.js] application which render
 
 [source,html]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=template,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=template,indent=0]
 ----
 
 …and the following javascript code…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=vue_app,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=vue_app,indent=0]
 ----
 
 The important thing to note is that the `li` elements re re-rendered when they are reordered.
@@ -110,40 +115,40 @@ Let's model each item in the list using the following module…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=module,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=module,indent=0]
 ----
 
 Given the following content definition…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=static_navigator,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=static_navigator,indent=0]
 ----
 
 The code below will fail with `StaleElementReferenceException`…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=exception,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=exception,indent=0]
 ----
 
 If we change the base navigator of the list element module to be dynamic as in the following page class…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=dynamic_navigator,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=dynamic_navigator,indent=0]
 ----
 
 Then the following will pass…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=no_exception,indent=0]
+include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=no_exception,indent=0]
 ----
 
 [WARNING]
 ====
-While using dynamic navigators might seem like a way to completely avoid `{stale-element-reference-exception-api}` it is unfortunatelly not the case.
+While using dynamic navigators might seem like a way to completely avoid `{stale-element-reference-exception-api}` it is unfortunately not the case.
 That's because operations which access elements of a dynamic `Navigator` are not atomic.
 For example, when calling `click()` on a dynamic `Navigator`, first a WebDriver protocol command will be executed to refresh the web elements which underpin that instance and then another command will be executed to click on the element that was found - if between the two commands the element is removed from the DOM the exception will still occur.
 While dynamic navigators make `StaleElementReferenceException` less likely, it's still far from impossible to get one when using them, especially in highly asynchronous applications with frequent DOM redraws.
@@ -732,8 +737,8 @@ It is possible to send non-textual characters to content by using the WebDriver 
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=import,indent=0]
-include::{snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=keystrokes,indent=0]
+include::{rb-snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=import,indent=0]
+include::{rb-snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=keystrokes,indent=0]
 ----
 
 Here we are sending a “control-c” to an input.
@@ -1013,8 +1018,8 @@ Which an also be used for non-character keys…
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/BackspaceSpec.groovy[tag=import,indent=0]
-include::{snippets-dir}/navigator/BackspaceSpec.groovy[tag=backspace,indent=0]
+include::{rb-snippets-dir}/navigator/BackspaceSpec.groovy[tag=import,indent=0]
+include::{rb-snippets-dir}/navigator/BackspaceSpec.groovy[tag=backspace,indent=0]
 ----
 
 [WARNING]
@@ -1055,7 +1060,7 @@ It is possible to access the contained `WebElement` instances via the following 
 
 [source,groovy]
 ----
-include::{snippets-dir}/geb/navigator/Navigator.groovy[tag=web_element_returning_methods,indent=0]
+include::{cm-snippets-dir}/geb/navigator/Navigator.groovy[tag=web_element_returning_methods,indent=0]
 ----
 
 By using the methods of the WebDriver `{actions-api}` class with `WebElement` instances, complex user gestures can be emulated.
@@ -1063,21 +1068,21 @@ First you will need to create an `Actions` instance after obtaining the WebDrive
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/InteractionsSpec.groovy[tag=actions_creation,indent=0]
+include::{rb-snippets-dir}/navigator/InteractionsSpec.groovy[tag=actions_creation,indent=0]
 ----
 
 Next, use methods of `Actions` to compose a series of UI actions, then call `build()` to create a concrete `Action`:
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/InteractionsSpec.groovy[tag=action_definition,indent=0]
+include::{rb-snippets-dir}/navigator/InteractionsSpec.groovy[tag=action_definition,indent=0]
 ----
 
 Finally, call `perform()` to actually trigger the desired mouse or keyboard behavior:
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/InteractionsSpec.groovy[tag=action_execution,indent=0]
+include::{rb-snippets-dir}/navigator/InteractionsSpec.groovy[tag=action_execution,indent=0]
 ----
 
 [[interact-closures]]
@@ -1093,14 +1098,14 @@ This `interact()` call performs the same work as the calls in the <<using-action
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/InteractionsSpec.groovy[tag=interact,indent=0]
+include::{rb-snippets-dir}/navigator/InteractionsSpec.groovy[tag=interact,indent=0]
 ----
 
 While usually not needed, it's possible to directly access the `Actions` instance backing the `InteractDelegate`:
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/InteractionsSpec.groovy[tag=actions_in_interact,indent=0]
+include::{rb-snippets-dir}/navigator/InteractionsSpec.groovy[tag=actions_in_interact,indent=0]
 ----
 
 For the full list of available methods that can be used for emulating user gestures see the documentation for the `{interact-delegate-api}` class.
@@ -1115,14 +1120,14 @@ Calls to `interact()` can be used to perform behaviors that are more complicated
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DragAndDropSpec.groovy[tag=verbose,indent=0]
+include::{rb-snippets-dir}/navigator/DragAndDropSpec.groovy[tag=verbose,indent=0]
 ----
 
 Drag-and-dropping can also be accomplished using the `dragAndDropBy()` convenience method from the Actions API:
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/DragAndDropSpec.groovy[tag=convenience,indent=0]
+include::{rb-snippets-dir}/navigator/DragAndDropSpec.groovy[tag=convenience,indent=0]
 ----
 
 In this particular example, the element will be clicked then dragged 150 pixels to the right and 200 pixels downward before being released.
@@ -1138,6 +1143,6 @@ Control-clicking several elements, such as items in a list, is performed the sam
 
 [source,groovy]
 ----
-include::{snippets-dir}/navigator/ControlClickSpec.groovy[tag=import,indent=0]
-include::{snippets-dir}/navigator/ControlClickSpec.groovy[tag=interact,indent=0]
+include::{rb-snippets-dir}/navigator/ControlClickSpec.groovy[tag=import,indent=0]
+include::{rb-snippets-dir}/navigator/ControlClickSpec.groovy[tag=interact,indent=0]
 ----

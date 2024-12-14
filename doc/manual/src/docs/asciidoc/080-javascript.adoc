@@ -1,3 +1,9 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+:ct-snippets-dir: ../../../../../module/geb-core/src/test/groovy
+endif::[]
 = Javascript, AJAX and dynamic pages
 
 This section discusses how to deal with some of the challenges in testing and/or automating modern web applications.
@@ -242,7 +248,7 @@ Temporarily adding network latency during test development allows to shake off t
 This is how `setNetworkLatency()` method be used:
 [source,groovy]
 ----
-include::{snippets-dir}/geb/BrowserNetworkLatencySpec.groovy[tag=setNetworkLatency,indent=0]
+include::{ct-snippets-dir}/geb/BrowserNetworkLatencySpec.groovy[tag=setNetworkLatency,indent=0]
 ----
 
 [NOTE]
@@ -279,7 +285,7 @@ There are three methods that deal with `alert()` dialogs:
 
 [source,groovy]
 ----
-include::{snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=alert,indent=0]
+include::{cm-snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=alert,indent=0]
 ----
 
 The first method, `withAlert()`, is used to verify actions that will produce an alert dialog.
@@ -346,7 +352,7 @@ There are five methods that deal with `confirm()` dialogs:
 
 [source,groovy]
 ----
-include::{snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=confirm,indent=0]
+include::{cm-snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=confirm,indent=0]
 ----
 
 The first method, `withConfirm()` (and its ‘`ok`’ defaulted relative), is used to verify actions that will produce a confirm dialog.
@@ -420,7 +426,7 @@ Consider the following page:
 
 [source,html]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=html,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=html,indent=0]
 ----
 
 We want to click the Geb link, but can't because it's hidden (WebDriver does not let you interact with hidden elements).
@@ -440,7 +446,7 @@ Which we could invoke via Geb easy enough…
 
 [source,groovy]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_javascript_executor,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_javascript_executor,indent=0]
 ----
 
 That will work, but can be inconvenient as it duplicates content definitions in our Geb pages.
@@ -449,19 +455,19 @@ Here is how we could call the `mouseover` jQuery function on an element from Geb
 
 [source,groovy]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_adapter,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_adapter,indent=0]
 ----
 
 To be clear, that is Groovy (not JavaScript code). It can be used with pages…
 
 [source,groovy]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=page,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=page,indent=0]
 ----
 
 [source,groovy]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=on_content,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=on_content,indent=0]
 ----
 
 The `jquery` property of a navigator is conceptually equivalent to a jQuery object for _all_ of the navigator's matched page elements. 
@@ -470,7 +476,7 @@ The methods can also take arguments…
 
 [source,groovy]
 ----
-include::{snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=with_parameters,indent=0]
+include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=with_parameters,indent=0]
 ----
 
 The same set of restricted types as allowed by WebDriver's `{javascript-executor-execute-script-api}` method are permitted here.

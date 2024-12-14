@@ -277,7 +277,7 @@ Following is an example of using the geb-browserstack Gradle plugin.
 import geb.gradle.browserstack.BrowserStackAccount
 
 plugins {
-    id "org.gebish.browserstack" version "{geb-version}" <1>
+    id "org.gebish.browserstack" version "{geb-version}" //<1>
 }
 
 browserStack {

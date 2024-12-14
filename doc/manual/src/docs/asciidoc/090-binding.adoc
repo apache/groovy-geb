@@ -1,3 +1,9 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+:ct-snippets-dir: ../../../../../module/geb-core/src/test/groovy
+endif::[]
 [[binding]]
 = Scripts and binding
 
@@ -29,7 +35,7 @@ The following is an example script that will work if `BindingUpdater` is initial
 
 [source,groovy]
 ----
-include::{snippets-dir}/gebScript.groovy[tag=script,indent=0]
+include::{snippets-dir}/../resources/gebScript.groovy[tag=script,indent=0]
 ----
 
 In a managed binding, all of the methods/properties that you can usually call in the {drive-method-link}[`Browser.drive()`] method are available.
@@ -64,5 +70,5 @@ The binding updater also updates the `page` property of the binding to be the br
 
 [source,groovy]
 ----
-include::{snippets-dir}/gebScriptUsingPages.groovy[tag=script,indent=0]
+include::{snippets-dir}/../resources/gebScriptUsingPages.groovy[tag=script,indent=0]
 ----

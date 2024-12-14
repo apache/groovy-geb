@@ -1,3 +1,8 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+:cm-snippets-dir: ../../../../../module/geb-core/src/main/groovy
+endif::[]
 [[pages]]
 = Pages
 
@@ -442,13 +447,13 @@ This essentially means that verification of page transition (“at checking”) 
 
 [source,groovy]
 ----
-include::{snippets-dir}/pages/ToWaitOptionSpec.groovy[tag=to_wait_page,indent=0]
+include::{rb-snippets-dir}/pages/ToWaitOptionSpec.groovy[tag=to_wait_page,indent=0]
 ----
 <1> Page change is asynchronous, e.g. an ajax call is involved.
 
 [source,groovy]
 ----
-include::{snippets-dir}/pages/ToWaitOptionSpec.groovy[tag=to_wait,indent=0]
+include::{rb-snippets-dir}/pages/ToWaitOptionSpec.groovy[tag=to_wait,indent=0]
 ----
 
 See the <<waiting, section on waiting>> for the semantics of the `waitFor()` method, that is used here internally.
@@ -763,7 +768,7 @@ The `{page-api}` implementation of this method looks like this…
 
 [source,groovy]
 ----
-include::{snippets-dir}/geb/Page.groovy[tag=convert_to_path,indent=0]
+include::{cm-snippets-dir}/geb/Page.groovy[tag=convert_to_path,indent=0]
 ----
 
 You can either overwrite this catchall method to control path conversion for all invocations or provide an overloaded version for a specific type signature.

@@ -1,3 +1,7 @@
+ifndef::snippets-dir[]
+:snippets-dir: ../../../../manual-snippets/src/test/groovy
+:rb-snippets-dir: ../../../../manual-snippets/real-browser/src/test/groovy
+endif::[]
 = Introduction
 
 Geb (pronounced "jeb" and originally a contraction of "Groovy web") is a developer focused tool for automating the interaction between web browsers and web content.
@@ -6,7 +10,7 @@ inspection and traversal API (for finding and interacting with content).
 
 Geb was born out of a desire to make browser automation (originally for web testing) easier and more productive.
 It aims to be a *developer tool* in that it allows and encourages the using of programming and language constructs instead of creating a restricted environment.
-It uses Groovy's dynamism to remove the noise and boiler plate code in order to focus on what's important — the content and interaction.
+It uses Groovy's dynamism to remove the noise and boilerplate code in order to focus on what's important — the content and interaction.
 
 == The browser automation technology
 
@@ -87,9 +91,9 @@ Here's an example of using Geb in an inline (i.e. no page objects or predefined 
 
 [source,groovy]
 ----
-include::{snippets-dir}/intro/ScriptingSpec.groovy[tags=imports,indent=0]
+include::{rb-snippets-dir}/intro/ScriptingSpec.groovy[tags=imports,indent=0]
 
-include::{snippets-dir}/intro/ScriptingSpec.groovy[tags=inline,indent=0]
+include::{rb-snippets-dir}/intro/ScriptingSpec.groovy[tags=inline,indent=0]
 ----
 <1> Check that we are at Geb's homepage.
 <2> Click on the manual menu entry to open it.
@@ -103,14 +107,14 @@ This time let us define our content up front using the Page Object pattern…
 
 [source,groovy]
 ----
-include::{snippets-dir}/intro/module/ManualsMenuModule.groovy[tags=imports,indent=0]
-include::{snippets-dir}/intro/page/GebHomePage.groovy[tags=imports,indent=0]
+include::{rb-snippets-dir}/intro/module/ManualsMenuModule.groovy[tags=imports,indent=0]
+include::{rb-snippets-dir}/intro/page/GebHomePage.groovy[tags=imports,indent=0]
 
-include::{snippets-dir}/intro/module/ManualsMenuModule.groovy[tags=class,indent=0]
+include::{rb-snippets-dir}/intro/module/ManualsMenuModule.groovy[tags=class,indent=0]
 
-include::{snippets-dir}/intro/page/GebHomePage.groovy[tags=class,indent=0]
+include::{rb-snippets-dir}/intro/page/GebHomePage.groovy[tags=class,indent=0]
 
-include::{snippets-dir}/intro/page/TheBookOfGebPage.groovy[tags=class,indent=0]
+include::{rb-snippets-dir}/intro/page/TheBookOfGebPage.groovy[tags=class,indent=0]
 ----
 <1> Modules are reusable fragments that can be used across pages. Here we are using a module to model a dropdown menu.
 <2> Content DSL.
@@ -124,9 +128,9 @@ Now our script again, using the above defined content…
 
 [source,groovy]
 ----
-include::{snippets-dir}/intro/ScriptingSpec.groovy[tags=imports,indent=0]
+include::{rb-snippets-dir}/intro/ScriptingSpec.groovy[tags=imports,indent=0]
 
-include::{snippets-dir}/intro/ScriptingSpec.groovy[tags=using_page_objects,indent=0]
+include::{rb-snippets-dir}/intro/ScriptingSpec.groovy[tags=using_page_objects,indent=0]
 ----
 <1> Go to the url defined by `GebHomePage` and also verify it's “at checker”.
 
@@ -140,9 +144,9 @@ Here is our Geb homepage case again, this time using Geb's {spock} integration�
 
 [source,groovy]
 ----
-include::{snippets-dir}/intro/GebHomepageSpec.groovy[tags=imports,indent=0]
+include::{rb-snippets-dir}/intro/GebHomepageSpec.groovy[tags=imports,indent=0]
 
-include::{snippets-dir}/intro/GebHomepageSpec.groovy[tags=class,indent=0]
+include::{rb-snippets-dir}/intro/GebHomepageSpec.groovy[tags=class,indent=0]
 ----
 
 For more information on using Geb for web and functional testing, see the <<testing,testing chapter>>.
