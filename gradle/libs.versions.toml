@@ -34,7 +34,7 @@ gebSpockGroovy25 = 'org.gebish:geb-spock:4.0'
 grolifant = 'org.ysb33r.gradle:grolifant80:4.0.0'
 groovy-bom = { module = 'org.apache.groovy:groovy-bom', version.ref = 'groovy' }
 groovy25 = 'org.codehaus.groovy:groovy-all:2.5.23'
-guava = 'com.google.guava:guava:23.0'
+guava = 'com.google.guava:guava:33.4.0-jre'
 htmlUnitDriver = 'org.seleniumhq.selenium:htmlunit-driver:4.13.0'
 jetty-server = { module = 'org.eclipse.jetty:jetty-server', version.ref = 'jetty' }
 jetty-servlet = { module = 'org.eclipse.jetty:jetty-servlet', version.ref = 'jetty' }
