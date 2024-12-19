@@ -45,7 +45,7 @@ project(":module").subprojects.each { apiModule ->
 dependencies {
     groovydocClasspath(project(":module:geb-core")) {
         capabilities {
-            requireCapability("org.gebish:geb-core-select")
+            requireCapability("org.apache.groovy.geb:geb-core-select")
         }
     }
 
