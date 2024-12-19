@@ -54,7 +54,7 @@ mailto:geb-dev-unsubscribe@groovy.apache.org[Unsubscribe]
 * github-profile:johnrengelman[John Engelman] - Grails integration improvements
 * github-profile:legart[Michael Legart] - Grails integration improvements
 * github-profile:graemerocher[Graeme Rocher] - Grails integration improvements
-* github-profile:craigatk[Craig Atkinson] - Bug fix around unexpected pages, fix for [issue:422[]]
+* github-profile:craigatk[Craig Atkinson] - Bug fix around unexpected pages, fix for [hissue:422[]]
 * github-profile:kgeis[Ken Geis] - Doc improvements
 * github-profile:kellyrob99[Kelly Robinson] - Additional configuration parameters for SauceLabs
 * github-profile:tygerpatch[Todd Gerspacher] - Doc improvements, Cleaned up settings.gradle
@@ -111,333 +111,333 @@ No changes have been made, yet.
 === 7.0
 
 ==== New features
-* Add support for selecting elements by visibility when creating a `Navigator`. [issue:675[]]
-* Add a convenience method for creating dynamic navigators based on a `Supplier<Iterable<WebElement>>`. [issue:674[]]
+* Add support for selecting elements by visibility when creating a `Navigator`. [hissue:675[]]
+* Add a convenience method for creating dynamic navigators based on a `Supplier<Iterable<WebElement>>`. [hissue:674[]]
 
 ==== Fixes
-* Correctly handle skipped and aborted tests in `OnFailureReporter`. [issue:676[]]
+* Correctly handle skipped and aborted tests in `OnFailureReporter`. [hissue:676[]]
 
 ==== Breaking changes
-* Update Groovy to 4.0.5 and Spock to 2.3-groovy-4.0. [issue:668[]]
+* Update Groovy to 4.0.5 and Spock to 2.3-groovy-4.0. [hissue:668[]]
 
 === 6.0
 
 ==== New features
 
-* Add an option to `waitFor()` to not throw `WaitTimeoutException` when the wait times out. [issue:644[]]
-* Cloud browser plugins are published to Gradle Plugin Portal. [issue:647[]]
+* Add an option to `waitFor()` to not throw `WaitTimeoutException` when the wait times out. [hissue:644[]]
+* Cloud browser plugins are published to Gradle Plugin Portal. [hissue:647[]]
 
 ==== Fixes
-* Fix a bug causing reports generated from within `cleanupSpec()` to not end up in the report group directory for the spec. [issue:661[]]
-* Update LambdaTest tunnel to v3. [issue:662[]]
-* Correctly expose all API dependencies for geb-junit4 and geb-testng modules to consumers.. [issue:666[]]
+* Fix a bug causing reports generated from within `cleanupSpec()` to not end up in the report group directory for the spec. [hissue:661[]]
+* Update LambdaTest tunnel to v3. [hissue:662[]]
+* Correctly expose all API dependencies for geb-junit4 and geb-testng modules to consumers.. [hissue:666[]]
 
 ==== Improvements
-* Add parallel execution support for JUnit 5 integration. [issue:663[]]
-* Update Spock to 2.1-groovy-3.0. [issue:665[]]
-* Any `WebDriverException` thrown from web storage clearing after each test in `GebTestManager` is now suppressed. [issue:649[]]
+* Add parallel execution support for JUnit 5 integration. [hissue:663[]]
+* Update Spock to 2.1-groovy-3.0. [hissue:665[]]
+* Any `WebDriverException` thrown from web storage clearing after each test in `GebTestManager` is now suppressed. [hissue:649[]]
 
 ==== Project related changes
-* Update Gradle logo at the bottom of gebish.org to the current design. [issue:653[]]
+* Update Gradle logo at the bottom of gebish.org to the current design. [hissue:653[]]
 
 ==== Breaking changes
-* Update to Selenium 4. [issue:664[]]
-* Cloud browser plugins are no longer published to Maven Central and should be resolved from Gradle Plugin portal instead. [issue:648[]]
-* Run GebConfig script only once rather than before each test in JUnit and Spock integrations. [issue:660[]]
+* Update to Selenium 4. [hissue:664[]]
+* Cloud browser plugins are no longer published to Maven Central and should be resolved from Gradle Plugin portal instead. [hissue:648[]]
+* Run GebConfig script only once rather than before each test in JUnit and Spock integrations. [hissue:660[]]
 
 === 5.1
 
 ==== Improvements
 
-* Add support for Spock's parallel execution to `GebSpec` and `GebReportingSpec`. [issue:645[]]
+* Add support for Spock's parallel execution to `GebSpec` and `GebReportingSpec`. [hissue:645[]]
 
 === 5.0
 
 ==== Fixes
 
-* Fix a bug under Groovy 3 which caused PageInstanceNotInitializedException when "container" was used as a content element name. [issue:640[]]
+* Fix a bug under Groovy 3 which caused PageInstanceNotInitializedException when "container" was used as a content element name. [hissue:640[]]
 
 ==== Breaking changes
 
-* The `quitDriverOnBrowserReset` config option now default to true if driver caching is disabled. [issue:633[]]
-* Update Groovy to 3.0.8 and Spock to 2.0-groovy-3.0. [issue:619[]]
-* Don't make non-optional dependencies optional in various modules' POMs. [issue:638[]]
+* The `quitDriverOnBrowserReset` config option now default to true if driver caching is disabled. [hissue:633[]]
+* Update Groovy to 3.0.8 and Spock to 2.0-groovy-3.0. [hissue:619[]]
+* Don't make non-optional dependencies optional in various modules' POMs. [hissue:638[]]
 
 === 4.1
 
 ==== Fixes
 
-* Minor fix to confusing statement in the documentation section about finding and filtering web elements. [issue:625[]]
-* Improve information about IntelliJ support in the section on IDE authoring assistance in the manual. [issue:629[]]
-* Fix `Browser.go()` not to fail for non-hierarchical, opaque URIs. [issue:634[]]
+* Minor fix to confusing statement in the documentation section about finding and filtering web elements. [hissue:625[]]
+* Improve information about IntelliJ support in the section on IDE authoring assistance in the manual. [hissue:629[]]
+* Fix `Browser.go()` not to fail for non-hierarchical, opaque URIs. [hissue:634[]]
 
 ==== New features
 
-* Add ability to compose multiple text matchers. [issue:631[]]
-* Add configuration option to quit the driver each time the browser instance is reset by `GebTestManager`. [issue:632[]]
+* Add ability to compose multiple text matchers. [hissue:631[]]
+* Add configuration option to quit the driver each time the browser instance is reset by `GebTestManager`. [hissue:632[]]
 
 === 4.0
 
 ==== Fixes
 
-* Fix failure reporting in Spock fixture methods. [issue:613[]]
-* Fix using constants (static final fields) is content definitions on Groovy 2.5.14. [issue:627[]]
+* Fix failure reporting in Spock fixture methods. [hissue:613[]]
+* Fix using constants (static final fields) is content definitions on Groovy 2.5.14. [hissue:627[]]
 
 ==== New features
 
-* Add integration with JUnit 5. [issue:539[]]
+* Add integration with JUnit 5. [hissue:539[]]
 
 ==== Improvements
 
-* Introduce `{geb-test-manager-api}` to decrease code duplication between test framework integrations and make it easier for users to add integrations for additional frameworks. [issue:614[]]
-* Improve frame context management when nested withFrame() calls are used. [issue:612[]]
+* Introduce `{geb-test-manager-api}` to decrease code duplication between test framework integrations and make it easier for users to add integrations for additional frameworks. [hissue:614[]]
+* Improve frame context management when nested withFrame() calls are used. [hissue:612[]]
 
 ==== Breaking changes
 
-* Superclasses providing <<spock-junit-testng, support for various test frameworks>> have been rewritten in a backwards incompatible way to benefit from introduction of `{geb-test-manager-api}`. [issue:614[]]
-* Geb no longer depends on `groovy-all` artifact but instead depends on `groovy`, `groovy-templates` and `groovy-macro` artifacts from `org.codehaus.groovy` group. [issue:618[]]
-* Update to Groovy 2.5.13. [issue:617[]]
-* Removed `geb.PageChangeListener` which was deprecated in favour of `geb.PageEventListener`. [issue:593[]]
-* Update to Gradle 6.7 and build the cloud browser Gradle plugin against it. [issue:622[]]
-* Rename tunnel id to tunnel name in the Gradle plugin for LambdaTest integration. [issue:606[]]
+* Superclasses providing <<spock-junit-testng, support for various test frameworks>> have been rewritten in a backwards incompatible way to benefit from introduction of `{geb-test-manager-api}`. [hissue:614[]]
+* Geb no longer depends on `groovy-all` artifact but instead depends on `groovy`, `groovy-templates` and `groovy-macro` artifacts from `org.codehaus.groovy` group. [hissue:618[]]
+* Update to Groovy 2.5.13. [hissue:617[]]
+* Removed `geb.PageChangeListener` which was deprecated in favour of `geb.PageEventListener`. [hissue:593[]]
+* Update to Gradle 6.7 and build the cloud browser Gradle plugin against it. [hissue:622[]]
+* Rename tunnel id to tunnel name in the Gradle plugin for LambdaTest integration. [hissue:606[]]
 
 === 3.4.1
 
 ==== Fixes
 
-* Fix `Browser.setNetworkLatency()` on newer versions of Chrome. [issue:620[]]
+* Fix `Browser.setNetworkLatency()` on newer versions of Chrome. [hissue:620[]]
 
 === 3.4
 
 ==== New features
 
-* Add support for adding multiple test tasks per browser type to cloud browser gradle plugins. [issue:597[]]
+* Add support for adding multiple test tasks per browser type to cloud browser gradle plugins. [hissue:597[]]
 
 ==== Fixes
 
-* Fix an overflow for large `int` timeouts in `geb.Wait` causing `Browser.pause()` to fail and return instantly. [issue:605[]]
-* Update the message searched for in BrowserStack tunnel process output before considering it successfully as started after output changes in the latest version. [issue:607[]]
-* Update the message searched for in LambdaTest tunnel process output before considering it successfully as started after output changes in the latest version. [issue:608[]]
-* Fix detection of 64 bit architecture in Gradle tasks downloading BrowserStack and LambdaTest tunnel binaries. [issue:610[]]
+* Fix an overflow for large `int` timeouts in `geb.Wait` causing `Browser.pause()` to fail and return instantly. [hissue:605[]]
+* Update the message searched for in BrowserStack tunnel process output before considering it successfully as started after output changes in the latest version. [hissue:607[]]
+* Update the message searched for in LambdaTest tunnel process output before considering it successfully as started after output changes in the latest version. [hissue:608[]]
+* Fix detection of 64 bit architecture in Gradle tasks downloading BrowserStack and LambdaTest tunnel binaries. [hissue:610[]]
 
 ==== Improvements
 
-* Make BrowserStack and LambdaTest tunnel ready messages configurable. [issue:611[]]
+* Make BrowserStack and LambdaTest tunnel ready messages configurable. [hissue:611[]]
 
 === 3.3
 
 ==== New features
 
-* Add ability to disable implicit assertions in particular waitFor block. [issue:578[]]
-* Add support to provide more information for UnexpectedPageException. [issue:596[]]
-* Add integration with LambdaTest. [issue:603[]]
-* Add a way to react when an unexpected page is encountered. [issue:598[]]
-* Add support for setting network throttling via setNetworkConditions Chrome command. [issue:602[]]
+* Add ability to disable implicit assertions in particular waitFor block. [hissue:578[]]
+* Add support to provide more information for UnexpectedPageException. [hissue:596[]]
+* Add integration with LambdaTest. [hissue:603[]]
+* Add a way to react when an unexpected page is encountered. [hissue:598[]]
+* Add support for setting network throttling via setNetworkConditions Chrome command. [hissue:602[]]
 
 ==== Fixes
 
-* `BindingUpdater` is not forwarding methods from `geb.textmatching.TextMatchingSupport` onto the `Browser` instance. [issue:601[]]
+* `BindingUpdater` is not forwarding methods from `geb.textmatching.TextMatchingSupport` onto the `Browser` instance. [hissue:601[]]
 
 ==== Improvements
 
-* Improve integration between cloud browser gradle plugins and driver factories. [issue:579[]]
-* Switch cloud driver factories to use https urls. [issue:599[]]
-* Pass SauceLabs credentials via capabilities and not the url. [issue:600[]]
+* Improve integration between cloud browser gradle plugins and driver factories. [hissue:579[]]
+* Switch cloud driver factories to use https urls. [hissue:599[]]
+* Pass SauceLabs credentials via capabilities and not the url. [hissue:600[]]
 
 === 3.2
 
 ==== Fixes
 
-* Unexpected pages are now only checked after checking that none of the pages passed to `Browser.page()` methods taking a list match. [issue:595[]]
-* Fix global atCheckWaiting in combination with to:[...] leading to potentially long delays. [issue:594[]]
-* Fix a MissingMethodException when `Browser.withFrame(Navigator, Class<P>, Closure<T>)` is called. [issue:591[]]
-* Support accessing `Browser` instance from module base definitions. [issue:582[]]
-* Fix `withConfirm()` to work when accepting the dialog closes the window. [issue:568[]]
+* Unexpected pages are now only checked after checking that none of the pages passed to `Browser.page()` methods taking a list match. [hissue:595[]]
+* Fix global atCheckWaiting in combination with to:[...] leading to potentially long delays. [hissue:594[]]
+* Fix a MissingMethodException when `Browser.withFrame(Navigator, Class<P>, Closure<T>)` is called. [hissue:591[]]
+* Support accessing `Browser` instance from module base definitions. [hissue:582[]]
+* Fix `withConfirm()` to work when accepting the dialog closes the window. [hissue:568[]]
 
 === 3.1
 
 ==== New features
 
-* Add a way to listen for navigator events. [issue:585[]]
-* Add a way to listen for page switching and at checking events. [issue:590[]]
+* Add a way to listen for navigator events. [hissue:585[]]
+* Add a way to listen for page switching and at checking events. [hissue:590[]]
 
 ==== Fixes
 
-* Add `Actions` methods added in WebDriver 3.x to `InteractDelegate` and expose the backing `Actions` instance. [issue:587[]]
-* Fix incorrect javadoc for `Configuration.isCacheDriverPerThread()`. [issue:592[]]
+* Add `Actions` methods added in WebDriver 3.x to `InteractDelegate` and expose the backing `Actions` instance. [hissue:587[]]
+* Fix incorrect javadoc for `Configuration.isCacheDriverPerThread()`. [hissue:592[]]
 
 === 3.0.1
 
 ==== Fixes
 
-* Set the correct type of dependency on `groovy-all` in poms published for Geb artifacts. [issue:586[]]
+* Set the correct type of dependency on `groovy-all` in poms published for Geb artifacts. [hissue:586[]]
 
 === 3.0
 
 ==== Fixes
 
-* Use `Number` instead of `Double` for waitFor calls. [issue:570[]]
-* Make `RadioButtons` module extendable. [issue:562[]]
-* Fix selector optimisation when attributes map contains `GString` values. [issue:564[]]
-* Do not swallow the cause when instantiating `UnableToLoadException`. [issue:572[]]
+* Use `Number` instead of `Double` for waitFor calls. [hissue:570[]]
+* Make `RadioButtons` module extendable. [hissue:562[]]
+* Fix selector optimisation when attributes map contains `GString` values. [hissue:564[]]
+* Do not swallow the cause when instantiating `UnableToLoadException`. [hissue:572[]]
 
 ==== New features
 
-* <<dynamic-navigators,Dynamic navigators>>. [issue:557[]]
-* Support specifying data center specific hostname when using SauceLabsDriverFactory. [issue:573[]]
-* Allow specifying custom commandline switches for BrowserStack local tunnel command in geb-browserstack Gradle plugin. [issue:573[]]
+* <<dynamic-navigators,Dynamic navigators>>. [hissue:557[]]
+* Support specifying data center specific hostname when using SauceLabsDriverFactory. [hissue:573[]]
+* Allow specifying custom commandline switches for BrowserStack local tunnel command in geb-browserstack Gradle plugin. [hissue:573[]]
 
 ==== Breaking changes
 
-* `geb.navigator.EmptyNavigator` class has been removed. [issue:557[]]
-* Signature of the method in `geb.navigator.factory.InnerNavigatorFactory` has been changed. [issue:557[]]
-* Multiple methods have been moved up from `geb.navigator.Locator` to `geb.navigator.BasicLocator`. [issue:557[]]
-* `geb.navigator.NonEmptyNavigator` has been renamed to `geb.navigator.DefaultNavigator`. [issue:557[]]
-* JUnit 3 support has been retired. [issue:532[]]
-* Update to Groovy 2.5.6. [issue:534[]]
-* Support for Groovy 2.3 has been removed. [issue:560[]]
-* Reports are now by default only taken only on test failure and not after every test. [issue:527[]]
-* Proxy settings for BrowserStackLocal, tunnel identifier and forcing all traffic through local machine are now configured in a different block when using geb-browserstack Gradle plugin. [issue:573[]]
-* Update to Spock 1.3, drop support for Spock 1.0. [issue:581[]]
+* `geb.navigator.EmptyNavigator` class has been removed. [hissue:557[]]
+* Signature of the method in `geb.navigator.factory.InnerNavigatorFactory` has been changed. [hissue:557[]]
+* Multiple methods have been moved up from `geb.navigator.Locator` to `geb.navigator.BasicLocator`. [hissue:557[]]
+* `geb.navigator.NonEmptyNavigator` has been renamed to `geb.navigator.DefaultNavigator`. [hissue:557[]]
+* JUnit 3 support has been retired. [hissue:532[]]
+* Update to Groovy 2.5.6. [hissue:534[]]
+* Support for Groovy 2.3 has been removed. [hissue:560[]]
+* Reports are now by default only taken only on test failure and not after every test. [hissue:527[]]
+* Proxy settings for BrowserStackLocal, tunnel identifier and forcing all traffic through local machine are now configured in a different block when using geb-browserstack Gradle plugin. [hissue:573[]]
+* Update to Spock 1.3, drop support for Spock 1.0. [hissue:581[]]
 
 === 2.3.1
 
 ==== Fixes
 
-* Fix setting value by text on multi select elements when the text within option tag contains trailing or leading spaces. [issue:563[]]
+* Fix setting value by text on multi select elements when the text within option tag contains trailing or leading spaces. [hissue:563[]]
 
 === 2.3
 
 ==== New features
 
-* Added form control modules for url, password and number inputs. [issue:548[]]
-* Added form control module for color inputs. [issue:549[]]
-* Added form control module for datetime-local inputs. [issue:550[]]
-* Added form control module for time inputs. [issue:554[]]
-* Added form control module for month inputs. [issue:552[]]
-* Added form control module for range inputs. [issue:551[]]
-* Added form control module for week inputs. [issue:553[]]
-* Added `focused()` method on `Navigable` which obtains a `Navigator` wrapping the active (focused) `WebElement`. [issue:546[]]
-* Ability to require at checkers to be defined even for pages that are implicitly at checked. [issue:541[]]
+* Added form control modules for url, password and number inputs. [hissue:548[]]
+* Added form control module for color inputs. [hissue:549[]]
+* Added form control module for datetime-local inputs. [hissue:550[]]
+* Added form control module for time inputs. [hissue:554[]]
+* Added form control module for month inputs. [hissue:552[]]
+* Added form control module for range inputs. [hissue:551[]]
+* Added form control module for week inputs. [hissue:553[]]
+* Added `focused()` method on `Navigable` which obtains a `Navigator` wrapping the active (focused) `WebElement`. [hissue:546[]]
+* Ability to require at checkers to be defined even for pages that are implicitly at checked. [hissue:541[]]
 
 ==== Fixes
 
-* Compatibility with latest Sauce Connect. [issue:559[]]
+* Compatibility with latest Sauce Connect. [hissue:559[]]
 
 ==== Improvements
 
-* Add an at() method to geb.Page which always throws MissingMethodException. [issue:543[]]
-* Improve signatures of methods in FrameSupport that take page objects to provide autocompletion inside of the closure passed as the last argument. [issue:540[]]
-* Resolve properties and methods in the closure passed to withNewWindow() and withWindow() against the browser. [issue:545[]]
+* Add an at() method to geb.Page which always throws MissingMethodException. [hissue:543[]]
+* Improve signatures of methods in FrameSupport that take page objects to provide autocompletion inside of the closure passed as the last argument. [hissue:540[]]
+* Resolve properties and methods in the closure passed to withNewWindow() and withWindow() against the browser. [hissue:545[]]
 
 === 2.2
 
 ==== New features
 
-* Make it more convenient to wait on something while reloading the page. [issue:499[]]
-* Added `waitCondition` content template option. [issue:342[]]
-* Added ability to disable use of tunnels in Gradle plugins for BrowserStack and SauceLabs. [issue:384[]]
-* Added `pause()` method to `Browser` class as an alternative to setting breakpoints when debugging. [issue:247[]]
-* Added ability to access names of content defined using the DSL at runtime. [issue:369[]]
-* Added ability to configure default values of content DSL template options. [issue:369[]]
-* Added ability to configure default values of options passed to `withWindow()` and `withNewWindow()`. [issue:406[]]
-* Added origin information to `TemplateDerivedPageContent` and `PageContentContainer`. [issue:446[]]
-* Added improved web storage support including management in test integrations. [issue:472[]]
+* Make it more convenient to wait on something while reloading the page. [hissue:499[]]
+* Added `waitCondition` content template option. [hissue:342[]]
+* Added ability to disable use of tunnels in Gradle plugins for BrowserStack and SauceLabs. [hissue:384[]]
+* Added `pause()` method to `Browser` class as an alternative to setting breakpoints when debugging. [hissue:247[]]
+* Added ability to access names of content defined using the DSL at runtime. [hissue:369[]]
+* Added ability to configure default values of content DSL template options. [hissue:369[]]
+* Added ability to configure default values of options passed to `withWindow()` and `withNewWindow()`. [hissue:406[]]
+* Added origin information to `TemplateDerivedPageContent` and `PageContentContainer`. [hissue:446[]]
+* Added improved web storage support including management in test integrations. [hissue:472[]]
 
 ==== Fixes
-* Fix translation of attribute map to css selector when finding elements for attribute value that is a GString. [issue:525[]]
-* Fix documentation around calling value() on unchecked checkboxes. [issue:520[]]
-* Make additional capabilities passed to cloud driver factory's `create()` method override the capabilities that are hardcoded for a particular cloud driver provider. [issue:372[]]
-* Fixed `getCheckedLabel()` on `RadioButtons` module to return label text instead of `null` when a checked radio button is wrapped by a label without a `for` attribute. [issue:530[]]
-* Fix links to manual sections that had non-unique ids. [issue:535[]]
+* Fix translation of attribute map to css selector when finding elements for attribute value that is a GString. [hissue:525[]]
+* Fix documentation around calling value() on unchecked checkboxes. [hissue:520[]]
+* Make additional capabilities passed to cloud driver factory's `create()` method override the capabilities that are hardcoded for a particular cloud driver provider. [hissue:372[]]
+* Fixed `getCheckedLabel()` on `RadioButtons` module to return label text instead of `null` when a checked radio button is wrapped by a label without a `for` attribute. [hissue:530[]]
+* Fix links to manual sections that had non-unique ids. [hissue:535[]]
 
 ==== Improvements
 
-* Support calling `GebReportingSpec#report(String)` from fixture methods. [issue:518[]]
-* Add method for performing assertions as part of an at check. [issue:405[]]
-* Document how to configure proxy to be used by the direct download API. [issue:371[]]
-* Enable taking reports for all windows if multiple are open. [issue:401[]]
-* Describe what constitutes a good at checker in the manual. [issue:512[]]
-* Document how to restart the browser mid-test. [issue:473[]]
+* Support calling `GebReportingSpec#report(String)` from fixture methods. [hissue:518[]]
+* Add method for performing assertions as part of an at check. [hissue:405[]]
+* Document how to configure proxy to be used by the direct download API. [hissue:371[]]
+* Enable taking reports for all windows if multiple are open. [hissue:401[]]
+* Describe what constitutes a good at checker in the manual. [hissue:512[]]
+* Document how to restart the browser mid-test. [hissue:473[]]
 
 === 2.1
 
 ==== New features
 
-* Added a form control module for search input. [issue:495[]]
-* Added a form control module for date input. [issue:496[]]
-* Added `FramesSourceReporter` which allows to report on the source content of each top level frame of the browser's current page. [issue:448[]]
-* Added form control modules for email and tel inputs. [issue:498[]]
+* Added a form control module for search input. [hissue:495[]]
+* Added a form control module for date input. [hissue:496[]]
+* Added `FramesSourceReporter` which allows to report on the source content of each top level frame of the browser's current page. [hissue:448[]]
+* Added form control modules for email and tel inputs. [hissue:498[]]
 
 ==== Fixes
 
-* Fix reporting on failure in JUnit support when `reportOnTestFailureOnly` is set to true [issue:491[]]
+* Fix reporting on failure in JUnit support when `reportOnTestFailureOnly` is set to true [hissue:491[]]
 
 ==== Breaking changes
 
-* Actually remove `FileInput#getFile()` which was supposed to be removed for 2.0 but wasn't. [issue:503[]]
+* Actually remove `FileInput#getFile()` which was supposed to be removed for 2.0 but wasn't. [hissue:503[]]
 
 === 2.0
 
 ==== New features
 
-* Allow specifying the expected number of elements a content definition should return. [issue:149[]]
+* Allow specifying the expected number of elements a content definition should return. [hissue:149[]]
 
 ==== Fixes
 
-* Improved error message when trying to select null on a single-select select element. [issue:477[]]
-* Return a list of results instead of `null` from `newWindow()` methods taking a window matching specification closure. [issue:476[]]
-* Ignore case of tag names passed as part of css selectors to `Navigator.filter()` [issue:482[]]
-* Gracefully handle incorrectly encoded URIs returned from `WebDriver.getCurrentUrl()` when navigating to urls. [issue:492[]]
+* Improved error message when trying to select null on a single-select select element. [hissue:477[]]
+* Return a list of results instead of `null` from `newWindow()` methods taking a window matching specification closure. [hissue:476[]]
+* Ignore case of tag names passed as part of css selectors to `Navigator.filter()` [hissue:482[]]
+* Gracefully handle incorrectly encoded URIs returned from `WebDriver.getCurrentUrl()` when navigating to urls. [hissue:492[]]
 
 ==== Improvements
 
-* Change signatures of methods from `FrameSupport` to be more strongly typed. [issue:470[]]
+* Change signatures of methods from `FrameSupport` to be more strongly typed. [hissue:470[]]
 
 ==== Breaking changes
 
-* Use Java 8 to compile the project. [issue:502[]]
-* Remove `FileInput#getFile()`. [issue:503[]]
-* Build using WebDriver 3.6.0. [issue:504[]]
-* Calling `click()` on empty navigators results in a `UnsupportedOperationException`. [issue:501[]]
-* Build using Spock 1.1. [issue:505[]]
-* Unchecked checkboxes return `null` as value for consistency with other input types. [issue:465[]]
+* Use Java 8 to compile the project. [hissue:502[]]
+* Remove `FileInput#getFile()`. [hissue:503[]]
+* Build using WebDriver 3.6.0. [hissue:504[]]
+* Calling `click()` on empty navigators results in a `UnsupportedOperationException`. [hissue:501[]]
+* Build using Spock 1.1. [hissue:505[]]
+* Unchecked checkboxes return `null` as value for consistency with other input types. [hissue:465[]]
 
 === 1.1.1
 
 ==== Fixes
 
-* Do not double encode query parameters when building urls for arguments passed to `go()`, `to()` and `via()`. [issue:469[]]
+* Do not double encode query parameters when building urls for arguments passed to `go()`, `to()` and `via()`. [hissue:469[]]
 
 === 1.1
 
 ==== Fixes
 
-* Delegate to `browser` instead of the module from blocks passed to `withFrame()` in module classes. [issue:461[]]
-* Fix implicit assertions in “at checkers” to not return `null` if the last call is to a void method. [issue:462[]]
+* Delegate to `browser` instead of the module from blocks passed to `withFrame()` in module classes. [hissue:461[]]
+* Fix implicit assertions in “at checkers” to not return `null` if the last call is to a void method. [hissue:462[]]
 
 ==== Improvements
 
-* Support for selecting Edge as the browser using name in configuration. [issue:425[]]
-* Support for using url fragment identifiers when navigating to pages. [issue:463[]]
-* Unexpected pages are only checked after at check fails for the expected page. [issue:450[]]
-* Support equality checking between all core implementations of `Navigator`, based on comparing collections of web elements wrapped by them. [issue:459[]]
-* Support using label text to select checkboxes and using collections as value to select multiple checkboxes when dealing a number of checkboxes with the same name. [issue:460[]]
+* Support for selecting Edge as the browser using name in configuration. [hissue:425[]]
+* Support for using url fragment identifiers when navigating to pages. [hissue:463[]]
+* Unexpected pages are only checked after at check fails for the expected page. [hissue:450[]]
+* Support equality checking between all core implementations of `Navigator`, based on comparing collections of web elements wrapped by them. [hissue:459[]]
+* Support using label text to select checkboxes and using collections as value to select multiple checkboxes when dealing a number of checkboxes with the same name. [hissue:460[]]
 
 ==== Deprecations
 
-* Grails 2.x plugin has been discontinued. [issue:456[]]
+* Grails 2.x plugin has been discontinued. [hissue:456[]]
 
 === 1.0
 
 ==== Fixes
-* Fix the direct field operator shortcut (`@`) for accessing element attributes to work on classes extending `Module`. [issue:438[]]
-* Fix reporting on failure only in `GebReportingSpec` to work with Spock 1.1. [issue:445[]]
+* Fix the direct field operator shortcut (`@`) for accessing element attributes to work on classes extending `Module`. [hissue:438[]]
+* Fix reporting on failure only in `GebReportingSpec` to work with Spock 1.1. [hissue:445[]]
 
 ==== Improvements
 
-* Add ability to unwrap modules returned from content dsl to their original type. [issue:434[]]
-* Add support for using attribute css selectors with navigator filtering methods like `filter()`, `not()`, `closest()`, etc. [issue:437[]]
+* Add ability to unwrap modules returned from content dsl to their original type. [hissue:434[]]
+* Add support for using attribute css selectors with navigator filtering methods like `filter()`, `not()`, `closest()`, etc. [hissue:437[]]
 
 ==== Breaking changes
 * `geb.testng.GebTest` and `geb.testng.GebReportingTest` which were deprecated in 0.13.0 have been removed.
@@ -448,39 +448,39 @@ No changes have been made, yet.
 
 ==== Fixes
 
-* Fix a MissingMethodException thrown from `Navigator.value()` when using Groovy versions < 2.4.0. [issue:422[]]
-* Don't unnecessarily synchronize methods of `CachingDirverFactory.ThreadLocalCache`. [issue:421[]]
-* Ensure `ConfigSlurper.parse(Script, URL)` is called in a thread safe way from `ConfigurationLoader`. [issue:423[]]
+* Fix a MissingMethodException thrown from `Navigator.value()` when using Groovy versions < 2.4.0. [hissue:422[]]
+* Don't unnecessarily synchronize methods of `CachingDirverFactory.ThreadLocalCache`. [hissue:421[]]
+* Ensure `ConfigSlurper.parse(Script, URL)` is called in a thread safe way from `ConfigurationLoader`. [hissue:423[]]
 
 === 0.13.0
 
 ==== New features
 
-* `reportOnTestFailureOnly` config option is now also effective in Spock and JUnit4 integrations. [issue:92[]]
-* `isFocused()` method has been added to the `Navigator` class. [issue:208[]]
-* `InvalidPageContent` exception is thrown when a content is defined with a name that will result in that content being not accessible. [issue:109[]] [issue:122[]]
-* Ability to specify proxy location and credentials to use with BrowserStack tunnel. [issue:419[]]
+* `reportOnTestFailureOnly` config option is now also effective in Spock and JUnit4 integrations. [hissue:92[]]
+* `isFocused()` method has been added to the `Navigator` class. [hissue:208[]]
+* `InvalidPageContent` exception is thrown when a content is defined with a name that will result in that content being not accessible. [hissue:109[]] [hissue:122[]]
+* Ability to specify proxy location and credentials to use with BrowserStack tunnel. [hissue:419[]]
 
 ==== Fixes
 
-* Fix a bug that caused reports for all but the last executed test class in TestNG integration to be wiped out. [issue:407[]]
-* Fix a bug preventing using module as a base of another module. [issue:411[]]
-* Restore `browser` property of `Module`. [issue:416[]]
-* Handle setting values of form elements that cause page change or reload when their value changes. [issue:155[]]
+* Fix a bug that caused reports for all but the last executed test class in TestNG integration to be wiped out. [hissue:407[]]
+* Fix a bug preventing using module as a base of another module. [hissue:411[]]
+* Restore `browser` property of `Module`. [hissue:416[]]
+* Handle setting values of form elements that cause page change or reload when their value changes. [hissue:155[]]
 
 ==== Improvements
 
-* Non-ASCII word characters are not longer replaced in report file names. [issue:399[]]
-* Change TestNG support to be based on traits. [issue:412[]]
-* Add `Navigator.moduleList()` methods as an alternative to the deprecated `moduleList()` methods available in the content DSL. [issue:402[]]
-* Add support for using Geb with Selendroid and other Selenium based frameworks for testing non-web applications. [issue:320[]]
-* Improve documentation for `Browser.clearCookies()` around what exactly is cleared, add a helper method for removing cookies across multiple domains. [issue:159[]]
-* Don't depend on UndefinedAtCheckerException for flow control. [issue:368[]]
-* Document that `Navigator.text()` returns the text of the element only if it's visible. [issue:403[]]
-* Make implementation of `interact()` less dynamic. [issue:190[]]
-* Improve documentation for `interact()`. [issue:207[]]
-* Don't unnecessarily request tag name and type attribute multiple times when setting text input values. [issue:417[]]
-* Improve usefulness of string representation of content elements. [issue:274[]]
+* Non-ASCII word characters are not longer replaced in report file names. [hissue:399[]]
+* Change TestNG support to be based on traits. [hissue:412[]]
+* Add `Navigator.moduleList()` methods as an alternative to the deprecated `moduleList()` methods available in the content DSL. [hissue:402[]]
+* Add support for using Geb with Selendroid and other Selenium based frameworks for testing non-web applications. [hissue:320[]]
+* Improve documentation for `Browser.clearCookies()` around what exactly is cleared, add a helper method for removing cookies across multiple domains. [hissue:159[]]
+* Don't depend on UndefinedAtCheckerException for flow control. [hissue:368[]]
+* Document that `Navigator.text()` returns the text of the element only if it's visible. [hissue:403[]]
+* Make implementation of `interact()` less dynamic. [hissue:190[]]
+* Improve documentation for `interact()`. [hissue:207[]]
+* Don't unnecessarily request tag name and type attribute multiple times when setting text input values. [hissue:417[]]
+* Improve usefulness of string representation of content elements. [hissue:274[]]
 
 ==== Deprecations
 
@@ -491,58 +491,58 @@ No changes have been made, yet.
 * Geb is now built with Groovy 2.4.5 and Spock 1.0-groovy-2.4.
 * The following `Navigator` methods now throw `SingleElementNavigatorOnlyMethodException` when called on a multi element `Navigator`: `hasClass(java.lang.String)`, `is(java.lang.String)`,
 `isDisplayed()`, `isDisabled()`, `isEnabled()`, `isReadOnly()`, `isEditable()`, `tag()`, `text()`, `getAttribute(java.lang.String)`, `attr(java.lang.String)`, `classes()`, `value()`, `click()`,
-`getHeight()`, `getWidth()`, `getX()`, `getY()`, `css(java.lang.String)`, `isFocused()`. [issue:284[]]
+`getHeight()`, `getWidth()`, `getX()`, `getY()`, `css(java.lang.String)`, `isFocused()`. [hissue:284[]]
 
 
 === 0.12.2
 
 ==== Fixes
 
-* Fix incorrect delegation in variant of `waitFor()` that takes timeout and interval. [issue:395[]]
-* Fix NPE on implicitly asserted statements that contain a safely navigated method call on null target. [issue:398[]]
+* Fix incorrect delegation in variant of `waitFor()` that takes timeout and interval. [hissue:395[]]
+* Fix NPE on implicitly asserted statements that contain a safely navigated method call on null target. [hissue:398[]]
 
 === 0.12.1
 
 ==== Fixes
 
-* Change implementation of `waitFor()` method delegation so that IntelliJ does not complain that page and module classes supposedly need to implement it. [issue:391[]]
-* Properly handle class attribute when it's passed to `$()` together with a css selector. [issue:390[]]
+* Change implementation of `waitFor()` method delegation so that IntelliJ does not complain that page and module classes supposedly need to implement it. [hissue:391[]]
+* Properly handle class attribute when it's passed to `$()` together with a css selector. [hissue:390[]]
 
 === 0.12.0
 
 ==== New features
 
-* Support for finding elements using Webdriver's `{by-api}` selectors. [issue:348[]]
-* Support for navigating to page instances in addition to classes. [issue:310[]]
-* Support for using page instances as `page` option value of window switching methods. [issue:352[]]
-* Support for using page instances together with frame switching methods. [issue:354[]]
-* Support for using page instances with `Navigator.click()` methods. [issue:355[]]
-* Support for using page instances and lists of page instances as `page` option value of content templates. [issue:356[]]
-* New `Navigator.module(Class&lt;? extends Module&gt;)` and `Navigable.module(Class&lt;? extends Module&gt;)`. [issue:312[]]
-* New `Navigable.module(Module)` and `Navigable.module(Module)`. [issue:311[]]
-* Support for using `interact {}` blocks in modules. [issue:364[]]
-* Support page level `atCheckWaiting` configuration. [issue:287[]]
-* `Navigator` elements can now also be filtered using `hasNot()` method. [issue:370[]]
-* Custom implementation of `equals()` and `hashCode()` methods have been added to classes implementing `Navigator`. [issue:374[]]
-* Support setting `forcelocal` flag for BrowserStack tunnel. [issue:385[]]
-* Add configuration option for including cause string representation in message of `WaitTimeoutException`. [issue:386[]]
+* Support for finding elements using Webdriver's `{by-api}` selectors. [hissue:348[]]
+* Support for navigating to page instances in addition to classes. [hissue:310[]]
+* Support for using page instances as `page` option value of window switching methods. [hissue:352[]]
+* Support for using page instances together with frame switching methods. [hissue:354[]]
+* Support for using page instances with `Navigator.click()` methods. [hissue:355[]]
+* Support for using page instances and lists of page instances as `page` option value of content templates. [hissue:356[]]
+* New `Navigator.module(Class&lt;? extends Module&gt;)` and `Navigable.module(Class&lt;? extends Module&gt;)`. [hissue:312[]]
+* New `Navigable.module(Module)` and `Navigable.module(Module)`. [hissue:311[]]
+* Support for using `interact {}` blocks in modules. [hissue:364[]]
+* Support page level `atCheckWaiting` configuration. [hissue:287[]]
+* `Navigator` elements can now also be filtered using `hasNot()` method. [hissue:370[]]
+* Custom implementation of `equals()` and `hashCode()` methods have been added to classes implementing `Navigator`. [hissue:374[]]
+* Support setting `forcelocal` flag for BrowserStack tunnel. [hissue:385[]]
+* Add configuration option for including cause string representation in message of `WaitTimeoutException`. [hissue:386[]]
 
 ==== Improvements
 
-* Using unrecognized content template parameters result in an `InvalidPageContent` exception to make catching typos in them easier. [issue:377[]]
-* Improve error reporting when no at checkers pass if using multiple candidates for page switching. [issue:346[]]
-* Don't unnecessarily lookup root element for every baseless element lookup using `$()` in context of `Navigable`. [issue:306[]]
-* Attribute based searches are compiled to CSS selectors where possible. [issue:280[]]
-* Attribute based searches using an id, class or name are performed using an appropriate `By` selector where possible. [issue:333[]]
+* Using unrecognized content template parameters result in an `InvalidPageContent` exception to make catching typos in them easier. [hissue:377[]]
+* Improve error reporting when no at checkers pass if using multiple candidates for page switching. [hissue:346[]]
+* Don't unnecessarily lookup root element for every baseless element lookup using `$()` in context of `Navigable`. [hissue:306[]]
+* Attribute based searches are compiled to CSS selectors where possible. [hissue:280[]]
+* Attribute based searches using an id, class or name are performed using an appropriate `By` selector where possible. [hissue:333[]]
 
 ==== Fixes
 
-* Improved message thrown from Navigator.isDisabled() and Navigator.isReadOnly() when navigator does not contain a form element. [issue:345[]]
-* Browser.verifyAtIfPresent() should fail for at checkers returning false when implicit assertions are disabled. [issue:357[]]
-* Provide better error reporting when unexpected pages configuration is not a collection that contains classes which extend `Page`. [issue:270[]]
-* Don't fail when creating a report and driver's screenshot taking method returns null. [issue:292[]]
-* Classes that can define content should not throw custom exceptions from `propertyMissing()`. [issue:367[]]
-* “At checkers” of pages passed to `withFrame()` methods are now verified. [issue:358[]]
+* Improved message thrown from Navigator.isDisabled() and Navigator.isReadOnly() when navigator does not contain a form element. [hissue:345[]]
+* Browser.verifyAtIfPresent() should fail for at checkers returning false when implicit assertions are disabled. [hissue:357[]]
+* Provide better error reporting when unexpected pages configuration is not a collection that contains classes which extend `Page`. [hissue:270[]]
+* Don't fail when creating a report and driver's screenshot taking method returns null. [hissue:292[]]
+* Classes that can define content should not throw custom exceptions from `propertyMissing()`. [hissue:367[]]
+* “At checkers” of pages passed to `withFrame()` methods are now verified. [hissue:358[]]
 
 ==== Breaking changes
 
@@ -557,54 +557,54 @@ No changes have been made, yet.
 * `module(Class&lt;? extends Module&gt;, Map args)` available in content DSL has been deprecated in favour of `Navigable.module(Module)` and will be removed in a future version of Geb.
 * `module(Class&lt;? extends Module&gt;, Navigator base, Map args)` available in content DSL has been deprecated in favour of `Navigator.module(Module)` and will be removed in a future version of Geb.
 * all variants of `moduleList()` method available in content DSL have been deprecated in favour of using `Navigator.module()` methods together with a `collect()` call and will be removed in a future
-version of Geb, see <<repeating-content, chapter on using modules for repeating content>> for examples [issue:362[]]
+version of Geb, see <<repeating-content, chapter on using modules for repeating content>> for examples [hissue:362[]]
 * `isDisabled()`, `isEnabled()`, `isReadOnly()` and `isEditable()` methods of `Navigator` have been deprecated and will be removed in a future version of Geb. These methods are now available on the
 new <<form-element, `FormElement`>> module class.
 
 ==== Project related changes
 
 * User mailing list has moved to link:https://groups.google.com/d/forum/geb-user[Google Groups].
-* The Book of Geb has been migrated to Asciidoctor and the examples have been made executable. [issue:350[]]
+* The Book of Geb has been migrated to Asciidoctor and the examples have been made executable. [hissue:350[]]
 
 === 0.10.0
 
 ==== New features
 
-* New `css()` method on `Navigator` that allows to access CSS properties of elements. [issue:141[]]
-* Added attribute based methods to relative content navigators such as next(), children() etc. [issue:299[]]
-* Added signature that accepts `localIdentifier` to `BrowserStackDriverFactory.create`. [issue:332[]]
-* Added <<content-dsl-to-wait, `toWait`>> content definition option which allows specifying that page transition happens asynchronously. [issue:134[]]
-* Added support for explicitly specifying browser capabilities when using cloud browsers Gradle plugins. [issue:340[]]
-* Added an overloaded `create()` method on cloud driver factories that allow specifying browser capabilities in a map and don't require a string capabilities specification. [issue:281[]]
+* New `css()` method on `Navigator` that allows to access CSS properties of elements. [hissue:141[]]
+* Added attribute based methods to relative content navigators such as next(), children() etc. [hissue:299[]]
+* Added signature that accepts `localIdentifier` to `BrowserStackDriverFactory.create`. [hissue:332[]]
+* Added <<content-dsl-to-wait, `toWait`>> content definition option which allows specifying that page transition happens asynchronously. [hissue:134[]]
+* Added support for explicitly specifying browser capabilities when using cloud browsers Gradle plugins. [hissue:340[]]
+* Added an overloaded `create()` method on cloud driver factories that allow specifying browser capabilities in a map and don't require a string capabilities specification. [hissue:281[]]
 
 ==== Fixes
 
-* Allow access to module properties from its content block. [issue:245[]]
-* Support setting of elements for WebDriver implementations that return uppercase tag name. [issue:318[]]
-* Use native binaries for running BrowserStack tunnel. [issue:326[]]
-* Update BrowserStack support to use command-line arguments introduced in tunnel version 3.1. [issue:332[]]
-* Fix PermGen memory leak when using groovy script backed configuration. [issue:335[]]
-* Don't fail in `Browser.isAt()` if at check waiting is enabled and it times out. [issue:337[]]
-* The value passed to `aliases` content option in documentation examples should be a String [issue:338[]]
-* Added `$()` method on Navigator with all signatures of `find()`. [issue:321[]]
-* `geb-saucelabs` plugin now uses a native version of SauceConnect. [issue:341[]]
-* Don't modify the predicate map passed to link:api/geb/navigator/BasicLocator.html#find(Map,%20java.lang.String)["`Navigator.find(Map&lt;String, Object&gt;, String)`"]. [issue:339[]]
-* Functional tests implemented using JUnit and Geb run twice in Grails 2.3+. [issue:314[]]
-* Mention in the manual where snapshot artifacts can be downloaded from. [issue:305[]]
-* Document that `withNewWindow()` and `withWindow()` switch page back to the original one. [issue:279[]]
-* Fix selectors in documentation for manipulating checkboxes. [issue:268[]]
+* Allow access to module properties from its content block. [hissue:245[]]
+* Support setting of elements for WebDriver implementations that return uppercase tag name. [hissue:318[]]
+* Use native binaries for running BrowserStack tunnel. [hissue:326[]]
+* Update BrowserStack support to use command-line arguments introduced in tunnel version 3.1. [hissue:332[]]
+* Fix PermGen memory leak when using groovy script backed configuration. [hissue:335[]]
+* Don't fail in `Browser.isAt()` if at check waiting is enabled and it times out. [hissue:337[]]
+* The value passed to `aliases` content option in documentation examples should be a String [hissue:338[]]
+* Added `$()` method on Navigator with all signatures of `find()`. [hissue:321[]]
+* `geb-saucelabs` plugin now uses a native version of SauceConnect. [hissue:341[]]
+* Don't modify the predicate map passed to link:api/geb/navigator/BasicLocator.html#find(Map,%20java.lang.String)["`Navigator.find(Map&lt;String, Object&gt;, String)`"]. [hissue:339[]]
+* Functional tests implemented using JUnit and Geb run twice in Grails 2.3+. [hissue:314[]]
+* Mention in the manual where snapshot artifacts can be downloaded from. [hissue:305[]]
+* Document that `withNewWindow()` and `withWindow()` switch page back to the original one. [hissue:279[]]
+* Fix selectors in documentation for manipulating checkboxes. [hissue:268[]]
 
 ==== Project related changes
 
-* Updated cucumber integration example to use `cucumber-jvm` instead of the now defunct `cuke4duke`. [issue:324[]]
-* Setup CI for all of the example projects. [issue:188[]]
-* Incorporate the example projects into the main build. [issue:189[]]
-* Add a test crawling the site in search for broken links. [issue:327[]]
-* Document the link:https://github.com/geb/geb/blob/master/RELEASING.md[release process]. [issue:325[]]
+* Updated cucumber integration example to use `cucumber-jvm` instead of the now defunct `cuke4duke`. [hissue:324[]]
+* Setup CI for all of the example projects. [hissue:188[]]
+* Incorporate the example projects into the main build. [hissue:189[]]
+* Add a test crawling the site in search for broken links. [hissue:327[]]
+* Document the link:https://github.com/geb/geb/blob/master/RELEASING.md[release process]. [hissue:325[]]
 
 ==== Breaking changes
 
-* Use Groovy 2.3.6 to build Geb. [issue:330[]]
+* Use Groovy 2.3.6 to build Geb. [hissue:330[]]
 * Format of browser specification passed to `BrowserStackBrowserFactory.create()` and `SauceLabsBrowserFactory.create()` has changed to be a string in Java properties file format defining the required browser capabilities.
 * `sauceConnect` configuration used with `geb-saucelabs` plugin should now point at a version of 'ci-sauce' artifact from 'com.saucelabs' group.
 
@@ -612,43 +612,43 @@ new <<form-element, `FormElement`>> module class.
 
 ==== New features
 
-* Added `baseNavigatorWaiting` setting to prevent intermittent Firefox driver errors when creating base navigator. [issue:269[]]
-* Page content classes including `Module` now implement `Navigator` interface [issue:181[]]
-* Added some tests that guard performance by verifying which WebDriver commands are executed [issue:302[]]
-* Added link:http://www.browserstack.com[BrowserStack] integration [issue:307[]]
-* Added a shortcut to `Browser` for getting current url [issue:294[]]
-* Verify pages at checker when passed as an option to open a new window via `withWindow()` and `withNewWindow()` [issue:278[]]
+* Added `baseNavigatorWaiting` setting to prevent intermittent Firefox driver errors when creating base navigator. [hissue:269[]]
+* Page content classes including `Module` now implement `Navigator` interface [hissue:181[]]
+* Added some tests that guard performance by verifying which WebDriver commands are executed [hissue:302[]]
+* Added link:http://www.browserstack.com[BrowserStack] integration [hissue:307[]]
+* Added a shortcut to `Browser` for getting current url [hissue:294[]]
+* Verify pages at checker when passed as an option to open a new window via `withWindow()` and `withNewWindow()` [hissue:278[]]
 
 ==== Fixes
 
-* Ignore `atCheckWaiting` setting when checking for unexpected pages. [issue:267[]]
-* Added missing range variants of find/$ methods. [issue:283[]]
-* Migrated `UnableToLoadException` to java. [issue:263[]]
-* Exception thrown when trying to set value on an invalid element (non form control). [issue:286[]]
-* Support for jQuery methods like offset() and position() which return a native Javascript object. [issue:271[]]
-* Finding elements when passing ids with spaces in the predicates map to the $() method. [issue:308[]]
+* Ignore `atCheckWaiting` setting when checking for unexpected pages. [hissue:267[]]
+* Added missing range variants of find/$ methods. [hissue:283[]]
+* Migrated `UnableToLoadException` to java. [hissue:263[]]
+* Exception thrown when trying to set value on an invalid element (non form control). [hissue:286[]]
+* Support for jQuery methods like offset() and position() which return a native Javascript object. [hissue:271[]]
+* Finding elements when passing ids with spaces in the predicates map to the $() method. [hissue:308[]]
 
 ==== Breaking changes
 
-* Removed easyb support. [issue:277[]]
-* `MissingMethodException` is now thrown when using shortcut for obtaining a navigator based on a control name and the returned navigator is empty. [issue:239[]]
+* Removed easyb support. [hissue:277[]]
+* `MissingMethodException` is now thrown when using shortcut for obtaining a navigator based on a control name and the returned navigator is empty. [hissue:239[]]
 * When using SauceLabs integration, the `allSauceTests` task was renamed to`allSauceLabsTests`
 * When using SauceLabs integration, the `geb.sauce.browser` system property was renamed to `geb.saucelabs.browser`
 * `Module` now implements `Navigator` instead of `Navigable` so `Navigator`'s methods can be called on it without having to first call `$()` to get the module's base `Navigator`.
 
 ==== Project related changes
 
-* Documentation site has been migrated to link:http://ratpack.io[Ratpack]. [issue:261[]]
-* Cross browser tests are now also executed using Safari driver [issue:276[]]
-* Artifact snapshots are uploaded and gebish.org is updated after every successful build in CI [issue:295[]]
-* Added a link:https://travis-ci.org/geb/geb[Travis CI build] that runs tests on submitted pull requests [issue:309[]]
+* Documentation site has been migrated to link:http://ratpack.io[Ratpack]. [hissue:261[]]
+* Cross browser tests are now also executed using Safari driver [hissue:276[]]
+* Artifact snapshots are uploaded and gebish.org is updated after every successful build in CI [hissue:295[]]
+* Added a link:https://travis-ci.org/geb/geb[Travis CI build] that runs tests on submitted pull requests [hissue:309[]]
 
 === 0.9.2
 
 ==== New features
 
 * `page` and `close` options can be passed to `withWindow()` calls, see <<already-opened-windows, this manual section>> for more information.
-* Unexpected pages can be specified to fail fast when performing “at” checks. This feature was contributed at a Hackergarten thanks to Andy Duncan. See <<unexpected-pages, this manual section>> for details. [issue:70[]]
+* Unexpected pages can be specified to fail fast when performing “at” checks. This feature was contributed at a Hackergarten thanks to Andy Duncan. See <<unexpected-pages, this manual section>> for details. [hissue:70[]]
 * Support for running Geb using SauceLabs provided browsers, see <<cloud-browser-testing, this manual section>> for details.
 * New `isEnabled()` and `isEditable()` methods on `Navigator`.
 * Support for ephemeral port allocation with Grails integration
@@ -656,7 +656,7 @@ new <<form-element, `FormElement`>> module class.
 
 ==== Fixes
 
-* Default value of `close` option for `withNewWindow()` is set to `true` as specified in the documentation. [issue:258[]]
+* Default value of `close` option for `withNewWindow()` is set to `true` as specified in the documentation. [hissue:258[]]
 
 ==== Breaking changes
 
@@ -672,68 +672,68 @@ new <<form-element, `FormElement`>> module class.
 
 ==== New features
 
-* Support for dealing with self-signed certificates in Download API using `SelfSignedCertificateHelper`. [issue:150[]]
+* Support for dealing with self-signed certificates in Download API using `SelfSignedCertificateHelper`. [hissue:150[]]
 * Connections created when using Download API can be configured globally using `defaultDownloadConfig` configuration option.
-* New `atCheckWaiting` configuration option allowing to implictly wrap “at” checkers in `waitFor` calls. [issue:253[]]
+* New `atCheckWaiting` configuration option allowing to implictly wrap “at” checkers in `waitFor` calls. [hissue:253[]]
 
 ==== Fixes
 
-* `containsWord()` and `iContainsWord()` now return expected results when matching against text that contains spaces [issue:254[]]
-* `has(Map&lt;String, Object&gt; predicates, String selector)` and `has(Map&lt;String, Object&gt; predicates)` were added to Navigator for consistency with `find()` and `filter()` [issue:256[]]
-* Also catch WaitTimeoutException when page verification has failed following a `click()` call [issue:255[]]
-* `not(Map&lt;String, Object&gt; predicates, String selector)` and `not(Map&lt;String, Object&gt; predicates)` were added to Navigator for consistency with `find()` and `filter()` [issue:257[]]
-* Make sure that `NullPointerException` is not thrown for incorrect driver implementations of getting current url without previously driving the browser to a url [issue:291[]]
+* `containsWord()` and `iContainsWord()` now return expected results when matching against text that contains spaces [hissue:254[]]
+* `has(Map&lt;String, Object&gt; predicates, String selector)` and `has(Map&lt;String, Object&gt; predicates)` were added to Navigator for consistency with `find()` and `filter()` [hissue:256[]]
+* Also catch WaitTimeoutException when page verification has failed following a `click()` call [hissue:255[]]
+* `not(Map&lt;String, Object&gt; predicates, String selector)` and `not(Map&lt;String, Object&gt; predicates)` were added to Navigator for consistency with `find()` and `filter()` [hissue:257[]]
+* Make sure that `NullPointerException` is not thrown for incorrect driver implementations of getting current url without previously driving the browser to a url [hissue:291[]]
 
 === 0.9.0
 
 ==== New features
 
-* New `via()` method that behaves the same way as `to()` behaved previously - it sets the page on the browser and does not verify the at checker of that page[issue:249[]].
-* It is now possible to provide your own `{navigator-api}` implementations by specifying a custom link:api/geb/navigator/factory/NavigatorFactory.html[`NavigatorFactory`], see <<navigator-factory, this manual section>> for more information [issue:96[]].
-* New variants of `withFrame()` method that allow to switch into frame context and change the page in one go and also automatically change it back to the original page after the call, see [switching pages and frames at once][switch-frame-and-page] in the manual [issue:213[]].
-* `wait`, `page` and `close` options can be passed to `withNewWindow()` calls, see <<newly-opened-windows, this manual section>> for more information [issue:167[]].
-* Improved message of UnresolvablePropertyException to include a hint about forgetting to import the class [issue:240[]].
+* New `via()` method that behaves the same way as `to()` behaved previously - it sets the page on the browser and does not verify the at checker of that page[hissue:249[]].
+* It is now possible to provide your own `{navigator-api}` implementations by specifying a custom link:api/geb/navigator/factory/NavigatorFactory.html[`NavigatorFactory`], see <<navigator-factory, this manual section>> for more information [hissue:96[]].
+* New variants of `withFrame()` method that allow to switch into frame context and change the page in one go and also automatically change it back to the original page after the call, see [switching pages and frames at once][switch-frame-and-page] in the manual [hissue:213[]].
+* `wait`, `page` and `close` options can be passed to `withNewWindow()` calls, see <<newly-opened-windows, this manual section>> for more information [hissue:167[]].
+* Improved message of UnresolvablePropertyException to include a hint about forgetting to import the class [hissue:240[]].
 * Improved signature of `Browser.at()` and `Browser.to()` to return the exact type of the page that was asserted to be at / was navigated to.
 * link:api/geb/report/ReportingListener.html[`ReportingListener`] objects can be registered to observe reporting (see: <<listening-to-reporting, this manual section>>)
 
 ==== Fixes
 
-* Fixed an issue where waitFor would throw a WaitTimeoutException even if the last evaluation before timeout returned a truthy value [issue:215[]].
-* Fixed taking screenshots for reporting when the browser is not on a HTML page (e.g. XML file) [issue:126[]].
-* Return the last evaluation value for a `(wait: true, required: false)` content instead of always returning null [issue:216[]].
-* `isAt()` behaves the same as `at()` in regards to updating the browser's page instance to the given page type if its at checker is successful [issue:227[]].
-* Handling of `select` elements has been reworked to be far more efficient [issue:229[]].
-* Modules support accessing base attributes' values using @attributeName notation [issue:237[]].
-* Use of text matchers in module base definitions is supported [issue:241[]].
-* Reading of textareas have been updated so that the current value of the text field is returned, instead of the initial [issue:174[]].
+* Fixed an issue where waitFor would throw a WaitTimeoutException even if the last evaluation before timeout returned a truthy value [hissue:215[]].
+* Fixed taking screenshots for reporting when the browser is not on a HTML page (e.g. XML file) [hissue:126[]].
+* Return the last evaluation value for a `(wait: true, required: false)` content instead of always returning null [hissue:216[]].
+* `isAt()` behaves the same as `at()` in regards to updating the browser's page instance to the given page type if its at checker is successful [hissue:227[]].
+* Handling of `select` elements has been reworked to be far more efficient [hissue:229[]].
+* Modules support accessing base attributes' values using @attributeName notation [hissue:237[]].
+* Use of text matchers in module base definitions is supported [hissue:241[]].
+* Reading of textareas have been updated so that the current value of the text field is returned, instead of the initial [hissue:174[]].
 
 ==== Breaking changes
 
-* `to(Class&lt;? extends Page&gt;)` method now changes the page on the browser and verifies the at checker of that page in one method call [issue:1[]], [issue:249[]]; use `via()` if you need the old behaviour
+* `to(Class&lt;? extends Page&gt;)` method now changes the page on the browser and verifies the at checker of that page in one method call [hissue:1[]], [hissue:249[]]; use `via()` if you need the old behaviour
 * `getAttribute(String)` on `Navigator` now returns `null` for boolean attributes that are not present.
-* `at()` and `to()` methods on `Browser` now return a page instance if they succeed and `via()` method always returns a page instance [issue:217[]].
-* `withFrame()` calls that don't take a page argument now change the browser page to what it was before the call, after the call [issue:222[]].
-* due to performance improvements duplicate elements are not removed when creating new `Navigator`s anymore; the new `unique()` method on `Navigator` can be used to remove duplicates if needed [issue:223[]].
-* `at(Page)` and `isAt(Page)` methods on `Browser` have been removed as they were inconsistent with the rest of the API [issue:242[]].
-* Navigator's `click(Class&lt;? extends Page&gt;)` and `to:` content option now verify page after switching to the new one to stay consistent with the new behaviour of `to(Class&lt;? extends Page&gt;)` [issue:250[]].
-* Reading an attribute that is not set on a navigator now returns an empty string across all drivers [issue:251[]].
+* `at()` and `to()` methods on `Browser` now return a page instance if they succeed and `via()` method always returns a page instance [hissue:217[]].
+* `withFrame()` calls that don't take a page argument now change the browser page to what it was before the call, after the call [hissue:222[]].
+* due to performance improvements duplicate elements are not removed when creating new `Navigator`s anymore; the new `unique()` method on `Navigator` can be used to remove duplicates if needed [hissue:223[]].
+* `at(Page)` and `isAt(Page)` methods on `Browser` have been removed as they were inconsistent with the rest of the API [hissue:242[]].
+* Navigator's `click(Class&lt;? extends Page&gt;)` and `to:` content option now verify page after switching to the new one to stay consistent with the new behaviour of `to(Class&lt;? extends Page&gt;)` [hissue:250[]].
+* Reading an attribute that is not set on a navigator now returns an empty string across all drivers [hissue:251[]].
 
 === 0.7.2
 
 ==== Fixes
 
-* Further fixes for Java 7 [issue:211[]].
+* Further fixes for Java 7 [hissue:211[]].
 
 === 0.7.1
 
 ==== New features
 
-* Geb is now built with Groovy 1.8.6. This was forced to resolve [issue:194[]].
+* Geb is now built with Groovy 1.8.6. This was forced to resolve [hissue:194[]].
 
 ==== Fixes
 
-* `startsWith()`, `contains()` etc. now work for selecting via element text now works for multiline (i.e. `&lt;br/&gt;`) text [issue:202[]]
-* Geb now works with Java 7 [issue:194[]].
+* `startsWith()`, `contains()` etc. now work for selecting via element text now works for multiline (i.e. `&lt;br/&gt;`) text [hissue:202[]]
+* Geb now works with Java 7 [hissue:194[]].
 
 === 0.7.0
 

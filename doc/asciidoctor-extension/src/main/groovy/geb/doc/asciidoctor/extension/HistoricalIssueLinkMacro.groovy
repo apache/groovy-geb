@@ -21,13 +21,13 @@ package geb.doc.asciidoctor.extension
 import org.asciidoctor.ast.ContentNode
 import org.asciidoctor.extension.InlineMacroProcessor
 
-class IssueLinkMacro extends InlineMacroProcessor {
+class HistoricalIssueLinkMacro extends InlineMacroProcessor {
 
     @Override
     Object process(ContentNode parent, String target, Map<String, Object> attributes) {
         def options = [
             type  : ":link",
-            target: "https://github.com/apache/groovy-geb/issues/issues/${target}"
+            target: "https://github.com/geb/issues/issues/${target}"
         ]
 
         createPhraseNode(parent, "anchor", "#$target", attributes, options)
