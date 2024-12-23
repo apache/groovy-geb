@@ -44,7 +44,7 @@ class CallbackHttpsServer extends CallbackHttpServer {
                 keyStorePath: getClass().getResource('/keystore.jks').toString()
         )
         def httpsConfig = new HttpConfiguration(securePort: port)
-        httpsConfig.addCustomizer(new SecureRequestCustomizer())
+        httpsConfig.addCustomizer(new SecureRequestCustomizer(sniHostCheck: false))
         def connector = new ServerConnector(
                 server,
                 new SslConnectionFactory(sslContextFactory, HTTP_1_1.asString()),
