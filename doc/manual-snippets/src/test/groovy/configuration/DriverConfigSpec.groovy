@@ -18,6 +18,7 @@
  */
 package configuration
 
+import geb.ConfigurationLoader
 import geb.driver.CachingDriverFactory
 import geb.fixture.HeadlessTestSupport
 import geb.test.StandaloneWebDriverServer
@@ -41,22 +42,10 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
 
     def "configuring driver using closure"() {
         when:
-        // lang=groovy
-        configScript """
-            import org.openqa.selenium.firefox.FirefoxOptions
-            // tag::configuring_driver[]
-            // tag::configuring_driver-a[]
-            import org.openqa.selenium.firefox.FirefoxDriver
-
-            driver = { 
-                new FirefoxDriver() 
-            // end::configuring_driver-a[]
-                ${HeadlessTestSupport.headless ? /new FirefoxDriver(new FirefoxOptions().addArguments('--headless'))/ : ''}
-            // tag::configuring_driver-b[]
-            }
-            // end::configuring_driver-b[]
-            // end::configuring_driver[]
-        """
+        def config = new ConfigurationLoader(null, null, new GroovyClassLoader(DriverConfigSpec.classLoader))
+            .getConf(
+                HeadlessTestSupport.headless ? '/headlessFirefoxDriverConfigScript.groovy' : '/basicFirefoxDriverConfigScript.groovy'
+            )
 
         then:
         config.driver instanceof FirefoxDriver

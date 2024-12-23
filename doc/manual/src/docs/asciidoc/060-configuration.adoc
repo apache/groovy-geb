@@ -87,7 +87,7 @@ In the config script it can be a closure that when invoked with no arguments ret
 
 [source,groovy]
 ----
-include::{snippets-dir}/configuration/DriverConfigSpec.groovy[tag=configuring_driver,indent=0]
+include::doc/manual-snippets/src/test/resources/basicFirefoxDriverConfigScript.groovy
 ----
 
 This is the preferred mechanism, as it allows the most control over the drivers creation and configuration.
