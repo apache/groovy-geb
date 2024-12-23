@@ -29,6 +29,7 @@ dependencies {
     testImplementation libs.systemLambda
     testImplementation libs.junit.platform.testkit
     testImplementation libs.junit5.jupiter.api
+    testRuntimeOnly "org.slf4j:slf4j-simple:2.0.16"
 }
 
 tasks.named("test") {
