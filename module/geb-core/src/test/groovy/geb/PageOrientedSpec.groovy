@@ -599,7 +599,7 @@ class PageWithAtCheckerThrowingException extends Page {
 }
 
 class PageWithAtCheckerReturningFalse extends Page {
-    //this circumvents implicit assertion AST transformation
+    // this circumvents implicit assertion AST transformation
     static atChecker = { false }
     static at = atChecker
 }

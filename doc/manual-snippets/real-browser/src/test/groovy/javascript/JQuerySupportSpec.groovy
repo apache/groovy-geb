@@ -36,7 +36,7 @@ class JQuerySupportSpec extends GebSpecWithServerUsingJavascript {
             } else {
                 response.contentType = ContentType.TEXT_HTML.toString()
                 response.writer << '''
-                    //tag::html[]
+                    // tag::html[]
                     <html>
                         <head>
                             <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
@@ -53,7 +53,7 @@ class JQuerySupportSpec extends GebSpecWithServerUsingJavascript {
                             <div id="b" style="display:none;"><a href="http://www.gebish.org">Geb!</a></div>
                         </body>
                     </html>
-                    //end::html[]
+                    // end::html[]
                 '''
             }
         }

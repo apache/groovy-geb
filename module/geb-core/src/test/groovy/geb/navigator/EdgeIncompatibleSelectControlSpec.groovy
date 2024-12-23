@@ -24,7 +24,7 @@ import geb.test.browsers.Firefox
 import geb.test.browsers.InternetExplorer
 import geb.test.browsers.Safari
 
-//Some functionality around multiselect seems not to work in Edge
+// Some functionality around multiselect seems not to work in Edge
 @Chrome
 @Firefox
 @InternetExplorer
