@@ -62,7 +62,7 @@ testng = 'org.testng:testng:7.5.1'
 threeTen-extra = { module = 'org.threeten:threeten-extra', version.ref = 'threeTen' }
 
 [plugins]
-asciidoc = { id = 'org.asciidoctor.jvm.convert', version = '4.0.3' }
+asciidoc = { id = 'org.asciidoctor.jvm.convert', version = '4.0.4' }
 asl2 = { id = 'com.energizedwork.asl2', version = '1.1' }
 nexusPublish = { id = 'io.github.gradle-nexus.publish-plugin', version = '2.0.0' }
 node = { id = 'com.github.node-gradle.node', version = '3.5.0' }
