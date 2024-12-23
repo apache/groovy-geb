@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build and test
+name: Build, test, and quality check
 
 on: [push, pull_request]
 
@@ -40,7 +40,7 @@ jobs:
       - name: Check firefox version
         run: /usr/bin/firefox --version
       - name: Build and run tests
-        run: ./gradlew --no-daemon --no-build-cache test
+        run: ./gradlew -Pci --no-daemon --no-build-cache check
         timeout-minutes: 60
       - name: Upload reports
         uses: actions/upload-artifact@v4
