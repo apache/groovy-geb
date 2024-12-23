@@ -15,7 +15,7 @@
 
 [versions]
 groovy = "4.0.24"
-jetty = "9.4.50.v20221201"
+jetty = "9.4.56.v20240826"
 junit4 = "4.13.2"
 junit5 = "5.11.4"
 ratpack = "1.10.0-milestone-38"

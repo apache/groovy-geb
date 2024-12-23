@@ -37,7 +37,7 @@ class CallbackHttpsServer extends CallbackHttpServer {
     }
 
     protected Connector createConnector(Server server, int port) {
-        def sslContextFactory = new SslContextFactory(
+        def sslContextFactory = new SslContextFactory.Server(
                 keyStorePassword: PASSWORD,
                 trustStorePassword: PASSWORD,
                 keyManagerPassword: PASSWORD,
