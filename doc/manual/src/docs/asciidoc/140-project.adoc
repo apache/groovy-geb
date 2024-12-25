@@ -102,66 +102,77 @@ mailto:geb-dev-unsubscribe@groovy.apache.org[Unsubscribe]
 
 == History
 
-This page lists the high level changes between versions of Geb.
+This page lists the more important changes between versions of Geb.
 
 === {geb-version}
 
-==== Improvements
-* Upgrade Groovy to 4.0.24. [issue:227[]]
-
-==== Breaking changes
+==== 💥 Breaking changes
 * Changed the Maven group coordinate to `org.apache.groovy.geb` from `org.gebish`. [issue:226[]]
+
+==== ⚙️ Dependencies
+* Upgrade Groovy to 4.0.24. [issue:227[]]
+* commit:e8b4a36c[] Bump guava to 33.4.0-jre
+* commit:cb70a30a[] Bump JUnit/JUnit Platform to 5.11.4/1.11.4
+* commit:518088aa[] Bump system-lambda to 1.2.1
+* commit:052216b4[] Bump jsoup to 1.18.3
+* commit:315a6387[] Bump jodd-lagarto to 6.0.6
+* commit:360faf9d[] Make dependency updates a little pickier about versions to show
+* commit:ec8d1130[] Bump testng to 7.5.1
+* commit:083c0703[] Bump Selenium to 4.27.0, Selenium TestContainer to 1.20.3
+* commit:b4fa2a12[] Bump CodeNarc version
+* commit:519b6d10[] Bump ThreeTen-Extra lib to 1.8.0
+
 
 === 7.0
 
-==== New features
+==== 🚀 New features
 * Add support for selecting elements by visibility when creating a `Navigator`. [issueh:675[]]
 * Add a convenience method for creating dynamic navigators based on a `Supplier<Iterable<WebElement>>`. [issueh:674[]]
 
-==== Fixes
+==== 🐛 Fixes
 * Correctly handle skipped and aborted tests in `OnFailureReporter`. [issueh:676[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 * Update Groovy to 4.0.5 and Spock to 2.3-groovy-4.0. [issueh:668[]]
 
 === 6.0
 
-==== New features
+==== 🚀 New features
 
 * Add an option to `waitFor()` to not throw `WaitTimeoutException` when the wait times out. [issueh:644[]]
 * Cloud browser plugins are published to Gradle Plugin Portal. [issueh:647[]]
 
-==== Fixes
+==== 🐛 Fixes
 * Fix a bug causing reports generated from within `cleanupSpec()` to not end up in the report group directory for the spec. [issueh:661[]]
 * Update LambdaTest tunnel to v3. [issueh:662[]]
 * Correctly expose all API dependencies for geb-junit4 and geb-testng modules to consumers.. [issueh:666[]]
 
-==== Improvements
+==== 💪 Improvements
 * Add parallel execution support for JUnit 5 integration. [issueh:663[]]
 * Update Spock to 2.1-groovy-3.0. [issueh:665[]]
 * Any `WebDriverException` thrown from web storage clearing after each test in `GebTestManager` is now suppressed. [issueh:649[]]
 
-==== Project related changes
+==== 🔄️ Changes
 * Update Gradle logo at the bottom of gebish.org to the current design. [issueh:653[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 * Update to Selenium 4. [issueh:664[]]
 * Cloud browser plugins are no longer published to Maven Central and should be resolved from Gradle Plugin portal instead. [issueh:648[]]
 * Run GebConfig script only once rather than before each test in JUnit and Spock integrations. [issueh:660[]]
 
 === 5.1
 
-==== Improvements
+==== 💪 Improvements
 
 * Add support for Spock's parallel execution to `GebSpec` and `GebReportingSpec`. [issueh:645[]]
 
 === 5.0
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix a bug under Groovy 3 which caused PageInstanceNotInitializedException when "container" was used as a content element name. [issueh:640[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * The `quitDriverOnBrowserReset` config option now default to true if driver caching is disabled. [issueh:633[]]
 * Update Groovy to 3.0.8 and Spock to 2.0-groovy-3.0. [issueh:619[]]
@@ -169,34 +180,34 @@ This page lists the high level changes between versions of Geb.
 
 === 4.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Minor fix to confusing statement in the documentation section about finding and filtering web elements. [issueh:625[]]
 * Improve information about IntelliJ support in the section on IDE authoring assistance in the manual. [issueh:629[]]
 * Fix `Browser.go()` not to fail for non-hierarchical, opaque URIs. [issueh:634[]]
 
-==== New features
+==== 🚀 New features
 
 * Add ability to compose multiple text matchers. [issueh:631[]]
 * Add configuration option to quit the driver each time the browser instance is reset by `GebTestManager`. [issueh:632[]]
 
 === 4.0
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix failure reporting in Spock fixture methods. [issueh:613[]]
 * Fix using constants (static final fields) is content definitions on Groovy 2.5.14. [issueh:627[]]
 
-==== New features
+==== 🚀 New features
 
 * Add integration with JUnit 5. [issueh:539[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Introduce `{geb-test-manager-api}` to decrease code duplication between test framework integrations and make it easier for users to add integrations for additional frameworks. [issueh:614[]]
 * Improve frame context management when nested withFrame() calls are used. [issueh:612[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Superclasses providing <<spock-junit-testng, support for various test frameworks>> have been rewritten in a backwards incompatible way to benefit from introduction of `{geb-test-manager-api}`. [issueh:614[]]
 * Geb no longer depends on `groovy-all` artifact but instead depends on `groovy`, `groovy-templates` and `groovy-macro` artifacts from `org.codehaus.groovy` group. [issueh:618[]]
@@ -207,30 +218,30 @@ This page lists the high level changes between versions of Geb.
 
 === 3.4.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix `Browser.setNetworkLatency()` on newer versions of Chrome. [issueh:620[]]
 
 === 3.4
 
-==== New features
+==== 🚀 New features
 
 * Add support for adding multiple test tasks per browser type to cloud browser gradle plugins. [issueh:597[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix an overflow for large `int` timeouts in `geb.Wait` causing `Browser.pause()` to fail and return instantly. [issueh:605[]]
 * Update the message searched for in BrowserStack tunnel process output before considering it successfully as started after output changes in the latest version. [issueh:607[]]
 * Update the message searched for in LambdaTest tunnel process output before considering it successfully as started after output changes in the latest version. [issueh:608[]]
 * Fix detection of 64 bit architecture in Gradle tasks downloading BrowserStack and LambdaTest tunnel binaries. [issueh:610[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Make BrowserStack and LambdaTest tunnel ready messages configurable. [issueh:611[]]
 
 === 3.3
 
-==== New features
+==== 🚀 New features
 
 * Add ability to disable implicit assertions in particular waitFor block. [issueh:578[]]
 * Add support to provide more information for UnexpectedPageException. [issueh:596[]]
@@ -238,11 +249,11 @@ This page lists the high level changes between versions of Geb.
 * Add a way to react when an unexpected page is encountered. [issueh:598[]]
 * Add support for setting network throttling via setNetworkConditions Chrome command. [issueh:602[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * `BindingUpdater` is not forwarding methods from `geb.textmatching.TextMatchingSupport` onto the `Browser` instance. [issueh:601[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Improve integration between cloud browser gradle plugins and driver factories. [issueh:579[]]
 * Switch cloud driver factories to use https urls. [issueh:599[]]
@@ -250,7 +261,7 @@ This page lists the high level changes between versions of Geb.
 
 === 3.2
 
-==== Fixes
+==== 🐛 Fixes
 
 * Unexpected pages are now only checked after checking that none of the pages passed to `Browser.page()` methods taking a list match. [issueh:595[]]
 * Fix global atCheckWaiting in combination with to:[...] leading to potentially long delays. [issueh:594[]]
@@ -260,38 +271,38 @@ This page lists the high level changes between versions of Geb.
 
 === 3.1
 
-==== New features
+==== 🚀 New features
 
 * Add a way to listen for navigator events. [issueh:585[]]
 * Add a way to listen for page switching and at checking events. [issueh:590[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Add `Actions` methods added in WebDriver 3.x to `InteractDelegate` and expose the backing `Actions` instance. [issueh:587[]]
 * Fix incorrect javadoc for `Configuration.isCacheDriverPerThread()`. [issueh:592[]]
 
 === 3.0.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Set the correct type of dependency on `groovy-all` in poms published for Geb artifacts. [issueh:586[]]
 
 === 3.0
 
-==== Fixes
+==== 🐛 Fixes
 
 * Use `Number` instead of `Double` for waitFor calls. [issueh:570[]]
 * Make `RadioButtons` module extendable. [issueh:562[]]
 * Fix selector optimisation when attributes map contains `GString` values. [issueh:564[]]
 * Do not swallow the cause when instantiating `UnableToLoadException`. [issueh:572[]]
 
-==== New features
+==== 🚀 New features
 
 * <<dynamic-navigators,Dynamic navigators>>. [issueh:557[]]
 * Support specifying data center specific hostname when using SauceLabsDriverFactory. [issueh:573[]]
 * Allow specifying custom commandline switches for BrowserStack local tunnel command in geb-browserstack Gradle plugin. [issueh:573[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * `geb.navigator.EmptyNavigator` class has been removed. [issueh:557[]]
 * Signature of the method in `geb.navigator.factory.InnerNavigatorFactory` has been changed. [issueh:557[]]
@@ -306,13 +317,13 @@ This page lists the high level changes between versions of Geb.
 
 === 2.3.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix setting value by text on multi select elements when the text within option tag contains trailing or leading spaces. [issueh:563[]]
 
 === 2.3
 
-==== New features
+==== 🚀 New features
 
 * Added form control modules for url, password and number inputs. [issueh:548[]]
 * Added form control module for color inputs. [issueh:549[]]
@@ -324,11 +335,11 @@ This page lists the high level changes between versions of Geb.
 * Added `focused()` method on `Navigable` which obtains a `Navigator` wrapping the active (focused) `WebElement`. [issueh:546[]]
 * Ability to require at checkers to be defined even for pages that are implicitly at checked. [issueh:541[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Compatibility with latest Sauce Connect. [issueh:559[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Add an at() method to geb.Page which always throws MissingMethodException. [issueh:543[]]
 * Improve signatures of methods in FrameSupport that take page objects to provide autocompletion inside of the closure passed as the last argument. [issueh:540[]]
@@ -336,7 +347,7 @@ This page lists the high level changes between versions of Geb.
 
 === 2.2
 
-==== New features
+==== 🚀 New features
 
 * Make it more convenient to wait on something while reloading the page. [issueh:499[]]
 * Added `waitCondition` content template option. [issueh:342[]]
@@ -348,14 +359,14 @@ This page lists the high level changes between versions of Geb.
 * Added origin information to `TemplateDerivedPageContent` and `PageContentContainer`. [issueh:446[]]
 * Added improved web storage support including management in test integrations. [issueh:472[]]
 
-==== Fixes
+==== 🐛 Fixes
 * Fix translation of attribute map to css selector when finding elements for attribute value that is a GString. [issueh:525[]]
 * Fix documentation around calling value() on unchecked checkboxes. [issueh:520[]]
 * Make additional capabilities passed to cloud driver factory's `create()` method override the capabilities that are hardcoded for a particular cloud driver provider. [issueh:372[]]
 * Fixed `getCheckedLabel()` on `RadioButtons` module to return label text instead of `null` when a checked radio button is wrapped by a label without a `for` attribute. [issueh:530[]]
 * Fix links to manual sections that had non-unique ids. [issueh:535[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Support calling `GebReportingSpec#report(String)` from fixture methods. [issueh:518[]]
 * Add method for performing assertions as part of an at check. [issueh:405[]]
@@ -366,39 +377,39 @@ This page lists the high level changes between versions of Geb.
 
 === 2.1
 
-==== New features
+==== 🚀 New features
 
 * Added a form control module for search input. [issueh:495[]]
 * Added a form control module for date input. [issueh:496[]]
 * Added `FramesSourceReporter` which allows to report on the source content of each top level frame of the browser's current page. [issueh:448[]]
 * Added form control modules for email and tel inputs. [issueh:498[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix reporting on failure in JUnit support when `reportOnTestFailureOnly` is set to true [issueh:491[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Actually remove `FileInput#getFile()` which was supposed to be removed for 2.0 but wasn't. [issueh:503[]]
 
 === 2.0
 
-==== New features
+==== 🚀 New features
 
 * Allow specifying the expected number of elements a content definition should return. [issueh:149[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Improved error message when trying to select null on a single-select select element. [issueh:477[]]
 * Return a list of results instead of `null` from `newWindow()` methods taking a window matching specification closure. [issueh:476[]]
 * Ignore case of tag names passed as part of css selectors to `Navigator.filter()` [issueh:482[]]
 * Gracefully handle incorrectly encoded URIs returned from `WebDriver.getCurrentUrl()` when navigating to urls. [issueh:492[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Change signatures of methods from `FrameSupport` to be more strongly typed. [issueh:470[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Use Java 8 to compile the project. [issueh:502[]]
 * Remove `FileInput#getFile()`. [issueh:503[]]
@@ -409,18 +420,18 @@ This page lists the high level changes between versions of Geb.
 
 === 1.1.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Do not double encode query parameters when building urls for arguments passed to `go()`, `to()` and `via()`. [issueh:469[]]
 
 === 1.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Delegate to `browser` instead of the module from blocks passed to `withFrame()` in module classes. [issueh:461[]]
 * Fix implicit assertions in “at checkers” to not return `null` if the last call is to a void method. [issueh:462[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Support for selecting Edge as the browser using name in configuration. [issueh:425[]]
 * Support for using url fragment identifiers when navigating to pages. [issueh:463[]]
@@ -428,29 +439,29 @@ This page lists the high level changes between versions of Geb.
 * Support equality checking between all core implementations of `Navigator`, based on comparing collections of web elements wrapped by them. [issueh:459[]]
 * Support using label text to select checkboxes and using collections as value to select multiple checkboxes when dealing a number of checkboxes with the same name. [issueh:460[]]
 
-==== Deprecations
+==== 🕸 Deprecations
 
 * Grails 2.x plugin has been discontinued. [issueh:456[]]
 
 === 1.0
 
-==== Fixes
+==== 🐛 Fixes
 * Fix the direct field operator shortcut (`@`) for accessing element attributes to work on classes extending `Module`. [issueh:438[]]
 * Fix reporting on failure only in `GebReportingSpec` to work with Spock 1.1. [issueh:445[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Add ability to unwrap modules returned from content dsl to their original type. [issueh:434[]]
 * Add support for using attribute css selectors with navigator filtering methods like `filter()`, `not()`, `closest()`, etc. [issueh:437[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 * `geb.testng.GebTest` and `geb.testng.GebReportingTest` which were deprecated in 0.13.0 have been removed.
 * `isDisabled()`, `isEnabled()`, `isReadOnly()` and `isEditable()` methods of `Navigator` which were deprecated in 0.12.0 have been removed.
 * Loosely typed `module()` and `moduleList()` methods of the content DSL which were deprecated in 0.12.0 have been removed.
 
 === 0.13.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix a MissingMethodException thrown from `Navigator.value()` when using Groovy versions < 2.4.0. [issueh:422[]]
 * Don't unnecessarily synchronize methods of `CachingDirverFactory.ThreadLocalCache`. [issueh:421[]]
@@ -458,21 +469,21 @@ This page lists the high level changes between versions of Geb.
 
 === 0.13.0
 
-==== New features
+==== 🚀 New features
 
 * `reportOnTestFailureOnly` config option is now also effective in Spock and JUnit4 integrations. [issueh:92[]]
 * `isFocused()` method has been added to the `Navigator` class. [issueh:208[]]
 * `InvalidPageContent` exception is thrown when a content is defined with a name that will result in that content being not accessible. [issueh:109[]] [issueh:122[]]
 * Ability to specify proxy location and credentials to use with BrowserStack tunnel. [issueh:419[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix a bug that caused reports for all but the last executed test class in TestNG integration to be wiped out. [issueh:407[]]
 * Fix a bug preventing using module as a base of another module. [issueh:411[]]
 * Restore `browser` property of `Module`. [issueh:416[]]
 * Handle setting values of form elements that cause page change or reload when their value changes. [issueh:155[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Non-ASCII word characters are not longer replaced in report file names. [issueh:399[]]
 * Change TestNG support to be based on traits. [issueh:412[]]
@@ -486,11 +497,11 @@ This page lists the high level changes between versions of Geb.
 * Don't unnecessarily request tag name and type attribute multiple times when setting text input values. [issueh:417[]]
 * Improve usefulness of string representation of content elements. [issueh:274[]]
 
-==== Deprecations
+==== 🕸 Deprecations
 
 * `geb.testng.GebTest` and `geb.testng.GebReportingTest` have been deprecated in favour of `geb.testng.GebTestTrait` and `geb.testng.GebReportingTestTrait` respectively.
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Geb is now built with Groovy 2.4.5 and Spock 1.0-groovy-2.4.
 * The following `Navigator` methods now throw `SingleElementNavigatorOnlyMethodException` when called on a multi element `Navigator`: `hasClass(java.lang.String)`, `is(java.lang.String)`,
@@ -500,21 +511,21 @@ This page lists the high level changes between versions of Geb.
 
 === 0.12.2
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fix incorrect delegation in variant of `waitFor()` that takes timeout and interval. [issueh:395[]]
 * Fix NPE on implicitly asserted statements that contain a safely navigated method call on null target. [issueh:398[]]
 
 === 0.12.1
 
-==== Fixes
+==== 🐛 Fixes
 
 * Change implementation of `waitFor()` method delegation so that IntelliJ does not complain that page and module classes supposedly need to implement it. [issueh:391[]]
 * Properly handle class attribute when it's passed to `$()` together with a css selector. [issueh:390[]]
 
 === 0.12.0
 
-==== New features
+==== 🚀 New features
 
 * Support for finding elements using Webdriver's `{by-api}` selectors. [issueh:348[]]
 * Support for navigating to page instances in addition to classes. [issueh:310[]]
@@ -531,7 +542,7 @@ This page lists the high level changes between versions of Geb.
 * Support setting `forcelocal` flag for BrowserStack tunnel. [issueh:385[]]
 * Add configuration option for including cause string representation in message of `WaitTimeoutException`. [issueh:386[]]
 
-==== Improvements
+==== 💪 Improvements
 
 * Using unrecognized content template parameters result in an `InvalidPageContent` exception to make catching typos in them easier. [issueh:377[]]
 * Improve error reporting when no at checkers pass if using multiple candidates for page switching. [issueh:346[]]
@@ -539,7 +550,7 @@ This page lists the high level changes between versions of Geb.
 * Attribute based searches are compiled to CSS selectors where possible. [issueh:280[]]
 * Attribute based searches using an id, class or name are performed using an appropriate `By` selector where possible. [issueh:333[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Improved message thrown from Navigator.isDisabled() and Navigator.isReadOnly() when navigator does not contain a form element. [issueh:345[]]
 * Browser.verifyAtIfPresent() should fail for at checkers returning false when implicit assertions are disabled. [issueh:357[]]
@@ -548,13 +559,13 @@ This page lists the high level changes between versions of Geb.
 * Classes that can define content should not throw custom exceptions from `propertyMissing()`. [issueh:367[]]
 * “At checkers” of pages passed to `withFrame()` methods are now verified. [issueh:358[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * `Page.toString()` now returns full page class name instead of its simple name.
 * `MissingPropertyException` is thrown instead of `UnresolvablePropertyException` when content with a given name is not found on page or module.
 * Geb is now built with Groovy 2.3.10 and Spock 1.0-groovy-2.3.
 
-==== Deprecations
+==== 🕸 Deprecations
 
 * `module(Class&lt;? extends Module&gt;, Navigator base)` available in content DSL has been deprecated in favour of `Navigator.module(Class&lt;? extends Module&gt;)` and will be removed in a future
  version of Geb.
@@ -565,14 +576,14 @@ version of Geb, see <<repeating-content, chapter on using modules for repeating 
 * `isDisabled()`, `isEnabled()`, `isReadOnly()` and `isEditable()` methods of `Navigator` have been deprecated and will be removed in a future version of Geb. These methods are now available on the
 new <<form-element, `FormElement`>> module class.
 
-==== Project related changes
+==== 🔄️ Changes
 
 * User mailing list has moved to link:https://groups.google.com/d/forum/geb-user[Google Groups].
 * The Book of Geb has been migrated to Asciidoctor and the examples have been made executable. [issueh:350[]]
 
 === 0.10.0
 
-==== New features
+==== 🚀 New features
 
 * New `css()` method on `Navigator` that allows to access CSS properties of elements. [issueh:141[]]
 * Added attribute based methods to relative content navigators such as next(), children() etc. [issueh:299[]]
@@ -581,7 +592,7 @@ new <<form-element, `FormElement`>> module class.
 * Added support for explicitly specifying browser capabilities when using cloud browsers Gradle plugins. [issueh:340[]]
 * Added an overloaded `create()` method on cloud driver factories that allow specifying browser capabilities in a map and don't require a string capabilities specification. [issueh:281[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Allow access to module properties from its content block. [issueh:245[]]
 * Support setting of elements for WebDriver implementations that return uppercase tag name. [issueh:318[]]
@@ -598,7 +609,7 @@ new <<form-element, `FormElement`>> module class.
 * Document that `withNewWindow()` and `withWindow()` switch page back to the original one. [issueh:279[]]
 * Fix selectors in documentation for manipulating checkboxes. [issueh:268[]]
 
-==== Project related changes
+==== 🔄️ Changes
 
 * Updated cucumber integration example to use `cucumber-jvm` instead of the now defunct `cuke4duke`. [issueh:324[]]
 * Setup CI for all of the example projects. [issueh:188[]]
@@ -606,7 +617,7 @@ new <<form-element, `FormElement`>> module class.
 * Add a test crawling the site in search for broken links. [issueh:327[]]
 * Document the link:https://github.com/geb/geb/blob/master/RELEASING.md[release process]. [issueh:325[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Use Groovy 2.3.6 to build Geb. [issueh:330[]]
 * Format of browser specification passed to `BrowserStackBrowserFactory.create()` and `SauceLabsBrowserFactory.create()` has changed to be a string in Java properties file format defining the required browser capabilities.
@@ -614,7 +625,7 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.9.3
 
-==== New features
+==== 🚀 New features
 
 * Added `baseNavigatorWaiting` setting to prevent intermittent Firefox driver errors when creating base navigator. [issueh:269[]]
 * Page content classes including `Module` now implement `Navigator` interface [issueh:181[]]
@@ -623,7 +634,7 @@ new <<form-element, `FormElement`>> module class.
 * Added a shortcut to `Browser` for getting current url [issueh:294[]]
 * Verify pages at checker when passed as an option to open a new window via `withWindow()` and `withNewWindow()` [issueh:278[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * Ignore `atCheckWaiting` setting when checking for unexpected pages. [issueh:267[]]
 * Added missing range variants of find/$ methods. [issueh:283[]]
@@ -632,7 +643,7 @@ new <<form-element, `FormElement`>> module class.
 * Support for jQuery methods like offset() and position() which return a native Javascript object. [issueh:271[]]
 * Finding elements when passing ids with spaces in the predicates map to the $() method. [issueh:308[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Removed easyb support. [issueh:277[]]
 * `MissingMethodException` is now thrown when using shortcut for obtaining a navigator based on a control name and the returned navigator is empty. [issueh:239[]]
@@ -640,7 +651,7 @@ new <<form-element, `FormElement`>> module class.
 * When using SauceLabs integration, the `geb.sauce.browser` system property was renamed to `geb.saucelabs.browser`
 * `Module` now implements `Navigator` instead of `Navigable` so `Navigator`'s methods can be called on it without having to first call `$()` to get the module's base `Navigator`.
 
-==== Project related changes
+==== 🔄️ Changes
 
 * Documentation site has been migrated to link:http://ratpack.io[Ratpack]. [issueh:261[]]
 * Cross browser tests are now also executed using Safari driver [issueh:276[]]
@@ -649,7 +660,7 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.9.2
 
-==== New features
+==== 🚀 New features
 
 * `page` and `close` options can be passed to `withWindow()` calls, see <<already-opened-windows, this manual section>> for more information.
 * Unexpected pages can be specified to fail fast when performing “at” checks. This feature was contributed at a Hackergarten thanks to Andy Duncan. See <<unexpected-pages, this manual section>> for details. [issueh:70[]]
@@ -658,29 +669,29 @@ new <<form-element, `FormElement`>> module class.
 * Support for ephemeral port allocation with Grails integration
 * Compatibility with Grails 2.3
 
-==== Fixes
+==== 🐛 Fixes
 
 * Default value of `close` option for `withNewWindow()` is set to `true` as specified in the documentation. [issueh:258[]]
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * `isDisabled()` now throws `UnsupportedOperationException` if called on an `EmptyNavigator` or on a `Navigator` that contains anything else than a button, input, option, select or textarea.
 * `isReadOnly()` now throws `UnsupportedOperationException` if called on an `EmptyNavigator` or on a `Navigator` that contains anything else than an input or a textarea.
 
 === 0.9.1
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Explicitly calling `at()` with a page object will throw `UndefinedAtCheckerException` instead of silently passing if the page object does not define an at checker.
 * Passing a page with no at checker to `click(List&lt;Class&lt;? extends Page&gt;&gt;)` or as one of the pages in `to` template option will throw `UndefinedAtCheckerException`.
 
-==== New features
+==== 🚀 New features
 
 * Support for dealing with self-signed certificates in Download API using `SelfSignedCertificateHelper`. [issueh:150[]]
 * Connections created when using Download API can be configured globally using `defaultDownloadConfig` configuration option.
 * New `atCheckWaiting` configuration option allowing to implicitly wrap “at” checkers in `waitFor` calls. [issueh:253[]]
 
-==== Fixes
+==== 🐛 Fixes
 
 * `containsWord()` and `iContainsWord()` now return expected results when matching against text that contains spaces [issueh:254[]]
 * `has(Map&lt;String, Object&gt; predicates, String selector)` and `has(Map&lt;String, Object&gt; predicates)` were added to Navigator for consistency with `find()` and `filter()` [issueh:256[]]
@@ -690,7 +701,7 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.9.0
 
-==== New features
+==== 🚀 New features
 
 * New `via()` method that behaves the same way as `to()` behaved previously - it sets the page on the browser and does not verify the at checker of that page[issueh:249[]].
 * It is now possible to provide your own `{navigator-api}` implementations by specifying a custom link:api/geb/navigator/factory/NavigatorFactory.html[`NavigatorFactory`], see <<navigator-factory, this manual section>> for more information [issueh:96[]].
@@ -700,7 +711,7 @@ new <<form-element, `FormElement`>> module class.
 * Improved signature of `Browser.at()` and `Browser.to()` to return the exact type of the page that was asserted to be at / was navigated to.
 * link:api/geb/report/ReportingListener.html[`ReportingListener`] objects can be registered to observe reporting (see: <<listening-to-reporting, this manual section>>)
 
-==== Fixes
+==== 🐛 Fixes
 
 * Fixed an issue where waitFor would throw a WaitTimeoutException even if the last evaluation before timeout returned a truthy value [issueh:215[]].
 * Fixed taking screenshots for reporting when the browser is not on a HTML page (e.g. XML file) [issueh:126[]].
@@ -711,7 +722,7 @@ new <<form-element, `FormElement`>> module class.
 * Use of text matchers in module base definitions is supported [issueh:241[]].
 * Reading of textareas have been updated so that the current value of the text field is returned, instead of the initial [issueh:174[]].
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * `to(Class&lt;? extends Page&gt;)` method now changes the page on the browser and verifies the at checker of that page in one method call [issueh:1[]], [issueh:249[]]; use `via()` if you need the old behaviour
 * `getAttribute(String)` on `Navigator` now returns `null` for boolean attributes that are not present.
@@ -724,24 +735,24 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.7.2
 
-==== Fixes
+==== 🐛 Fixes
 
 * Further fixes for Java 7 [issueh:211[]].
 
 === 0.7.1
 
-==== New features
+==== 🚀 New features
 
 * Geb is now built with Groovy 1.8.6. This was forced to resolve [issueh:194[]].
 
-==== Fixes
+==== 🐛 Fixes
 
 * `startsWith()`, `contains()` etc. now work for selecting via element text now works for multiline (i.e. `&lt;br/&gt;`) text [issueh:202[]]
 * Geb now works with Java 7 [issueh:194[]].
 
 === 0.7.0
 
-==== New features
+==== 🚀 New features
 
 * Added support for indexes and ranges in `moduleList()` method
 * Form control shortcuts now also work on page and module content
@@ -752,7 +763,7 @@ new <<form-element, `FormElement`>> module class.
 * new `isAt()` method on Browser that behaves like `at()` used to behave before, i.e. does not throw AssertionError but returns `false` if at checking fails
 * `withAlert()` and `withConfirm()` now accept a `wait` option and the possible values are the same as for waiting content
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * `click()` now instructs the browser to click *only on the first* element the navigator has matched
 * All `click()` method variants return the receiver
@@ -762,13 +773,13 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.6.3
 
-==== New features
+==== 🚀 New features
 
 * Compatibility with Spock 0.6
 
 === 0.6.2
 
-==== New features
+==== 🚀 New features
 
 * New `interact()` function for mouse and keyboard actions which delegates to the WebDriver Actions class
 * New `moduleList()` function for repeating content
@@ -780,28 +791,28 @@ new <<form-element, `FormElement`>> module class.
 * Drivers are now cached across the whole JVM, which avoids the browser startup cost in some situations
 * Added config option to disable quitting of cached browsers on JVM shutdown
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * The `Page.convertToPath()` function is now responsible for adding a prefix slash if required (i.e. it's not added implicitly in `Page.getPageUrl()`) [GEB-139].
 * Unchecked checkboxes now report their value as `false` instead of null
 
 === 0.6.1
 
-==== New features
+==== 🚀 New features
 
 * Compatibility with at least Selenium 2.9.0 (version 0.6.0 of Geb did not work with Selenium 2.5.0 and up)
 * Attempting to set a select to a value that it does not contain now throws an exception
 * The waiting algorithm is now time based instead of number of retries based, which is better for blocks that are not near instant
 * Better support for working with already instantiated pages
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Using `&lt;select&gt;` elements with Geb now requires an explicit dependency on an extra WebDriver jar (see <<installation-usage, the section on installation for more info>>)
 * The `Navigator` `classes()` method now returns a `List` (instead of `Set`) and guarantees that it will be sorted alphabetically
 
 === 0.6
 
-==== New features
+==== 🚀 New features
 
 * selenium-common is now a 'provided' scoped dependency of Geb
 * Radio buttons can be selected with their label text as well as their value attribute.
@@ -825,7 +836,7 @@ new <<form-element, `FormElement`>> module class.
 * Added the TestNG support (contributed by Alexander Zolotov)
 * Added the `height`, `width`, `x` and `y` properties to navigator objects and modules
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Raised minimum Groovy version to 1.7
 * All failed waitFor clauses now throw a `geb.waiting.WaitTimeoutException` instead of `AssertionError`
@@ -843,7 +854,7 @@ new <<form-element, `FormElement`>> module class.
 
 === 0.5
 
-==== New features
+==== 🚀 New features
 
 * Navigator objects now implement the Groovy truth (empty == false, non empty == true)
 * Introduced “js” short notation
@@ -859,7 +870,7 @@ new <<form-element, `FormElement`>> module class.
 * The click() methods that take one or more page classes are now available on `Navigator` objects
 * Added page lifecycle methods `onLoad()`/`onUnload()`
 
-==== Breaking changes
+==== 💥 Breaking changes
 
 * Exceptions raised in `drive()` blocks are no longer wrapped with `DriveException`
 * the `at(Class pageClass)` method no longer requires the existing page instance to be of that class (page will be updated if the given type matches)

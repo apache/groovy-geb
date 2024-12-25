@@ -18,18 +18,19 @@
  */
 package geb.doc.asciidoctor.extension
 
-import org.asciidoctor.Asciidoctor
-import org.asciidoctor.jruby.extension.spi.ExtensionRegistry
+import org.asciidoctor.ast.ContentNode
+import org.asciidoctor.extension.InlineMacroProcessor
 
-class BookOfGebExtension implements ExtensionRegistry {
+class GithubCommitLinkMacro extends InlineMacroProcessor {
 
     @Override
-    void register(Asciidoctor asciidoctor) {
-        asciidoctor.javaExtensionRegistry()
-            .inlineMacro("issue", IssueLinkMacro)
-            .inlineMacro("issueh", HistoricalIssueLinkMacro)
-            .inlineMacro("github-profile", GithubProfileLinkMacro)
-            .inlineMacro("commit", GithubCommitLinkMacro)
+    Object process(ContentNode parent, String target, Map<String, Object> attributes) {
+        def options = [
+            type  : ":link",
+            target: "https://github.com/apache/groovy-geb/commit/${target}"
+        ]
+
+        createPhraseNode(parent, "anchor", target, attributes, options)
     }
 
 }
