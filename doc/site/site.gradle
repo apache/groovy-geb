@@ -62,10 +62,8 @@ dependencies {
 
 node {
     version = '19.2.0'
-
     download = true
-
-    nodeModulesDir = file("src/npm")
+    nodeProjectDir = file("src/npm")
 }
 
 def generateResourcesTask = tasks.register("generateResources", Sync) {
