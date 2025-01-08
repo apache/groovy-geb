@@ -23,6 +23,7 @@ boolean isCI = env.CI || env.TEAMCITY_VERSION || env.GITHUB_ACTIONS
 develocity {
     server = "https://develocity.apache.org"
     allowUntrustedServer = false
+    projectId = "groovy-geb"
 
     buildScan {
         uploadInBackground = !isCI
