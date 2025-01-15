@@ -25,14 +25,44 @@ To become a committer, you need to sign the [Apache Individual Contributor Agree
 ## Build Environment
 
 Geb builds with [Gradle](http://www.gradle.org/). 
-You do not need to have Gradle installed to work with the Geb build as Gradle provides an executable wrapper that you use to drive the build.
+You do not need to have Gradle installed to work with the Geb build as Gradle
+provides an executable wrapper that you use to drive the build.
 
 On UNIX type environments this is `gradlew` and is `gradlew.bat` on Windows.
+Most examples here are for UNIX type systems.
+You can leave off the leading `./` when using the wrapper on Windows.
 
-For example to run all the automated tests and quality checks for the entire project you would run…
+To see all available tasks you can run:
+
+    ./gradlew tasks
+
+But there are a few very common tasks worth knowing.
+For example, to run all the automated tests and quality
+checks for the entire project you would run:
 
     ./gradlew check
-    
+
+To publish Geb artifacts to your local Maven cache you would run:
+
+    ./gradlew publishToMavenLocal
+
+## Bootstrapping the build environment from a source distribution
+
+If you have cloned the source from the GitHub repo, you can skip this section. If instead
+you are using an ASF source release Zip, read on.
+
+ASF source releases don't contain binary files such as those needed by the Gradle wrapper.
+If using a source Zip release, there is an additional boostrap step you need to do
+to properly set up the build environment.
+
+The bootstrap step requires you to have a version of Gradle installed on your system.
+If you know the desired Gradle version, you can run Gradle's `wrapper` task.
+Alternatively, you can use the bootstrap project which knows about the correct Gradle version:
+
+    gradle -P bootstrap
+
+Now the wrapper will be installed, and you can follow the instructions elsewhere which use the wrapper.
+
 ## IDE import
 
 The project is set up to work with IntelliJ IDEA, simply import it using the native IntelliJ IDEA import for Gradle projects.

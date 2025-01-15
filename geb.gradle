@@ -25,6 +25,7 @@ plugins {
     id 'geb.coordinates'
     alias(libs.plugins.nexusPublish)
     alias(libs.plugins.asl2)
+    id 'geb.source-distribution'
     id 'com.github.jk1.dependency-license-report' version '2.9'
     id 'org.nosphere.apache.rat'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -100,6 +101,7 @@ tasks.named('rat') {
         'doc', // TODO re-enable checking for docs
         'logo.svg', // Logo svg
         'out/**', '*.ipr', '**/*.iml', '*.iws', '.idea/**', // Intellij files
+        'bootstrap/settings.gradle', // empty file
     ]
 }
 
