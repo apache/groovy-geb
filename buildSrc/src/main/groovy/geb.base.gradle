@@ -22,6 +22,7 @@ import geb.gradle.SystemPropertiesCommandLineArgumentProvider
 
 plugins {
     id 'geb.coordinates'
+    id 'org.gradlex.reproducible-builds'
 }
 
 extensions.create('gebModule', BaseExtension, project)
