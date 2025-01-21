@@ -37,6 +37,7 @@ dependencies {
 	implementation localGroovy()
 	implementation gradleApi()
 	implementation 'org.nosphere.apache:creadur-rat-gradle:0.8.1'
+	implementation 'org.gradlex.reproducible-builds:org.gradlex.reproducible-builds.gradle.plugin:1.0'
 
 	implementation libs.guava
 	implementation libs.grolifant
