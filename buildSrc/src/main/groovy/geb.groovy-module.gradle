@@ -51,6 +51,7 @@ codenarcTasks.configureEach {
 
 tasks.withType(GroovyCompile).configureEach {
     groovyOptions.forkOptions.memoryMaximumSize = '256m'
+    groovyOptions.parameters = true
 }
 
 tasks.withType(Test).configureEach {
