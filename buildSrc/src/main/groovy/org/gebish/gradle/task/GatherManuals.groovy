@@ -41,7 +41,9 @@ class GatherManuals extends Sync {
 
     private Provider<Configuration> publishedManual(Provider<String> version) {
         version.map {
-            def dependency = project.dependencies.create("org.gebish:geb-manual:${it}@zip")
+            def preApache = it[0].toInteger() < 8
+            def prefix = preApache ? 'org.gebish' : 'org.apache.groovy.geb'
+            def dependency = project.dependencies.create("$prefix:geb-manual:${it}@zip")
             project.configurations.detachedConfiguration(dependency)
         }
     }
