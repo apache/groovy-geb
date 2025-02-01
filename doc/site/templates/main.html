@@ -32,10 +32,6 @@
 </head>
 
 <body>
-
-    <% import geb.site.Manuals %>
-        <% Manuals manuals = (Manuals) model.manuals %>
-
             <div class="ui inverted vertical masthead center aligned segment">
 
                 <div class="ui large inverted secondary horizontal pointing menu">
@@ -57,19 +53,10 @@
                     <div class="ui container">
                         <a href="/manual/current/api/" class="item">
                             <div class="ui green horizontal label">current</div>
-                            ${manuals.current}
+                            <%= current %>
                         </a>
-                        <% manuals.oldList.each { %>
-                            <a href="/manual/$it/api/" class="item">
-                                ${it}
-                            </a>
-                            <% } %>
-                                <% if (manuals.snapshot) { %>
-                                    <a href="/manual/snapshot/api/" class="item">
-                                        <div class="ui yellow horizontal label">snapshot</div>
-                                        ${manuals.snapshot}
-                                    </a>
-                                    <% } %>
+                        <% for (String v : old) { print "<a href=\"/manual/$v/api/\" class=\"item\">$v</a>" } %>
+                        <% if (snapshot) print "<a href=\"/manual/snapshot/api/\" class=\"item\"><div class=\"ui yellow horizontal label\">snapshot</div>${snapshot}</a>" %>
                     </div>
                 </div>
 
@@ -77,38 +64,18 @@
                     <div class="ui container">
                         <a href="/manual/current/" class="item">
                             <div class="ui green horizontal label">current</div>
-                            ${manuals.current}
+                            <%= current %>
                         </a>
-                        <% manuals.oldList.each { %>
-                            <a href="/manual/$it/" class="item">
-                                ${it}
-                            </a>
-                            <% } %>
-                                <% if (manuals.snapshot) { %>
-                                    <a href="/manual/snapshot/" class="item">
-                                        <div class="ui yellow horizontal label">snapshot</div>
-                                        ${manuals.snapshot}
-                                    </a>
-                                    <% } %>
+                        <% for (String v : old) { print "<a href=\"/manual/$v/\" class=\"item\">$v</a>" } %>
+                        <% if (snapshot) print "<a href=\"/manual/snapshot/\" class=\"item\"><div class=\"ui yellow horizontal label\">snapshot</div>${snapshot}</a>" %>
                     </div>
                 </div>
 
                 <div id="mailing-lists-menu" class="ui horizontal secondary inverted hidden transition menu">
                     <div class="ui container">
-                        <a href="https://groups.google.com/d/forum/geb-user" class="item">User List</a>
-                        <a href="https://groups.google.com/d/forum/geb-dev" class="item">Development List</a>
-                        <a href="http://markmail.org/search/list:org.codehaus.geb.user" class="item">
-                            <div class="ui grey horizontal label">
-                                archive
-                            </div>
-                            User List
-                        </a>
-                        <a href="http://markmail.org/search/list:org.codehaus.geb.dev" class="item">
-                            <div class="ui grey horizontal label">
-                                archive
-                            </div>
-                            Development List
-                        </a>
+                        <a href="https://lists.apache.org/list.html?geb-users@groovy.apache.org" class="item">User List</a>
+                        <a href="https://lists.apache.org/list.html?geb-dev@groovy.apache.org" class="item">Development List</a>
+                        <a href="https://lists.apache.org/list.html?geb-notifications@groovy.apache.org">Notifications</a>
                     </div>
                 </div>
 
@@ -128,7 +95,7 @@
                             <div class="ui four statistics inverted" data-github-stats="">
                                 <div class="static statistic">
                                     <div class="value">
-                                        ${manuals.current}
+                                        <%= current %>
                                     </div>
                                     <div class="label">
                                         Latest Release
@@ -178,18 +145,6 @@
 
                 </div>
             </div>
-
-            <% if (model.notFound) { %>
-
-            <div class="ui vertical stripe segment">
-                <div class="ui middle aligned stackable grid container">
-                    <div class="nine wide column">
-                        <h1 class="ui header">Page not found</h1>
-                    </div>
-                </div>
-            </div>
-
-            <% } else { %>
 
             <div class="ui vertical stripe segment">
                 <div class="ui middle aligned stackable grid container">
@@ -330,7 +285,7 @@ Browser.drive {
                         <h1 class="ui header">Navigating Content</h1>
                     </div>
                     <div class="eight wide column">
-                        <p>Geb takes inspiration from jQuery to provide a concise and effective way to get at content. This is called the <a href="manual/current/#navigator" title="The Book Of Geb - Interacting with content">Navigator API</a>.</p>
+                        <p>Geb takes inspiration from jQuery to provide a concise and effective way to get at content. This is called the <a href="/manual/current/#navigator" title="The Book Of Geb - Interacting with content">Navigator API</a>.</p>
 
                         <p>The dollar function can be used anywhere to select content based on CSS selectors, attribute matchers and/or indexes.</p>
                     </div>
@@ -558,13 +513,11 @@ class LoginSpec extends GebSpec {
                         <div class="ten wide column">
                             <h4 class="ui inverted header">About Geb</h4>
                             <p>Geb is free, open source software licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" title="Apache License, Version 2.0">Apache License, Version 2.0</a>.</p>
-                            <p>This site is powered by <a href="http://ratpack.io" title="Ratpack - A toolkit for JVM web applications">Ratpack</a>.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <% } %>
 
             <script src="/js/jquery.min.js"></script>
             <script src="/js/semantic.min.js"></script>

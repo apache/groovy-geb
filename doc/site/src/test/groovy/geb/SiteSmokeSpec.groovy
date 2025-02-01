@@ -21,25 +21,25 @@ package geb
 import geb.pages.ApiPage
 import geb.pages.MainPage
 import geb.pages.ManualPage
-import geb.pages.NotFoundPage
 import geb.spock.GebSpec
+import io.micronaut.context.ApplicationContext
+import io.micronaut.http.client.BlockingHttpClient
+import io.micronaut.http.client.HttpClient
+import io.micronaut.runtime.server.EmbeddedServer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import ratpack.groovy.test.GroovyRatpackMainApplicationUnderTest
 import spock.lang.Shared
 import spock.lang.Stepwise
 import spock.lang.Unroll
-
-import static ratpack.test.http.TestHttpClient.testHttpClient
 
 @Stepwise
 class SiteSmokeSpec extends GebSpec {
 
     @Shared
-    def app = new GroovyRatpackMainApplicationUnderTest()
+    EmbeddedServer app = ApplicationContext.run(EmbeddedServer)
 
     def setup() {
-        browser.baseUrl = app.address.toString()
+        browser.baseUrl = "http://localhost:${app.port}".toString()
     }
 
     def cleanupSpec() {
@@ -53,18 +53,6 @@ class SiteSmokeSpec extends GebSpec {
         then:
         at MainPage
         firstHeaderText == 'What is it?'
-    }
-
-    @Unroll
-    void 'requesting a non-existing page - #pagePath'() {
-        when:
-        go(pagePath)
-
-        then:
-        at NotFoundPage
-
-        where:
-        pagePath << ['idontexist', 'manuals', 'manuals/']
     }
 
     void 'manual and api links are available'() {
@@ -82,6 +70,7 @@ class SiteSmokeSpec extends GebSpec {
     @Unroll
     void 'manual - #manualVersion'() {
         when:
+        println("Version: $link")
         go(link)
 
         then:
@@ -108,15 +97,20 @@ class SiteSmokeSpec extends GebSpec {
     }
 
     private Document parseMainPage() {
-        Jsoup.parse(testHttpClient(app).get().body.text)
+        BlockingHttpClient client = app.applicationContext.createBean(HttpClient, app.URL).toBlocking()
+        String html = client.retrieve("", String)
+        Jsoup.parse(html)
     }
 
-    private manualLinksData() {
+    private List<List<String>> manualLinksData() {
         def links = parseMainPage().select("#manuals-menu a")
-        links.collect { [(it.text() - 'current' - 'snapshot').trim(), it.attr('href')] }
+        links.collect {
+            [it.text(), it.attr('href')]
+        }.findAll { !it[0].contains("snapshot") && !it[0].contains("current") }
     }
 
-    private apiLinksData() {
-        parseMainPage().select("#apis-menu a")*.attr('href')
+    private List<String> apiLinksData() {
+        List<String> links = parseMainPage().select("#apis-menu a")*.attr('href')
+        links
     }
 }

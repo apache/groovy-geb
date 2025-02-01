@@ -21,7 +21,8 @@ package geb
 import geb.crawl.Crawler
 import geb.crawl.PrettyPrintCollection
 import groovy.util.logging.Slf4j
-import ratpack.groovy.test.GroovyRatpackMainApplicationUnderTest
+import io.micronaut.context.ApplicationContext
+import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.Specification
 
 import static geb.crawl.Crawler.Link
@@ -32,11 +33,13 @@ class LinkCrawlSpec extends Specification {
 
     def "site has no bad links"() {
         given:
-        def aut = new GroovyRatpackMainApplicationUnderTest()
+        def aut = ApplicationContext.run(EmbeddedServer)
 
         def allowBroken = ["https://travis-ci.org", "http://markmail.org", "https://circleci.com", "https://saucelabs.com", "https://wiki.saucelabs.com", "http://ldaley.com"]
 
-        def crawler = new Crawler(aut.address.toString(), ["markmail.org", "ldaley.com"].toSet()) {
+        String startingUrl = "http://localhost:${aut.port}"
+        Set<String> knowBadHosts = ["markmail.org", "ldaley.com"] as Set<String>
+        def crawler = new Crawler(startingUrl, knowBadHosts) {
             boolean shouldUseHeadRequest(Link url) {
                 !(url.uri.host in ["blog.proxerd.pl", "search.maven.org"]) && super.shouldUseHeadRequest(url)
             }

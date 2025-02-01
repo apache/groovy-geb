@@ -16,14 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package geb.site
+package geb.crawl
 
-class Model {
-
-    static Map<String, Object> get(Manuals manuals, boolean notFound = false) {
-        [
-                manuals: manuals,
-                notFound: notFound
-        ]
+class SeeOtherException extends Exception {
+    URI uri
+    SeeOtherException(URI uri) {
+        this.uri = uri
     }
 }

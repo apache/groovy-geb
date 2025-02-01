@@ -29,8 +29,8 @@ mailto:geb-dev-unsubscribe@groovy.apache.org[Unsubscribe]
 
 === Committers
 
-* link:http://ldaley.com[Luke Daley]
-* link:http://blog.proxerd.pl[Marcin Erdmann]
+* Luke Daley
+* Marcin Erdmann
 
 === Contributors
 

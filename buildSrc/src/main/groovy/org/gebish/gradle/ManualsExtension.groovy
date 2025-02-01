@@ -21,6 +21,7 @@ package org.gebish.gradle
 import org.gebish.gradle.task.GatherManuals
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 
 class ManualsExtension {
@@ -31,11 +32,13 @@ class ManualsExtension {
 
     final ListProperty<String> includedManuals
     final ConfigurableFileCollection currentManual
+    RegularFileProperty indexTemplate
 
     ManualsExtension(Project project) {
         this.project = project
         this.includedManuals = project.objects.listProperty(String)
         this.currentManual = project.objects.fileCollection()
+        this.indexTemplate = project.objects.fileProperty()
     }
 
     void include(String... versions) {

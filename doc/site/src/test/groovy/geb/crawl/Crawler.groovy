@@ -18,12 +18,11 @@
  */
 package geb.crawl
 
+import io.micronaut.http.MediaType
 import org.codehaus.groovy.runtime.StackTraceUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import ratpack.http.MediaType
-import ratpack.http.internal.DefaultMediaType
 
 import javax.net.ssl.*
 import java.security.SecureRandom
@@ -139,11 +138,16 @@ abstract class Crawler {
     }
 
     protected visitCrawlable(Link link) {
-        Response lastResponse = new Response(link.uri, openUrlConnection(link.uri))
+        Response lastResponse
+        try {
+            lastResponse = new Response(link.uri, openUrlConnection(link.uri))
+        } catch (SeeOtherException e) {
+            lastResponse = new Response(e.uri, openUrlConnection(e.uri))
+        }
 
         addPageErrors(link, lastResponse)
 
-        if (!link.errors && lastResponse.contentType.html) {
+        if (!link.errors && lastResponse.contentType == MediaType.TEXT_HTML_TYPE) {
             findPageLinks(lastResponse).each { String it ->
                 def newLink = toLink(link.uri, it)
                 if (newLink) {
@@ -177,41 +181,50 @@ abstract class Crawler {
 
     @SuppressWarnings("UnnecessarySetter")
     protected HttpURLConnection openUrlConnection(URI uri) {
-        HttpURLConnection connection = uri.toURL().openConnection() as HttpURLConnection
-        connection.instanceFollowRedirects = false
-
-        connection.connectTimeout = 10000
-        connection.readTimeout = 10000
-
-        if (connection instanceof HttpsURLConnection) {
-            def https = connection as HttpsURLConnection
-            https.hostnameVerifier = new HostnameVerifier() {
-                @Override
-                boolean verify(String s, SSLSession sslSession) {
-                    true
-                }
+        HttpURLConnection connection
+        try {
+            connection = uri.toURL().openConnection() as HttpURLConnection
+        } catch (IllegalArgumentException e) {
+            if (e.message == "URI is not absolute") {
+                connection = URI.create(startingUrl + uri.toString()).toURL().openConnection() as HttpURLConnection
             }
-
-            def trustManager = new X509TrustManager() {
-                @Override
-                void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                }
-
-                @Override
-                void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                }
-
-                @Override
-                X509Certificate[] getAcceptedIssuers() {
-                    new X509Certificate[0]
-                }
-            }
-
-            def sc = SSLContext.getInstance("SSL")
-            sc.init([] as KeyManager[], [trustManager] as TrustManager[], new SecureRandom())
-            https.setSSLSocketFactory(sc.socketFactory)
         }
-        connection
+        if (connection != null) {
+            connection.instanceFollowRedirects = false
+
+            connection.connectTimeout = 10000
+            connection.readTimeout = 10000
+
+            if (connection instanceof HttpsURLConnection) {
+                def https = connection as HttpsURLConnection
+                https.hostnameVerifier = new HostnameVerifier() {
+                    @Override
+                    boolean verify(String s, SSLSession sslSession) {
+                        true
+                    }
+                }
+
+                def trustManager = new X509TrustManager() {
+                    @Override
+                    void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                    }
+
+                    @Override
+                    void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                    }
+
+                    @Override
+                    X509Certificate[] getAcceptedIssuers() {
+                        new X509Certificate[0]
+                    }
+                }
+
+                def sc = SSLContext.getInstance("SSL")
+                sc.init([] as KeyManager[], [trustManager] as TrustManager[], new SecureRandom())
+                https.setSSLSocketFactory(sc.socketFactory)
+            }
+        }
+        return connection
     }
 
     protected Link toLink(URI currentUrl, String url) {
@@ -245,13 +258,19 @@ abstract class Crawler {
 
             // Force the request
             statusCode = connection.responseCode
-            contentType = DefaultMediaType.get(connection.getHeaderField("Content-Type"))
-
-            if (connection.requestMethod == "GET" && contentType.html) {
-                def stream = statusCode >= 400 ? connection.errorStream : connection.inputStream
-                document = Jsoup.parse(stream, contentType.charset, uri.toString())
+            if (statusCode == 303) {
+                throw new SeeOtherException(URI.create(connection.getHeaderField("Location")))
             } else {
-                document = null
+                String contentTypeHeader = connection.getHeaderField("Content-Type")
+                if (contentTypeHeader != null) {
+                    contentType = MediaType.of(contentTypeHeader)
+                }
+                if (connection.requestMethod == "GET" && contentType == MediaType.TEXT_HTML_TYPE) {
+                    def stream = statusCode >= 400 ? connection.errorStream : connection.inputStream
+                    document = Jsoup.parse(stream, "UTF-8", uri.toString())
+                } else {
+                    document = null
+                }
             }
         }
     }

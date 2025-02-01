@@ -100,6 +100,23 @@ You can then generate the API reference HTML by running…
 You will then find the compiled HTML in the directory `doc/manual/build/apiDoc`
 
 > Note that you can build the manual chapters and reference API in one go with `./gradlew doc:manual:packageManual`
+ 
+### The Geb website
+
+You can generate the Geb Website by running…
+
+```
+    ./gradlew :doc:manual:build
+```
+
+It is a static website. You can find it in the folder `doc/site/build/dist`.
+
+You can serve it [jwebserver](https://blogs.oracle.com/javamagazine/post/java-18-simple-web-server) with 
+
+```
+cd doc/site/build/dist
+jwebserver -d $(pwd)
+```
 
 ## Contributing features/patches
 

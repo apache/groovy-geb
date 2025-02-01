@@ -18,11 +18,15 @@
  */
 package org.gebish.gradle
 
+import groovy.text.SimpleTemplateEngine
 import org.gebish.gradle.task.GatherManuals
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.WriteProperties
+
+import java.nio.file.Files
+import java.nio.file.Paths
 
 class ManualsPlugin implements Plugin<Project> {
 
@@ -35,10 +39,10 @@ class ManualsPlugin implements Plugin<Project> {
             into project.layout.buildDirectory.dir("manuals")
         }
 
-        def manualsExtension = project.extensions.create('manuals', ManualsExtension, project)
+        ManualsExtension manualsExtension = project.extensions.create('manuals', ManualsExtension, project)
 
         configureCurrentManualGathering(project, baseExtension, manualsExtension, gatherManualsTask)
-        configureGenerateConfigPropertiesTask(project, baseExtension, manualsExtension)
+        configureIndexTask(project)
     }
 
     private void configureCurrentManualGathering(
@@ -56,21 +60,25 @@ class ManualsPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGenerateConfigPropertiesTask(
-        Project project, BaseExtension baseExtension, ManualsExtension manualsExtension
-    ) {
-        def currentVersion = manualsExtension.includedManuals.map {
-            baseExtension.isSnapshot() ? it.last() : project.version
+    private void configureIndexTask(Project project) {
+        project.tasks.register("generateIndex", WriteProperties) {
+            destinationFile = project.layout.buildDirectory.file("index.html")
+            doLast {
+                def baseExtension = project.extensions.getByType(BaseExtension)
+                def ext = project.extensions.getByName("manuals")
+                List<String> includedManuals = ext.includedManuals.get()
+                String currentVersion = baseExtension.isSnapshot() ? includedManuals.last() : project.version
+                String snapshot = baseExtension.isSnapshot() ? project.version : ''
+                List<String> oldManuals = includedManuals.findAll {v -> v != currentVersion }
+                Map<String, String> model = [old: oldManuals, current: currentVersion, snapshot: snapshot]
+                String template = readFileContent(ext.indexTemplate.asFile.get())
+                String html = new SimpleTemplateEngine().createTemplate(template).make(model).toString()
+                destinationFile.get().asFile.text = html
+            }
         }
+    }
 
-        project.tasks.register("generateConfigProperties", WriteProperties) {
-            destinationFile = project.layout.buildDirectory.file("config-properties/ratpack.properties")
-
-            property("manuals.old", manualsExtension.includedManuals.map {
-                (it - currentVersion.get()).reverse().join(",")
-            })
-            property("manuals.current", currentVersion)
-            property("manuals.snapshot", baseExtension.isSnapshot() ? project.version : '')
-        }
+    private String readFileContent(File file) {
+        return new String(Files.readAllBytes(Paths.get(file.toURI())), "UTF-8")
     }
 }

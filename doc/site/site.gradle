@@ -20,22 +20,14 @@
 plugins {
     id "geb.groovy-module"
     id "geb.manuals"
-    alias(libs.plugins.node)
-    alias(libs.plugins.ratpackGroovy)
+    id("geb.spock-2-module")
 }
-
 repositories {
     mavenCentral()
-    maven { url = "https://repository.apache.org/content/repositories/snapshots"
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
 }
 
 configurations {
     currentManual
-
     distribution
 }
 
@@ -45,95 +37,58 @@ manuals {
         "4.0", "4.1", "5.0", "5.1", "6.0", "7.0"
     )
     currentManual.from(configurations.currentManual)
+    indexTemplate.set(file("templates/main.html"))
 }
 
 dependencies {
-    groovy libs.groovy25
-
     testImplementation libs.spockCoreGroovy25
     testImplementation libs.jsoup
     testImplementation libs.gebSpockGroovy25
     testImplementation libs.htmlUnitDriver
-
     currentManual project(path: ":doc:manual", configuration: "manual")
-
-    codenarc libs.codenarc, {
-        exclude module: "GMetrics"
-        exclude group: "org.codehaus.groovy"
-    }
+    testImplementation(platform(libs.micronaut.bom))
+    testCompileOnly(libs.micronaut.inject.groovy)
+    testImplementation(libs.micronaut.runtime.groovy)
+    testImplementation(libs.micronaut.http.client)
+    testImplementation(libs.micronaut.http.server.netty)
+    testImplementation(libs.logback.classic)
 }
 
-node {
-    version = '19.2.0'
-    download = true
-    nodeProjectDir = file("src/npm")
-}
+tasks.register("generateResources", Sync) {
 
-def generateResourcesTask = tasks.register("generateResources", Sync) {
     from(tasks.named("gatherManuals")) {
         into 'public/manual'
     }
-    from tasks.named("generateConfigProperties")
-
-    into 'src/main/generatedResources'
+    from(tasks.named("generateIndex"))
+    into 'src/main/resources'
 }
-
-sourceSets.main.resources.srcDirs generateResourcesTask, 'src/semantic'
-
-def pnpmInstallTask = tasks.named("pnpmInstall") {
-    args.add("--frozen-lockfile")
-}
-
-tasks.named("processResources") {
-    from(pnpmInstallTask) {
-        includeEmptyDirs = false
-        include 'jquery/dist/jquery.min.js'
-        eachFile {
-            it.relativePath = new RelativePath(true, 'public', 'js', it.sourceName)
-        }
-    }
-    from(pnpmInstallTask) {
-        includeEmptyDirs = false
-        include '@browser-logos/chrome/chrome_512x512.png'
-        include '@browser-logos/safari/safari_512x512.png'
-        include '@browser-logos/edge/edge_512x512.png'
-        include '@browser-logos/firefox/firefox_512x512.png'
-        eachFile {
-            it.relativePath = new RelativePath(true, 'public', 'images', it.sourceName)
-        }
+tasks.register("placeIndex", Copy) {
+    from 'src/main/resources/index.html'
+    into 'src/main/resources/public'
+    dependsOn("generateResources", "generateIndex")
+    doLast {
+        delete 'src/main/resources/index.html'
     }
 }
-
-tasks.register("publish", Exec) {
-    commandLine 'git push git@heroku.com:gebish.git master'.tokenize(' ')
+tasks.register("copyPublicResources", Copy) {
+    from 'public'
+    into 'src/main/resources/public'
+    mustRunAfter("generateResources", "generateIndex")
 }
-
-def distributionTask = tasks.register("distribution", Sync) {
-    with distributions.main.contents
-    into project.layout.buildDirectory.dir('distribution')
+tasks.register("generatePublic") {
+    dependsOn("copyPublicResources", "generateResources", "placeIndex")
 }
-
-artifacts {
-    distribution(distributionTask.map { it.outputs.files.singleFile }) {
-        builtBy distributionTask
-    }
+tasks.register("deleteResources", Delete) {
+    delete 'src/main/resources'
 }
-
-if (project.gradle.startParameter.continuous) {
-    run {
-        flattenClassloaders = true
-    }
+clean.dependsOn("deleteResources")
+processResources.dependsOn("generatePublic")
+test.dependsOn("generatePublic")
+rat.dependsOn("generatePublic")
+tasks.register("generateDist", Copy) {
+    from 'src/main/resources/public'
+    into 'build/dist'
+    dependsOn("generatePublic")
 }
-
-idea {
-    module {
-        excludeDirs += file('src/npm/node_modules')
-    }
-}
-
-
-tasks.withType(Test).configureEach {
-    jvmArgs('--add-opens', 'java.base/jdk.internal.misc=ALL-UNNAMED')
-}
-
-rat.mustRunAfter(pnpmInstall)
+build.dependsOn("generatePublic")
+build.dependsOn("generateDist")

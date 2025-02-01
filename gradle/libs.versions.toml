@@ -23,6 +23,7 @@ sauceConnect = "1.153"
 selenium = "4.27.0"
 spock = "2.3-groovy-4.0"
 threeTen = "1.8.0"
+micronaut = "3.10.1" # Micronaut 3 is still supports Java 11
 
 [libraries]
 asciidoctorj = 'org.asciidoctor:asciidoctorj:2.5.13'
@@ -44,6 +45,13 @@ jsoup = 'org.jsoup:jsoup:1.18.3'
 junit-platform-launcher = 'org.junit.platform:junit-platform-launcher:1.11.4'
 junit-platform-testkit = 'org.junit.platform:junit-platform-testkit:1.11.4'
 junit4 = { module = 'junit:junit', version.ref = 'junit4' }
+micronaut-bom = { module = 'io.micronaut:micronaut-bom', version.ref = 'micronaut' }
+micronaut-inject-groovy = { module = 'io.micronaut:micronaut-inject-groovy' }
+micronaut-runtime-groovy = { module = 'io.micronaut.groovy:micronaut-runtime-groovy' }
+micronaut-http-client = { module = 'io.micronaut:micronaut-http-client' }
+micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
+logback-classic = { module = "ch.qos.logback:logback-classic" }
+
 junit5-jupiter-api = { module = 'org.junit.jupiter:junit-jupiter-api', version.ref = 'junit5' }
 junit5-jupiter-engine = { module = 'org.junit.jupiter:junit-jupiter-engine', version.ref = 'junit5' }
 junit5-jupiter-params = { module = 'org.junit.jupiter:junit-jupiter-params', version.ref = 'junit5' }
@@ -66,4 +74,3 @@ asciidoc = { id = 'org.asciidoctor.jvm.convert', version = '4.0.4' }
 asl2 = { id = 'com.energizedwork.asl2', version = '1.1' }
 nexusPublish = { id = 'io.github.gradle-nexus.publish-plugin', version = '2.0.0' }
 node = { id = 'com.github.node-gradle.node', version = '7.1.0' }
-ratpackGroovy = { id = 'io.ratpack.ratpack-groovy', version.ref = 'ratpack' }

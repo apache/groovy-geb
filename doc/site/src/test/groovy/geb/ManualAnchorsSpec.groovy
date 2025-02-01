@@ -18,17 +18,20 @@
  */
 package geb
 
+import io.micronaut.context.ApplicationContext
+import io.micronaut.http.client.BlockingHttpClient
+import io.micronaut.http.client.HttpClient
+import io.micronaut.runtime.server.EmbeddedServer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import ratpack.groovy.test.GroovyRatpackMainApplicationUnderTest
-import ratpack.test.ApplicationUnderTest
+
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 class ManualAnchorsSpec extends Specification {
 
     @AutoCleanup
-    ApplicationUnderTest aut = new GroovyRatpackMainApplicationUnderTest()
+    EmbeddedServer aut = ApplicationContext.run(EmbeddedServer)
 
     def "manual headers have unique ids"() {
         when:
@@ -39,7 +42,9 @@ class ManualAnchorsSpec extends Specification {
     }
 
     private Document parseManual() {
-        Jsoup.parse(aut.httpClient.get("manual/snapshot/").body.text)
+        BlockingHttpClient client = aut.applicationContext.createBean(HttpClient, aut.URL).toBlocking()
+        String json = client.retrieve("/manual/snapshot/", String)
+        Jsoup.parse(json)
     }
 
 }
