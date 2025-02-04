@@ -39,9 +39,6 @@ public class NormalizeURL {
             url = new URI(taintedURL).normalize().toURL();
         } catch (URISyntaxException e) {
             throw new MalformedURLException(e.getMessage());
-        } catch (  java.net.MalformedURLException e) {
-            String foo = "bar";
-            throw e;
         }
 
         final String path = url.getPath().replace("/$", "");

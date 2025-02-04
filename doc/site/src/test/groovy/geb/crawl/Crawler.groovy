@@ -138,13 +138,7 @@ abstract class Crawler {
     }
 
     protected visitCrawlable(Link link) {
-        Response lastResponse
-        try {
-            lastResponse = new Response(link.uri, openUrlConnection(link.uri))
-        } catch (SeeOtherException e) {
-            lastResponse = new Response(e.uri, openUrlConnection(e.uri))
-        }
-
+        Response lastResponse = new Response(link.uri, openUrlConnection(link.uri))
         addPageErrors(link, lastResponse)
 
         if (!link.errors && lastResponse.contentType == MediaType.TEXT_HTML_TYPE) {
@@ -159,6 +153,7 @@ abstract class Crawler {
 
     protected visitNonCrawlable(Link link) {
         def connection = openUrlConnection(link.uri)
+        connection.instanceFollowRedirects = true
         def method = shouldUseHeadRequest(link) ? "HEAD" : "GET"
         connection.requestMethod = method
 
@@ -258,19 +253,15 @@ abstract class Crawler {
 
             // Force the request
             statusCode = connection.responseCode
-            if (statusCode == 303) {
-                throw new SeeOtherException(URI.create(connection.getHeaderField("Location")))
+            String contentTypeHeader = connection.getHeaderField("Content-Type")
+            if (contentTypeHeader != null) {
+                contentType = MediaType.of(contentTypeHeader)
+            }
+            if (connection.requestMethod == "GET" && contentType == MediaType.TEXT_HTML_TYPE) {
+                def stream = statusCode >= 400 ? connection.errorStream : connection.inputStream
+                document = Jsoup.parse(stream, "UTF-8", uri.toString())
             } else {
-                String contentTypeHeader = connection.getHeaderField("Content-Type")
-                if (contentTypeHeader != null) {
-                    contentType = MediaType.of(contentTypeHeader)
-                }
-                if (connection.requestMethod == "GET" && contentType == MediaType.TEXT_HTML_TYPE) {
-                    def stream = statusCode >= 400 ? connection.errorStream : connection.inputStream
-                    document = Jsoup.parse(stream, "UTF-8", uri.toString())
-                } else {
-                    document = null
-                }
+                document = null
             }
         }
     }
