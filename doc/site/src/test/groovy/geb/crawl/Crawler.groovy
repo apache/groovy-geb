@@ -176,50 +176,42 @@ abstract class Crawler {
 
     @SuppressWarnings("UnnecessarySetter")
     protected HttpURLConnection openUrlConnection(URI uri) {
-        HttpURLConnection connection
-        try {
-            connection = uri.toURL().openConnection() as HttpURLConnection
-        } catch (IllegalArgumentException e) {
-            if (e.message == "URI is not absolute") {
-                connection = URI.create(startingUrl + uri.toString()).toURL().openConnection() as HttpURLConnection
+        HttpURLConnection connection = uri.toURL().openConnection() as HttpURLConnection
+
+        connection.instanceFollowRedirects = false
+
+        connection.connectTimeout = 10000
+        connection.readTimeout = 10000
+
+        if (connection instanceof HttpsURLConnection) {
+            def https = connection as HttpsURLConnection
+            https.hostnameVerifier = new HostnameVerifier() {
+                @Override
+                boolean verify(String s, SSLSession sslSession) {
+                    true
+                }
             }
-        }
-        if (connection != null) {
-            connection.instanceFollowRedirects = false
 
-            connection.connectTimeout = 10000
-            connection.readTimeout = 10000
-
-            if (connection instanceof HttpsURLConnection) {
-                def https = connection as HttpsURLConnection
-                https.hostnameVerifier = new HostnameVerifier() {
-                    @Override
-                    boolean verify(String s, SSLSession sslSession) {
-                        true
-                    }
+            def trustManager = new X509TrustManager() {
+                @Override
+                void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
                 }
 
-                def trustManager = new X509TrustManager() {
-                    @Override
-                    void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                    }
-
-                    @Override
-                    void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                    }
-
-                    @Override
-                    X509Certificate[] getAcceptedIssuers() {
-                        new X509Certificate[0]
-                    }
+                @Override
+                void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
                 }
 
-                def sc = SSLContext.getInstance("SSL")
-                sc.init([] as KeyManager[], [trustManager] as TrustManager[], new SecureRandom())
-                https.setSSLSocketFactory(sc.socketFactory)
+                @Override
+                X509Certificate[] getAcceptedIssuers() {
+                    new X509Certificate[0]
+                }
             }
+
+            def sc = SSLContext.getInstance("SSL")
+            sc.init([] as KeyManager[], [trustManager] as TrustManager[], new SecureRandom())
+            https.setSSLSocketFactory(sc.socketFactory)
         }
-        return connection
+        connection
     }
 
     protected Link toLink(URI currentUrl, String url) {
