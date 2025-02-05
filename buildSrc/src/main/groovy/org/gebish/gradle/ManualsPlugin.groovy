@@ -42,7 +42,7 @@ class ManualsPlugin implements Plugin<Project> {
         ManualsExtension manualsExtension = project.extensions.create('manuals', ManualsExtension, project)
 
         configureCurrentManualGathering(project, baseExtension, manualsExtension, gatherManualsTask)
-        configureIndexTask(project, manualsExtension)
+        configureIndexTask(project, baseExtension, manualsExtension)
     }
 
     private void configureCurrentManualGathering(
@@ -60,11 +60,10 @@ class ManualsPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureIndexTask(Project project, ManualsExtension manualsExtension) {
+    private void configureIndexTask(Project project, BaseExtension baseExtension, ManualsExtension manualsExtension) {
         project.tasks.register("generateIndex", WriteProperties) {
             destinationFile.set(project.layout.buildDirectory.file("index.html"))
             doLast {
-                def baseExtension = project.extensions.getByType(BaseExtension)
                 List<String> includedManuals = manualsExtension.includedManuals.get()
                 String currentVersion = baseExtension.isSnapshot() ? includedManuals.last() : project.version
                 String snapshot = baseExtension.isSnapshot() ? project.version : ''
