@@ -42,7 +42,7 @@ class ManualsPlugin implements Plugin<Project> {
         ManualsExtension manualsExtension = project.extensions.create('manuals', ManualsExtension, project)
 
         configureCurrentManualGathering(project, baseExtension, manualsExtension, gatherManualsTask)
-        configureIndexTask(project)
+        configureIndexTask(project, manualsExtension)
     }
 
     private void configureCurrentManualGathering(
@@ -60,18 +60,17 @@ class ManualsPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureIndexTask(Project project) {
+    private void configureIndexTask(Project project, ManualsExtension manualsExtension) {
         project.tasks.register("generateIndex", WriteProperties) {
-            destinationFile = project.layout.buildDirectory.file("index.html")
+            destinationFile.set(project.layout.buildDirectory.file("index.html"))
             doLast {
                 def baseExtension = project.extensions.getByType(BaseExtension)
-                def ext = project.extensions.getByName("manuals")
-                List<String> includedManuals = ext.includedManuals.get()
+                List<String> includedManuals = manualsExtension.includedManuals.get()
                 String currentVersion = baseExtension.isSnapshot() ? includedManuals.last() : project.version
                 String snapshot = baseExtension.isSnapshot() ? project.version : ''
                 List<String> oldManuals = includedManuals.findAll {v -> v != currentVersion }
                 Map<String, String> model = [old: oldManuals, current: currentVersion, snapshot: snapshot]
-                String template = readFileContent(ext.indexTemplate.asFile.get())
+                String template = readFileContent(manualsExtension.indexTemplate.asFile.get())
                 String html = new SimpleTemplateEngine().createTemplate(template).make(model).toString()
                 destinationFile.get().asFile.text = html
             }
