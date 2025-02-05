@@ -25,9 +25,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.WriteProperties
 
-import java.nio.file.Files
-import java.nio.file.Paths
-
 class ManualsPlugin implements Plugin<Project> {
 
     @Override
@@ -69,14 +66,10 @@ class ManualsPlugin implements Plugin<Project> {
                 String snapshot = baseExtension.isSnapshot() ? project.version : ''
                 List<String> oldManuals = includedManuals.findAll {v -> v != currentVersion }
                 Map<String, String> model = [old: oldManuals, current: currentVersion, snapshot: snapshot]
-                String template = readFileContent(manualsExtension.indexTemplate.asFile.get())
+                String template = manualsExtension.indexTemplate.asFile.get().text
                 String html = new SimpleTemplateEngine().createTemplate(template).make(model).toString()
                 destinationFile.get().asFile.text = html
             }
         }
-    }
-
-    private String readFileContent(File file) {
-        return new String(Files.readAllBytes(Paths.get(file.toURI())), "UTF-8")
     }
 }
