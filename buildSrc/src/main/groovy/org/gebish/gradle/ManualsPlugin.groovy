@@ -25,9 +25,6 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.api.tasks.WriteProperties
 
-import java.nio.file.Files
-import java.nio.file.Paths
-
 class ManualsPlugin implements Plugin<Project> {
 
     @Override
@@ -75,14 +72,10 @@ class ManualsPlugin implements Plugin<Project> {
                     .reverse()
                     .collect { sv -> sv.toString()}
                 Map<String, String> model = [old: oldManuals, current: currentVersion, snapshot: snapshot]
-                String template = readFileContent(ext.indexTemplate.asFile.get())
+                String template = ext.indexTemplate.asFile.get().text
                 String html = new SimpleTemplateEngine().createTemplate(template).make(model).toString()
                 destinationFile.get().asFile.text = html
             }
         }
-    }
-
-    private String readFileContent(File file) {
-        return new String(Files.readAllBytes(Paths.get(file.toURI())), "UTF-8")
     }
 }
