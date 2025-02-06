@@ -69,7 +69,11 @@ class ManualsPlugin implements Plugin<Project> {
                 List<String> includedManuals = ext.includedManuals.get()
                 String currentVersion = baseExtension.isSnapshot() ? includedManuals.last() : project.version
                 String snapshot = baseExtension.isSnapshot() ? project.version : ''
-                List<String> oldManuals = includedManuals.findAll {v -> v != currentVersion }
+                List<String> oldManuals = includedManuals.findAll { v -> v != currentVersion }
+                    .collect { v -> SoftwareVersion.of(v)}
+                    .sort()
+                    .reverse()
+                    .collect { sv -> sv.toString()}
                 Map<String, String> model = [old: oldManuals, current: currentVersion, snapshot: snapshot]
                 String template = readFileContent(ext.indexTemplate.asFile.get())
                 String html = new SimpleTemplateEngine().createTemplate(template).make(model).toString()
