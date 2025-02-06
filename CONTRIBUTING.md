@@ -106,7 +106,7 @@ You will then find the compiled HTML in the directory `doc/manual/build/apiDoc`
 You can generate the Geb Website by running…
 
 ```
-    ./gradlew :doc:manual:build
+    ./gradlew :doc:site:build
 ```
 
 It is a static website. You can find it in the folder `doc/site/build/dist`.
