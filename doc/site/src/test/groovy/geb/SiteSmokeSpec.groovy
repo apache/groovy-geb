@@ -39,7 +39,7 @@ class SiteSmokeSpec extends GebSpec {
     EmbeddedServer app = ApplicationContext.run(EmbeddedServer)
 
     def setup() {
-        browser.baseUrl = "http://localhost:${app.port}".toString()
+        browser.baseUrl = "http://localhost:${app.port}/".toString()
     }
 
     def cleanupSpec() {

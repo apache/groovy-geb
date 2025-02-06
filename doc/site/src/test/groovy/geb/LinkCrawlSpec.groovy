@@ -37,7 +37,7 @@ class LinkCrawlSpec extends Specification {
 
         def allowBroken = ["https://travis-ci.org", "http://markmail.org", "https://circleci.com", "https://saucelabs.com", "https://wiki.saucelabs.com", "http://ldaley.com"]
 
-        String startingUrl = "http://localhost:${aut.port}"
+        String startingUrl = "http://localhost:${aut.port}/"
         Set<String> knowBadHosts = ["markmail.org", "ldaley.com"] as Set<String>
         def crawler = new Crawler(startingUrl, knowBadHosts) {
             boolean shouldUseHeadRequest(Link url) {
