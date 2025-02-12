@@ -100,8 +100,17 @@ tasks.register("replaceAnalyticsWithMatomo") {
 '''
                 String matomo = new File("${project.rootDir}/doc/manual/src/docs/asciidoc/docinfo.html").text
                 html = html.replace(ga, matomo)
-                html = html.replace('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
-                    '../../css/font-awesome.min.css')
+                List<String> fontAwesomeLinks = [
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css',
+                    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+                ]
+                for (String link : fontAwesomeLinks) {
+                    html = html.replace(link, '../../css/font-awesome.min.css')
+                }
+                html = html.replace('https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css',
+                    '../../css/prettify.min.css')
+                html = html.replace('https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js',
+                    '../../js/prettify.min.js')
                 file.text = html
             }
         }

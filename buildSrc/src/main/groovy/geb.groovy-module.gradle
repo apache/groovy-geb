@@ -66,6 +66,10 @@ tasks.named('rat') {
         '**/src/main/resources/public', // Site Only
         '**/public/robots.txt', // Doesn't support comments
         '**/public/css/*.css', // site only
+        '**/public/fonts/*.svg', // site only
+        '**/public/fonts/*.ttf', // site only
+        '**/public/fonts/*.woff', // site only
+        '**/public/fonts/*.woff2', // site only
         '**/public/js/*.js', // JavaScript files MIT license, site/test only
         '**/*.min.js', // JavaScript files MIT license, site/test only
         '**/*.min.css', // CSS files MIT license, site only
