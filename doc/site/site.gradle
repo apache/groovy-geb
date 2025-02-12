@@ -70,6 +70,42 @@ tasks.generateIndex {
     inputs.files(file("templates/main.html"))
 }
 
+tasks.register("replaceAnalyticsWithMatomo") {
+    group = "website"
+    description = "Replace Google Analytics with Matomo in manuals"
+    dependsOn("generateResources")
+    doLast {
+        File baseDir = file("${project.projectDir}/src/main/resources/public/manual")
+        baseDir.eachFileRecurse(groovy.io.FileType.FILES) { file ->
+            if (file.name == 'index.html') {
+                String html = file.text
+                String ga = '''
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-15031038-2']);
+    _gaq.push(['_trackPageview', location.pathname + location.hash]);
+
+    window.onhashchange = function() {
+        _gaq.push(['_trackPageview', location.pathname + location.hash]);
+    };
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+'''
+                String matomo = new File("${project.rootDir}/doc/manual/src/docs/asciidoc/docinfo.html").text
+                file.text = html.replace(ga, matomo)
+                // Add your processing logic here
+            }
+        }
+    }
+}
+
 tasks.register("placeIndex", Copy) {
     group = "website"
     description = "move the generated src/main/resources/index.html to src/main/resources/public/index.html and deletes it from src/main/resources"
@@ -90,7 +126,7 @@ tasks.register("copyPublicResources", Copy) {
 
 tasks.register("generatePublic") {
     group = "website"
-    dependsOn("copyPublicResources", "generateResources", "placeIndex")
+    dependsOn("copyPublicResources", "generateResources", "placeIndex", "replaceAnalyticsWithMatomo")
 }
 processResources.dependsOn("generatePublic")
 test.dependsOn("generatePublic")
