@@ -99,8 +99,10 @@ tasks.register("replaceAnalyticsWithMatomo") {
 </script>
 '''
                 String matomo = new File("${project.rootDir}/doc/manual/src/docs/asciidoc/docinfo.html").text
-                file.text = html.replace(ga, matomo)
-                // Add your processing logic here
+                html = html.replace(ga, matomo)
+                html = html.replace('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css',
+                    '../../css/font-awesome.min.css')
+                file.text = html
             }
         }
     }
