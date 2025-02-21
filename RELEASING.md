@@ -46,4 +46,4 @@ limitations under the License.
 	* Find all unresolved issues in the tracker that have the fix version set to the recently released version and bulk edit them to have the fix version set to the next version.
 	* Find the recently released milestone, change the version number if it's different from the one that was released and close it.
 1. Wait for the build of the next version to pass and the site including manual for the released version to be published.
-1. Send an email to the mailing list, you can use [this one](http://markmail.org/message/j35koyww35lh4mxk) as a template. Please mention significant breaking changes if there are any.
+1. Send an email to the mailing list, you can use [this one](https://web.archive.org/web/20220822074356/https://groups.google.com/g/geb-user/c/VmqpY4Z6JrY) as a template. Please mention significant breaking changes if there are any.

@@ -78,7 +78,7 @@ include::{snippets-dir}/driver/HtmlUnitRefreshHandlerSpec.groovy[tag=changing_ha
 ----
 <1> From here on refresh meta tag value will be respected.
 
-See link:http://markmail.org/thread/bu3g56oxz2uqzq43[this mailing list thread] for details.
+See link:https://web.archive.org/web/20120211213811/http://markmail.org/thread/bu3g56oxz2uqzq43[this mailing list thread] for details.
 
 [discrete]
 ==== Configuring logging

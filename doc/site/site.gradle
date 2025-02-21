@@ -116,6 +116,8 @@ tasks.register("replaceAnalyticsWithMatomo") {
                     '../../css/prettify.min.css')
                 html = html.replace('https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js',
                     '../../js/prettify.min.js')
+                html = html.replace('http://markmail.org/thread/bu3g56oxz2uqzq43',
+                    'https://web.archive.org/web/20120211213811/http://markmail.org/thread/bu3g56oxz2uqzq43')
                 file.text = html
             }
         }

@@ -35,10 +35,10 @@ class LinkCrawlSpec extends Specification {
         given:
         def aut = ApplicationContext.run(EmbeddedServer)
 
-        def allowBroken = ["https://travis-ci.org", "http://markmail.org", "https://circleci.com", "https://saucelabs.com", "https://wiki.saucelabs.com", "http://ldaley.com"]
+        def allowBroken = ["https://travis-ci.org", "https://circleci.com", "https://saucelabs.com", "https://wiki.saucelabs.com", "http://ldaley.com"]
 
         String startingUrl = "http://localhost:${aut.port}/"
-        Set<String> knowBadHosts = ["markmail.org", "ldaley.com"] as Set<String>
+        Set<String> knowBadHosts = ["ldaley.com"] as Set<String>
         def crawler = new Crawler(startingUrl, knowBadHosts) {
             boolean shouldUseHeadRequest(Link url) {
                 !(url.uri.host in ["blog.proxerd.pl", "search.maven.org"]) && super.shouldUseHeadRequest(url)
