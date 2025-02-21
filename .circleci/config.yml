@@ -15,34 +15,6 @@
 
 version: 2
 jobs:
-  check:
-    docker:
-      - image: eclipse-temurin:21-jdk
-    resource_class: large
-    environment:
-      GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
-      GRADLE_USER_HOME: .gradle-home
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - gradle-home-check-{{ .Branch }}
-            - gradle-home-check-master
-            - gradle-home-check
-      - run: ./gradlew --no-daemon --max-workers 4 --parallel -Pci module:check internal:check integration:check doc:site:check --continue
-      - run:
-          name: Copy all test results to a directory
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-check-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
   manual:
     docker:
       - image: selenium/standalone-firefox
@@ -103,30 +75,6 @@ jobs:
           path: build/reports
       - save_cache:
           key: gradle-home-dockerised-crossbrowser-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
-  local-cross-browser:
-    docker:
-      - image: selenium/standalone-chromium
-    resource_class: large
-    environment:
-        GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
-        GRADLE_USER_HOME: .gradle-home
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - gradle-home-local-crossbrowser-{{ .Branch }}
-            - gradle-home-local-crossbrowser-master
-            - gradle-home-local-crossbrowser
-      - run: ./gradlew --no-daemon --max-workers 4 --parallel -p module -Pci localChromeTest
-      - run: *collectTestResults
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-local-crossbrowser-{{ .Branch }}-{{ epoch }}
           paths:
             - .gradle-home
   saucelabs:
