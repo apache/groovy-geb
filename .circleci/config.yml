@@ -15,96 +15,6 @@
 
 version: 2
 jobs:
-  check:
-    docker:
-      - image: eclipse-temurin:21-jdk
-    resource_class: large
-    environment:
-      GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
-      GRADLE_USER_HOME: .gradle-home
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - gradle-home-check-{{ .Branch }}
-            - gradle-home-check-master
-            - gradle-home-check
-      - run: ./gradlew --no-daemon --max-workers 4 --parallel -Pci module:check internal:check integration:check doc:site:check --continue
-      - run:
-          name: Copy all test results to a directory
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-check-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
-  manual:
-    docker:
-      - image: selenium/standalone-firefox
-        environment:
-          GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
-          GRADLE_USER_HOME: ".gradle-home"
-    resource_class: large
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - restore_cache:
-          keys:
-            - gradle-home-manual-machine-{{ .Branch }}
-            - gradle-home-manual-machine-master
-            - gradle-home-manual-machine
-      - run:
-          command: |
-            Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
-            ./gradlew --no-daemon --max-workers 4 --parallel -Pci :doc:manual-snippets:check :doc:manual-snippets:fixtures:check :doc:manual-snippets:real-browser:check :doc:manual:build :doc:asciidoctor-extension:check
-      - run: &collectTestResults
-          name: Copy all test results to a directory
-          when: always
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-manual-machine-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
-  dockerised-cross-browser:
-    docker:
-      - image: eclipse-temurin:21-jdk
-        environment:
-          GRADLE_OPTS: "-Xmx1024m -XX:MaxMetaspaceSize=256m"
-          GRADLE_USER_HOME: ".gradle-home"
-    resource_class: large
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - restore_cache:
-          keys:
-            - gradle-home-dockerised-crossbrowser-{{ .Branch }}
-            - gradle-home-dockerised-crossbrowser-master
-            - gradle-home-dockerised-crossbrowser
-      - run:
-          command: |
-            ./gradlew --no-daemon --max-workers 4 --parallel -Pci allDockerisedCrossBrowserTests
-      - run: *collectTestResults
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-dockerised-crossbrowser-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
   saucelabs:
     docker:
       - image: eclipse-temurin:21-jdk
@@ -268,16 +178,7 @@ workflows:
   version: 2
   build-workflow:
     jobs:
-      - check
-      - manual
-      - dockerised-cross-browser:
-          requires:
-            - check
-            - manual
       - saucelabs:
-          requires:
-            - check
-            - manual
           filters:
             branches:
               ignore: /pull\/[0-9]+/
@@ -289,9 +190,6 @@ workflows:
 #            branches:
 #              ignore: /pull\/[0-9]+/
       - non-ie:
-          requires:
-            - check
-            - manual
           filters:
             branches:
               ignore: /pull\/[0-9]+/
