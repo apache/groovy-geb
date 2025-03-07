@@ -15,7 +15,7 @@
 
 name: Test in SauceLabs
 
-on: [pull_request, workflow_dispatch]
+on: [pull_request, workflow_dispatch, push] #TODO: Remove push
 
 permissions:
   contents: read
