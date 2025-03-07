@@ -15,32 +15,6 @@
 
 version: 2
 jobs:
-  saucelabs:
-    docker:
-      - image: eclipse-temurin:21-jdk
-    resource_class: large
-    environment:
-        GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
-        GRADLE_USER_HOME: .gradle-home
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - gradle-home-saucelabs-{{ .Branch }}
-            - gradle-home-saucelabs-master
-            - gradle-home-saucelabs
-      - run:
-          command: |
-            ./gradlew --no-daemon -Pci --max-workers 5 --parallel allSauceLabsTests
-      - run: *collectTestResults
-      - store_test_results:
-          path: ~/test-results/
-      - store_artifacts:
-          path: build/reports
-      - save_cache:
-          key: gradle-home-saucelabs-{{ .Branch }}-{{ epoch }}
-          paths:
-            - .gradle-home
 #  TODO: Return LambdaTest integration to the CI pipeline. Jobs are failing in CI when calling to LambdaTest, but not locally.
 #  lambdatest:
 #    docker:
@@ -178,10 +152,6 @@ workflows:
   version: 2
   build-workflow:
     jobs:
-      - saucelabs:
-          filters:
-            branches:
-              ignore: /pull\/[0-9]+/
 #      - lambdatest:
 #          requires:
 #            - check
@@ -202,7 +172,6 @@ workflows:
 #      - upload:
 #          requires:
 #            - dockerised-cross-browser
-#            - saucelabs
 #            - lambdatest
 #            - ie
 #          filters:
