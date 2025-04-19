@@ -168,7 +168,7 @@ class ConfigurationDriverCreationSpec extends Specification {
         def config = new ConfigObject()
         config.cacheDriver = false
         config.driver = { new HtmlUnitDriver() }
-        d = new Configuration(config, p()).driver
+        d = new Configuration(config, p()).createDriver()
 
         then:
         d instanceof HtmlUnitDriver
@@ -182,7 +182,7 @@ class ConfigurationDriverCreationSpec extends Specification {
         config.driver = { 'not a driver' }
 
         when:
-        new Configuration(config).driver
+        new Configuration(config).createDriver()
 
         then:
         thrown(DriverCreationException)

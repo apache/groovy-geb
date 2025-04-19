@@ -48,10 +48,10 @@ class GebTestManagerBrowserResetSpec extends Specification {
         driver = new RemoteWebDriverWithExpectations(
             webDriverServer.url, DEFAULT_IGNORED_COMMANDS - 'quit'
         )
-        configuration.driver = driver
+        configuration.driverConf = { null }
         gebTestManager = new GebTestManagerBuilder()
             .withBrowserCreator {
-                new Browser(configuration)
+                new Browser(configuration, driver: driver)
             }
             .build()
 

@@ -28,7 +28,7 @@ ruleset {
             doNotApplyToFileNames = 'GebTest.groovy, GebReportingTest.groovy'
         }
         EmptyMethod {
-            doNotApplyToClassNames = 'UsingRuleWithoutTestManagerTest, UsingReportingRuleWithoutTestManagerTest'
+            doNotApplyToClassNames = 'UsingRuleWithoutTestManagerTest, UsingReportingRuleWithoutTestManagerTest, Configuration'
         }
     }
     ruleset('rulesets/braces.xml')

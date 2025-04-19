@@ -56,7 +56,7 @@ class PauseSpec extends GebSpecWithCallbackServer {
     @InheritConstructors
     private static class ThreadSafeScriptExecutionDriverConfiguration extends Configuration {
         @Override
-        protected WebDriver createDriver() {
+        WebDriver createDriver() {
             def driver = super.createDriver()
             driver.javascriptEnabled = true
             ThreadSafeScriptExecutionDriver.of(driver)

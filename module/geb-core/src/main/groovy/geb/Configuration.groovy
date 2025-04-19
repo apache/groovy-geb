@@ -39,8 +39,6 @@ class Configuration {
     final Properties properties
     final BuildAdapter buildAdapter
 
-    private WebDriver driver
-
     Configuration(Map rawConfig) {
         this(toConfigObject(rawConfig), null, null, null)
     }
@@ -256,7 +254,7 @@ class Configuration {
      * This may be the class name of a driver implementation, a driver short name or a closure
      * that when invoked with no arguments returns a driver implementation.
      *
-     * @see #getDriver()
+     * @see #createDriver()
      */
     void setDriverConf(value) {
         rawConfig.driver = value
@@ -268,7 +266,7 @@ class Configuration {
      * This may be the class name of a driver implementation, a short name, or a closure
      * that when invoked returns an actual driver.
      *
-     * @see #getDriver()
+     * @see #createDriver()
      */
     def getDriverConf() {
         def value = properties.getProperty("geb.driver") ?: readValue("driver", null)
@@ -376,16 +374,27 @@ class Configuration {
         rawConfig.pageEventListener = pageEventListener
     }
 
-    WebDriver getDriver() {
-        if (driver == null) {
-            driver = createDriver()
-        }
-
-        driver
+    WebDriver createDriver() {
+        wrapDriverFactoryInCachingIfNeeded(getDriverFactory(getDriverConf())).driver
     }
 
-    void setDriver(WebDriver driver) {
-        this.driver = driver
+    /**
+     * @deprecated As of 8.0, replaced by {@link #createDriver()}, the configuration does
+     *             no longer carry a driver instance.
+     */
+    @Deprecated
+    WebDriver getDriver() {
+        createDriver()
+    }
+
+    /**
+     * @deprecated As of 8.0, the configuration does no longer carry a driver
+     *             instance, but only create new driver instances, the driver
+     *             instance used is stored in the browser instance.
+     */
+    @Deprecated
+    void setDriver(WebDriver ignored) {
+        // does nothing anymore
     }
 
     /**
@@ -698,10 +707,6 @@ class Configuration {
 
     private void boundsAndRequiredConflicting() {
         throw new InvalidGebConfiguration("Configuration for bounds and 'required' template options is conflicting")
-    }
-
-    protected WebDriver createDriver() {
-        wrapDriverFactoryInCachingIfNeeded(getDriverFactory(getDriverConf())).driver
     }
 
     protected DriverFactory getDriverFactory(driverValue) {

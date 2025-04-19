@@ -54,7 +54,7 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
         """
 
         then:
-        config.driver instanceof FirefoxDriver
+        config.createDriver() instanceof FirefoxDriver
 
         cleanup:
         CachingDriverFactory.clearCacheAndQuitDriver()
@@ -72,7 +72,7 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
         """
 
         then:
-        config.driver instanceof FirefoxDriver
+        config.createDriver() instanceof FirefoxDriver
 
         cleanup:
         CachingDriverFactory.clearCacheAndQuitDriver()
@@ -90,7 +90,7 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
         """
 
         then:
-        config.driver instanceof FirefoxDriver
+        config.createDriver() instanceof FirefoxDriver
 
         cleanup:
         CachingDriverFactory.clearCacheAndQuitDriver()
@@ -130,7 +130,7 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
         """)
 
         then:
-        config.driver in driverClass
+        config.createDriver() in driverClass
 
         cleanup:
         CachingDriverFactory.clearCacheAndQuitDriver()

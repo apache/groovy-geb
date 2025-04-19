@@ -60,6 +60,7 @@ class Browser {
 
     private Page page
     private final Configuration config
+    private WebDriver driver
     private final RemoteDriverOperations remoteDriverOperations = new RemoteDriverOperations(this.class.classLoader)
     private String reportGroup = null
     private NavigatorFactory navigatorFactory = null
@@ -68,7 +69,7 @@ class Browser {
      * If the driver is remote, this object allows access to its capabilities (users of Geb should not access this object, it is used internally).
      */
     @Lazy
-    WebDriver augmentedDriver = remoteDriverOperations.getAugmentedDriver(driver)
+    WebDriver augmentedDriver = remoteDriverOperations.getAugmentedDriver(getDriver())
 
     /**
      * Create a new browser with a default configuration loader, loading the default configuration file.
@@ -164,10 +165,14 @@ class Browser {
      * <p>
      * The driver implementation to use is determined by the configuration.
      *
-     * @see geb.Configuration#getDriver()
+     * @see geb.Configuration#createDriver()
      */
     WebDriver getDriver() {
-        config.driver
+        if (driver == null) {
+            driver = createDriver()
+        }
+
+        driver
     }
 
     /**
@@ -189,11 +194,9 @@ class Browser {
      * This should only be called before making any requests as a means to override the driver instance
      * that would be created from the configuration. Where possible, prefer using the configuration mechanism
      * to specify the driver implementation to use.
-     * <p>
-     * This method delegates to {@link geb.Configuration#setDriver(org.openqa.selenium.WebDriver)}.
      */
     void setDriver(WebDriver driver) {
-        config.driver = driver
+        this.driver = driver
     }
 
     /**
@@ -223,7 +226,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver#getCurrentUrl()
      */
     String getCurrentUrl() {
-        driver.currentUrl
+        getDriver().currentUrl
     }
 
     /**
@@ -509,9 +512,9 @@ class Browser {
     void go(Map params = [:], String url = null, UrlFragment fragment = null) {
         def newUri = calculateUri(url, params, fragment)
         def currentUri = retrieveCurrentUri()
-        driver.get(newUri.toString())
+        getDriver().get(newUri.toString())
         if (sameUrlWithDifferentFragment(currentUri, newUri)) {
-            driver.navigate().refresh()
+            getDriver().navigate().refresh()
         }
         if (!page) {
             page(Page)
@@ -630,7 +633,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver.Options#deleteAllCookies()
      */
     void clearCookies() {
-        driver?.manage()?.deleteAllCookies()
+        getDriver()?.manage()?.deleteAllCookies()
     }
 
     /**
@@ -669,7 +672,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver#quit()
      */
     void quit() {
-        driver.quit()
+        getDriver().quit()
     }
 
     /**
@@ -678,7 +681,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver#close()
      */
     void close() {
-        driver.close()
+        getDriver().close()
     }
 
     /**
@@ -687,7 +690,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver#getWindowHandle()
      */
     String getCurrentWindow() {
-        driver.windowHandle
+        getDriver().windowHandle
     }
 
     /**
@@ -696,7 +699,7 @@ class Browser {
      * @see org.openqa.selenium.WebDriver#getWindowHandles()
      */
     Set<String> getAvailableWindows() {
-        driver.windowHandles
+        getDriver().windowHandles
     }
 
     /**
@@ -812,7 +815,7 @@ class Browser {
             cloned.call()
         } finally {
             if ((!options.containsKey(CLOSE_OPTION) && config.withNewWindowConfig.close.orElse(true)) || options.close) {
-                driver.close()
+                getDriver().close()
             }
             switchToWindow(originalWindow)
             page originalPage
@@ -996,8 +999,8 @@ class Browser {
     }
 
     public <T> Optional<T> driverAs(Class<T> castType) {
-        if (castType.isInstance(driver)) {
-            Optional.of(driver as T)
+        if (castType.isInstance(getDriver())) {
+            Optional.of(getDriver() as T)
         } else if (castType.isInstance(augmentedDriver)) {
             Optional.of(augmentedDriver as T)
         } else {
@@ -1006,7 +1009,7 @@ class Browser {
     }
 
     protected switchToWindow(String window) {
-        driver.switchTo().window(window)
+        getDriver().switchTo().window(window)
     }
 
     protected <T> T doWithWindow(Map options, Closure<T> block) {
@@ -1021,7 +1024,7 @@ class Browser {
             cloned.call()
         } finally {
             if (options.close || (!options.containsKey(CLOSE_OPTION) && config.withWindowConfig.close)) {
-                driver.close()
+                getDriver().close()
             }
         }
     }
@@ -1033,6 +1036,15 @@ class Browser {
      */
     protected NavigatorFactory createNavigatorFactory() {
         config.createNavigatorFactory(this)
+    }
+
+    /**
+     * Called to create the driver, the first time it is requested.
+     *
+     * @return The driver
+     */
+    protected WebDriver createDriver() {
+        config.createDriver()
     }
 
     private WebDriver getDriverWithNetworkConditions() {
@@ -1230,7 +1242,7 @@ class Browser {
     private URI retrieveCurrentUri() {
         def currentUri = null
         try {
-            def currentUrl = driver.currentUrl
+            def currentUrl = getDriver().currentUrl
             currentUri = currentUrl ? new URI(currentUrl) : null
         } catch (NullPointerException npe) {
         } catch (URISyntaxException use) {

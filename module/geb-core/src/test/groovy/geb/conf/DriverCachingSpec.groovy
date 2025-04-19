@@ -35,13 +35,11 @@ class DriverCachingSpec extends Specification {
         File getReportsDir() { null }
     }
 
-    def conf(cacheDriverPerThread = false) {
+    def conf(cacheDriverPerThread = false, cacheDriver = true) {
         def conf = new Configuration(new ConfigObject(), new Properties(), new NullBuildAdapter())
+        conf.cacheDriver = cacheDriver
         conf.cacheDriverPerThread = cacheDriverPerThread
         conf.driverConf = { new HtmlUnitDriver() }
-
-        assert conf.cacheDriver
-
         conf
     }
 
@@ -58,23 +56,23 @@ class DriverCachingSpec extends Specification {
         def holder = new BlockingVariable()
 
         when:
-        Thread.start { holder.set(conf2.driver) }
+        Thread.start { holder.set(conf2.createDriver()) }
 
         and:
-        def driver1 = conf1.driver
+        def driver1 = conf1.createDriver()
         def driver2 = holder.get()
 
         then:
         !driver1.is(driver2)
 
         and:
-        driver1.is conf(true).driver
+        driver1.is conf(true).createDriver()
 
         when:
         CachingDriverFactory.clearCacheAndQuitDriver()
 
         then:
-        !driver1.is(conf(true).driver)
+        !driver1.is(conf(true).createDriver())
 
         cleanup:
         driver1.quit()
@@ -90,23 +88,39 @@ class DriverCachingSpec extends Specification {
         def holder = new BlockingVariable()
 
         when:
-        Thread.start { holder.set(conf2.driver) }
+        Thread.start { holder.set(conf2.createDriver()) }
 
         and:
-        def driver1 = conf1.driver
+        def driver1 = conf1.createDriver()
         def driver2 = holder.get()
 
         then:
         driver1.is(driver2)
 
         and:
-        driver1.is conf().driver
+        driver1.is conf().createDriver()
 
         when:
         CachingDriverFactory.clearCacheAndQuitDriver()
 
         then:
-        !driver1.is(conf(true).driver)
+        !driver1.is(conf(true).createDriver())
+
+        cleanup:
+        driver1.quit()
+        driver2.quit()
+    }
+
+    def "disabled caching yields different drivers on each call"() {
+        given:
+        def conf = conf(false, false)
+
+        when:
+        def driver1 = conf.createDriver()
+        def driver2 = conf.createDriver()
+
+        then:
+        !driver1.is(driver2)
 
         cleanup:
         driver1.quit()
