@@ -97,6 +97,11 @@ class GebTestManager {
         this.testClass.get().push(testClass)
         currentTestName.set(testName)
         if (reportingEnabled) {
+            // it happens that beforeTestClass for test class A is run on a thread
+            // and next beforeTest (and thus test execution) for tests from class B are run on that thread
+            // as the browser is thread-local reused, we need to set the report group here or the report
+            // eventually is written to the wrong report group which is confusing and makes some tests flaky
+            getBrowser().reportGroup(testClass)
             testCounter.get().push(nextTestCounter(testClass))
             perTestReportCounter.get().push(1)
         }
