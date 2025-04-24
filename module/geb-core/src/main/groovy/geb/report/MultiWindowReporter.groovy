@@ -44,9 +44,9 @@ class MultiWindowReporter implements Reporter {
 
     void writeWindowReport(ReportState reportState, String windowId) {
         reportState.browser.withWindow(windowId) {
-            def windowLabel = "${reportState.label}-window $windowId"
+            def windowLabel = "${reportState.label}-window_$windowId"
             def windowState = new ReportState(reportState.browser, windowLabel, reportState.outputDir)
-            backing.writeReport(windowState)
+            this.backing.writeReport(windowState)
         }
     }
 

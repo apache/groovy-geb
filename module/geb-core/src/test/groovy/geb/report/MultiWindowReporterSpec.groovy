@@ -45,7 +45,7 @@ class MultiWindowReporterSpec extends BaseWindowHandlingSpec {
         report("test")
 
         then:
-        reportFileNames == availableWindows.collect { "001-001-writes report for each open window-test-window ${it}.html" }.toSet()
+        reportFileNames == availableWindows.collect { "001-001-writes report for each open window-test-window_${it}.html" }.toSet()
 
         and:
         linkTextsInReports == [
@@ -64,6 +64,20 @@ class MultiWindowReporterSpec extends BaseWindowHandlingSpec {
 
         then:
         reportFileNames == ["002-001-does not include window id in report name if there is only a single window open-test.html"].toSet()
+    }
+
+    def "does not read backing from SUT but refers to its field"() {
+        given:
+        openAllWindows()
+        html {
+            input(type: "text", name: "backing")
+        }
+
+        when:
+        report("test")
+
+        then:
+        notThrown(MissingMethodException)
     }
 
     Set<List<String>> getLinkTextsInReports() {
