@@ -34,8 +34,8 @@ class OnFailureReporter implements IMethodInterceptor {
             if (spec.testManager.reportingEnabled) {
                 try {
                     spec.testManager.reportFailure()
-                } catch (Exception ignored) {
-                    // ignore
+                } catch (Exception reportingException) {
+                    throwable.addSuppressed(reportingException)
                 }
             }
             throw throwable

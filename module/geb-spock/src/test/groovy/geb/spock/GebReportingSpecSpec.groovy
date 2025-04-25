@@ -189,7 +189,7 @@ class GebReportingSpecSpec extends Specification {
                 given:
                 config.reporter = new Reporter() {
                     void writeReport(ReportState reportState) {
-                        throw new Exception()
+                        throw new Exception("Foo")
                     }
 
                     void addListener(ReportingListener listener) {
@@ -204,7 +204,8 @@ class GebReportingSpecSpec extends Specification {
         """
 
         then:
-        result.failures.first().exception in ConditionNotSatisfiedError
+        result.failures.first().exception instanceof ConditionNotSatisfiedError
+        result.failures.first().exception.suppressed*.message == ['Foo']
     }
 
     def "report called from fixture method should create report with default name"() {
