@@ -22,7 +22,8 @@ import org.openqa.selenium.WebDriver
 
 class CachingDriverFactory implements DriverFactory {
 
-    static private final CACHE = new SimpleCache<Cache<WebDriver>>()
+    static private final GLOBAL_CACHE = new SimpleCache<Cache<WebDriver>>()
+    static private final PER_THREAD_CACHE = new SimpleCache<Cache<WebDriver>>()
 
     private final Cache<WebDriver> cache
     private final DriverFactory innerFactory
@@ -35,15 +36,16 @@ class CachingDriverFactory implements DriverFactory {
     }
 
     static CachingDriverFactory global(DriverFactory innerFactory, boolean quitOnShutdown) {
-        new CachingDriverFactory(CACHE.get { new SimpleCache<WebDriver>() }, innerFactory, quitOnShutdown)
+        new CachingDriverFactory(GLOBAL_CACHE.get { new SimpleCache<WebDriver>() }, innerFactory, quitOnShutdown)
     }
 
     static CachingDriverFactory perThread(DriverFactory innerFactory, boolean quitOnShutdown) {
-        new CachingDriverFactory(CACHE.get { new ThreadLocalCache<WebDriver>() }, innerFactory, quitOnShutdown)
+        new CachingDriverFactory(PER_THREAD_CACHE.get { new ThreadLocalCache<WebDriver>() }, innerFactory, quitOnShutdown)
     }
 
     static WebDriver clearCache() {
-        CACHE.get { null }?.clear()
+        GLOBAL_CACHE.get { null }?.clear()
+        PER_THREAD_CACHE.get { null }?.clear()
     }
 
     static WebDriver clearCacheAndQuitDriver() {
@@ -53,7 +55,8 @@ class CachingDriverFactory implements DriverFactory {
     }
 
     static clearCacheCache() {
-        CACHE.clear()
+        GLOBAL_CACHE.clear()
+        PER_THREAD_CACHE.clear()
     }
 
     WebDriver getDriver() {
