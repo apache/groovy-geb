@@ -48,6 +48,10 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
         }
     }
 
+    def setup() {
+        driver.webClient.options.javaScriptEnabled = false
+    }
+
     def "verify our server is configured correctly"() {
         when:
         go "/"
@@ -344,6 +348,9 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
 
     @Unroll
     def "implicitly waits when at checking if toWait content option is specified for '#contentName' content"() {
+        given:
+        driver.webClient.options.javaScriptEnabled = true
+
         when:
         to PageOrientedSpecPageA
 
@@ -359,6 +366,7 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
 
     def "implicitly waits when at checking after clicking on content that has to option specified if global atCheckWaiting is specified"() {
         given:
+        driver.webClient.options.javaScriptEnabled = true
         config.atCheckWaiting = true
 
         when:
@@ -373,6 +381,9 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
 
     @Unroll
     def "implicitly waits when at checking if toWait content option is specified and to option contains a list of candidates for '#contentName' content"() {
+        given:
+        driver.webClient.options.javaScriptEnabled = true
+
         when:
         to PageOrientedSpecPageA
 
