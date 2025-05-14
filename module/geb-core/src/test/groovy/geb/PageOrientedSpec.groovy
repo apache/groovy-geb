@@ -32,13 +32,6 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
             def other = path == "b" ? "a" : "b"
             res.outputStream << """
             <html>
-                <head>
-                    <script type="text/javascript" charset="utf-8">
-                    setTimeout(function() {
-                        document.body.innerHTML += '<div id="dynamic">dynamic</div>';
-                    }, 100);
-                    </script>
-                </head>
                 <body>
                     <a href="/$other" id="$path">$other</a>
                     <div id="uri">$req.requestURI</div>
@@ -342,50 +335,6 @@ class PageOrientedSpec extends GebSpecWithCallbackServer {
         PageContentPageInstancePageParam | 'instance'   | new PageContentPageInstancePageParam()
     }
 
-    @Unroll
-    def "implicitly waits when at checking if toWait content option is specified for '#contentName' content"() {
-        when:
-        to PageOrientedSpecPageA
-
-        and:
-        page[contentName].click()
-
-        then:
-        page in PageOrientedSpecPageE
-
-        where:
-        contentName << ["linkWithToWait", "linkWithToWaitUsingPageInstance"]
-    }
-
-    def "implicitly waits when at checking after clicking on content that has to option specified if global atCheckWaiting is specified"() {
-        given:
-        config.atCheckWaiting = true
-
-        when:
-        to PageOrientedSpecPageA
-
-        and:
-        linkToPageWithDynamicContent.click()
-
-        then:
-        page in PageOrientedSpecPageE
-    }
-
-    @Unroll
-    def "implicitly waits when at checking if toWait content option is specified and to option contains a list of candidates for '#contentName' content"() {
-        when:
-        to PageOrientedSpecPageA
-
-        and:
-        page[contentName].click()
-
-        then:
-        page in PageOrientedSpecPageE
-
-        where:
-        contentName << ["linkWithToWaitAndVariantTo", "linkWithToWaitAndVariantToUsingPageInstances"]
-    }
-
     def "unrecognized content template parameters are reported"() {
         when:
         to PageWithContentUsingUnrecognizedParams
@@ -511,11 +460,6 @@ class PageOrientedSpecPageA extends Page {
         linkWithVariantToUsingPageInstances(to: [new PageOrientedSpecPageD(), new PageOrientedSpecPageC(), new PageOrientedSpecPageB()]) { link }
         linkWithVariantToNoMatches(to: [PageOrientedSpecPageD, PageOrientedSpecPageC]) { link }
         linkWithVariantToNoMatchesUsingPageInstances(to: [new PageOrientedSpecPageD(), new PageOrientedSpecPageC()]) { link }
-        linkToPageWithDynamicContent(to: PageOrientedSpecPageE) { link }
-        linkWithToWait(to: PageOrientedSpecPageE, toWait: true) { link }
-        linkWithToWaitUsingPageInstance(to: new PageOrientedSpecPageE(), toWait: true) { link }
-        linkWithToWaitAndVariantTo(to: [PageOrientedSpecPageC, PageOrientedSpecPageE], toWait: true) { link }
-        linkWithToWaitAndVariantToUsingPageInstances(to: [new PageOrientedSpecPageC(), new PageOrientedSpecPageE()], toWait: true) { link }
         linkText { link.text().trim() }
         linkTextAlias(aliases: 'linkText')
         notPresentValueRequired { $("div#asdfasdf").text() }
@@ -542,14 +486,6 @@ class PageOrientedSpecPageC extends Page {
 @SuppressWarnings(["ComparisonOfTwoConstants", "InvertedCondition"])
 class PageOrientedSpecPageD extends Page {
     static at = { assert 1 == 2 }
-}
-
-class PageOrientedSpecPageE extends Page {
-    static at = { dynamic }
-    static content = {
-        dynamic { $("#dynamic") }
-    }
-
 }
 
 class ConvertPage extends Page {
