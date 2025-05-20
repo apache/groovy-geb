@@ -94,7 +94,7 @@ asciidoctorj {
         'selenium-version'     : libs.versions.selenium.get(),
         'groovy-version'       : libs.versions.groovy.get(),
         'sauce-connect-version': libs.versions.sauceConnect.get(),
-        'home-page'            : 'www.gebish.org',
+        'home-page'            : 'groovy.apache.org/geb/',
         docinfo1               : true,
         linkcss                : true,
         stylesheet             : 'css/style.css',

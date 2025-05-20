@@ -118,6 +118,6 @@ tasks.withType(Groovydoc).configureEach {
 
     def docName = project.name == "manual" ? "Geb" : project.name
     docTitle = "Groovy API Documentation for $docName $version"
-    footer = "<p style='text-align: center'>Groovy API Documentation for $docName $version - Licensed under the Apache License, Version 2.0 - <a href='http://www.gebish.org'>http://www.gebish.org</a></p>"
+    footer = "<p style='text-align: center'>Groovy API Documentation for $docName $version - Licensed under the Apache License, Version 2.0 - <a href='http://groovy.apache.org/geb/'>http://groovy.apache.org/geb/</a></p>"
     windowTitle = "Groovy API for $docName $version"
 }

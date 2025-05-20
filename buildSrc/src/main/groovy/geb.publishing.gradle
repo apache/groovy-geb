@@ -33,7 +33,7 @@ signing {
 publishing {
     publications.configureEach {
         pom {
-            url = "http://www.gebish.org"
+            url = "http://groovy.apache.org/geb/"
             inceptionYear = "2010"
             licenses {
                 license {

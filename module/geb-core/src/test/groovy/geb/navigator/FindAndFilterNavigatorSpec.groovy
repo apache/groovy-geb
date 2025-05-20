@@ -47,7 +47,7 @@ class FindAndFilterNavigatorSpec extends GebSpecWithCallbackServer {
         html {
             div(id: "idA", 'class': 'classA', "a")
             div(id: "idB", 'class': 'classB', "b")
-            a(id: "link", 'href': 'www.gebish.org', "Geb testing")
+            a(id: "link", 'href': 'groovy.apache.org/geb/', "Geb testing")
         }
 
         expect:

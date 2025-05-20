@@ -27,7 +27,7 @@ class WithWindowSpec extends DriveMethodSupportingSpecWithServer {
         given:
         server.responseHtml """
             // tag::using_name_html[]
-            <a href="http://www.gebish.org" target="myWindow">Geb</a>
+            <a href="http://groovy.apache.org/geb/" target="myWindow">Geb</a>
             // end::using_name_html[]
         """
 
@@ -47,7 +47,7 @@ class WithWindowSpec extends DriveMethodSupportingSpecWithServer {
         given:
         server.responseHtml """
             // tag::using_closure_html[]
-            <a href="http://www.gebish.org" target="_blank">Geb</a>
+            <a href="http://groovy.apache.org/geb/" target="_blank">Geb</a>
             // end::using_closure_html[]
         """
 

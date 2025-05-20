@@ -55,7 +55,7 @@ class ReportingSpec extends DriveMethodSupportingSpecWithServer {
 
             // tag::reporting_groups[]
             reportGroup "geb"
-            go "http://gebish.org"
+            go "http://groovy.apache.org/geb/"
             report "home page"
             // end::reporting_groups[]
             assert new File(config.reportsDir, "geb/home page.html").exists()

@@ -28,12 +28,12 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with page specifying an url"() {
         expect:
         // tag::to[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::to[]
             driver.javascriptEnabled = false
             // tag::to[]
             to PageObjectsPage
-            assert currentUrl == "https://gebish.org/pages"
+            assert currentUrl == "https://groovy.apache.org/geb/pages"
         }
         // end::to[]
     }
@@ -41,12 +41,12 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with additional arguments"() {
         expect:
         // tag::to_with_args[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::to_with_args[]
             driver.javascriptEnabled = false
             // tag::to_with_args[]
-            to ManualsPage, "0.9.3", "index.html"
-            assert currentUrl == "https://gebish.org/manual/0.9.3/index.html"
+            to ManualsPage, "7.0.0", "index.html"
+            assert currentUrl == "https://groovy.apache.org/geb/manual/7.0.0/index.html"
         }
         // end::to_with_args[]
     }
@@ -54,17 +54,17 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with custom convert to path"() {
         when:
         // tag::convert_to_path[]
-        def someManualVersion = new Manual(version: "0.9.3")
+        def someManualVersion = new Manual(version: "7.0.0")
 
         // end::convert_to_path[]
         then:
         // tag::convert_to_path[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::convert_to_path[]
             driver.javascriptEnabled = false
             // tag::convert_to_path[]
             to ManualsPage, someManualVersion
-            assert currentUrl == "https://gebish.org/manual/0.9.3/index.html"
+            assert currentUrl == "https://groovy.apache.org/geb/manual/7.0.0/index.html"
         }
         // end::convert_to_path[]
     }
@@ -72,17 +72,17 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with named params"() {
         when:
         // tag::to_with_named_params[]
-        def someManualVersion = new Manual(version: "0.9.3")
+        def someManualVersion = new Manual(version: "7.0.0")
 
         // end::to_with_named_params[]
         then:
         // tag::to_with_named_params[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::to_with_named_params[]
             driver.javascriptEnabled = false
             // tag::to_with_named_params[]
             to ManualsPage, someManualVersion, flag: true
-            assert currentUrl == "https://gebish.org/manual/0.9.3/index.html?flag=true"
+            assert currentUrl == "https://groovy.apache.org/geb/manual/7.0.0/index.html?flag=true"
         }
         // end::to_with_named_params[]
     }
@@ -90,12 +90,12 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with fragments"() {
         expect:
         // tag::to_with_fragment[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::to_with_fragment[]
             driver.javascriptEnabled = false
             // tag::to_with_fragment[]
-            to ManualsPage, UrlFragment.of("advanced-page-navigation"), "0.9.3", "index.html"
-            assert currentUrl == "https://gebish.org/manual/0.9.3/index.html#advanced-page-navigation"
+            to ManualsPage, UrlFragment.of("advanced-page-navigation"), "7.0.0", "index.html"
+            assert currentUrl == "https://groovy.apache.org/geb/manual/7.0.0/index.html#advanced-page-navigation"
         }
         // end::to_with_fragment[]
     }
@@ -103,12 +103,12 @@ class AdvancedNavigationSpec extends Specification {
     def "using to with parameterized page"() {
         expect:
         // tag::to_with_parameterized_page[]
-        Browser.drive(baseUrl: "https://gebish.org/") {
+        Browser.drive(baseUrl: "https://groovy.apache.org/geb/") {
             // end::to_with_parameterized_page[]
             driver.javascriptEnabled = false
             // tag::to_with_parameterized_page[]
-            to new ParameterizedManualsPage(version: "0.9.3", section: "advanced-page-navigation")
-            assert currentUrl == "https://gebish.org/manual/0.9.3/index.html#advanced-page-navigation"
+            to new ParameterizedManualsPage(version: "7.0.0", section: "advanced-page-navigation")
+            assert currentUrl == "https://groovy.apache.org/geb/manual/7.0.0/index.html#advanced-page-navigation"
         }
         // end::to_with_parameterized_page[]
     }

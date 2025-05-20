@@ -27,7 +27,7 @@ class WithNewWindowSpec extends DriveMethodSupportingSpecWithServer {
         given:
         server.responseHtml """
             // tag::html[]
-            <a href="http://www.gebish.org" target="_blank">Geb</a>
+            <a href="http://groovy.apache.org/geb/" target="_blank">Geb</a>
             // end::html[]
         """
 

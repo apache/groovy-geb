@@ -44,13 +44,13 @@ class BrowserSpec extends GebSpecWithCallbackServer {
         go()
 
         when:
-        browser.clearCookies('http://gebish.org')
+        browser.clearCookies('http://groovy.apache.org/geb/')
 
         then:
         notThrown(Throwable)
 
         and:
-        browser.currentUrl.contains('gebish.org')
+        browser.currentUrl.contains('groovy.apache.org/geb/')
     }
 
     def "load default config"() {

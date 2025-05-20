@@ -1,6 +1,6 @@
 = About the project
 
-The Geb home page can be found at link:http://www.gebish.org[http://www.gebish.org].
+The Geb home page can be found at link:https://groovy.apache.org/geb/[https://groovy.apache.org/geb/].
 
 == API reference
 

@@ -40,7 +40,7 @@ dependencies {
 }
 
 gradlePlugin {
-    website = "https://gebish.org/manual/current/#gradle-plugins"
+    website = "https://groovy.apache.org/geb/manual/current/#gradle-plugins"
     vcsUrl = "https://github.com/geb/geb"
 }
 

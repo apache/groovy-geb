@@ -38,12 +38,12 @@ class UrlInputSnippetSpec extends GebSpecWithCallbackServer {
         when:
         // tag::example[]
         def input = $(name: "homepage").module(UrlInput)
-        input.text = "http://gebish.org"
+        input.text = "http://groovy.apache.org/geb/"
 
         // end::example[]
         then:
         // tag::example[]
-        assert input.text == "http://gebish.org"
+        assert input.text == "http://groovy.apache.org/geb/"
         // end::example[]
     }
 
