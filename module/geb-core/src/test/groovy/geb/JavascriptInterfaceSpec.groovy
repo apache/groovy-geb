@@ -63,6 +63,12 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
         r == "coming back"
         js.v1 == 5
         js.v2 == 6
+        when: "we use a GString as argument"
+        r = js.exec("${7}", 8, "return changeVars(arguments[0], arguments[1]);")
+        then: "the call result is returned and it changed the vars"
+        r == "coming back"
+        js.v1 == '7'
+        js.v2 == 8
     }
 
     def "page objects style"() {
@@ -83,6 +89,12 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
         r == "coming back"
         v1 == 5
         v2 == 6
+        when: "we use a GString as argument"
+        r = changeVarsViaExec("${7}", 8)
+        then: "the call result is returned and it changed the vars"
+        r == "coming back"
+        v1 == '7'
+        v2 == 8
     }
 
     def "via a module"() {
@@ -103,6 +115,12 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
         r == "coming back"
         mod.v1 == 5
         mod.v2 == 6
+        when: "we use a GString as argument"
+        r = mod.changeVarsViaExec("${7}", 8)
+        then: "the call result is returned and it changed the vars"
+        r == "coming back"
+        mod.v1 == '7'
+        mod.v2 == 8
     }
 
     /**

@@ -67,7 +67,7 @@ class JavascriptInterface {
             throw new GebException("driver '$driver' can not execute javascript")
         }
 
-        driver.executeScript(script, *args)
+        driver.executeScript(script, *args.collect { (it instanceof GString) ? it as String : it })
     }
 
 }
