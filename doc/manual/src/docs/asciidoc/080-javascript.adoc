@@ -104,7 +104,8 @@ include::{snippets-dir}/javascript/CallingMethodsSpec.groovy[tag=nested_methods,
 === Executing arbitrary code
 
 The `js` object also has an `exec()` method that can be used to run snippets of JavaScript.
-It is identical to the `{javascript-executor-execute-script-api}` method, except that it takes its arguments in the other order…
+It is identical to the `{javascript-executor-execute-script-api}` method, except that it takes its arguments in the other order,
+and accepts `Navigator` instances in addition to `WebElement`s…
 
 [source,groovy]
 ----

@@ -20,6 +20,7 @@ package geb.js
 
 import geb.Browser
 import geb.error.GebException
+import geb.navigator.Navigator
 import org.openqa.selenium.JavascriptExecutor
 
 class JavascriptInterface {
@@ -67,7 +68,25 @@ class JavascriptInterface {
             throw new GebException("driver '$driver' can not execute javascript")
         }
 
-        driver.executeScript(script, *args.collect { (it instanceof GString) ? it as String : it })
+        driver.executeScript(script, *args.collect {
+            switch (it) {
+                case GString:
+                    it as String
+                    break
+
+                case { (it instanceof Navigator) && it.size() == 1 }:
+                    it.singleElement()
+                    break
+
+                case Navigator:
+                    it.allElements()
+                    break
+
+                default:
+                    it
+                    break
+            }
+        })
     }
 
 }
