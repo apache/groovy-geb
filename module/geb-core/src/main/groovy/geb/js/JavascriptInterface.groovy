@@ -53,8 +53,11 @@ class JavascriptInterface {
             jsArgs = args[0..(args.size() - 2)]
         }
 
+        if (script instanceof Closure) {
+            script = script()
+        }
         if (!(script instanceof CharSequence)) {
-            throw new IllegalArgumentException("The last argument to the js function must be string-like")
+            throw new IllegalArgumentException("The last argument to the js function must be string-like or a Closure returning a string-like")
         }
 
         execjs(script.toString(), *jsArgs)

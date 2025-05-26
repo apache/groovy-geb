@@ -123,6 +123,20 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
         mod.v2 == 8
     }
 
+    def "closure as script generator"() {
+        expect: "we can read the vars"
+        js.v1 == 1
+        js.v2 == 2
+        when: "we use the javascript call syntax with Closure"
+        def r = js.exec(5, 6) {
+            "return changeVars(arguments[0], arguments[1]);"
+        }
+        then: "the call result is returned and it changed the vars"
+        r == "coming back"
+        js.v1 == 5
+        js.v2 == 6
+    }
+
     /**
      * The JavascriptExecutor interface says NOTHING about script errors
      * so there is not much we can do here unfortunately.
