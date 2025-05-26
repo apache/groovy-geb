@@ -50,4 +50,25 @@ class ExecutingArbitraryCodeSpec extends GebSpecWithCallbackServer {
         """
         // end::multiline[]
     }
+
+    def "closure"() {
+        given:
+        html {
+            script(type: "text/javascript", """
+                function someJsMethod(a,b) {
+                }
+            """)
+        }
+
+        expect:
+        // tag::closure[]
+        js.exec(1, 2) {
+            """
+                someJsMethod(1, 2);
+                // lots of javascript
+                return true;
+            """
+        }
+        // end::closure[]
+    }
 }
