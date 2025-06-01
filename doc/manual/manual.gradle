@@ -18,12 +18,16 @@
  */
 plugins {
     alias(libs.plugins.asciidoc)
+    alias(libs.plugins.asciidoc.gems)
     id 'java-platform'
     id 'geb.publishing'
 }
 
 repositories {
     mavenCentral()
+    ruby {
+        gems()
+    }
 }
 
 configurations {
@@ -49,6 +53,8 @@ dependencies {
         }
     }
 
+    asciidoctorGems("rubygems:asciidoctor-tabs:${libs.versions.asciidoctorTabs.get()}")
+
     snippets project(path: ":doc:manual-snippets", configuration: "allSources")
     snippets project(path: ":doc:manual-snippets:real-browser", configuration: "allSources")
     snippets project(path: ":module:geb-core", configuration: "allSources")
@@ -72,33 +78,37 @@ def snippetsTask = tasks.register("snippets", Sync) {
 }
 
 asciidoctorj {
+    requires 'asciidoctor-tabs'
     options = [doctype: 'book']
     attributes = [
-        toc                    : 'left',
-        encoding               : 'utf-8',
-        'snippets-dir'         : snippetsPath,
-        'snippets-res-dir'     : snippetsPath,
-        'rb-snippets-dir'      : snippetsPath,
-        'cm-snippets-dir'      : snippetsPath,
-        'ct-snippets-dir'      : snippetsPath,
-        numbered               : true,
-        sectlinks              : true,
-        idprefix               : '',
-        idseparator            : '-',
-        icons                  : 'font',
-        'source-highlighter'   : 'coderay',
-        'geb-version'          : project.version,
-        'geb-group'            : project.group,
-        'geb-group-dir'        : project.group.replace('.', '/'),
-        'spock-core-version'   : libs.versions.spock.get(),
-        'selenium-version'     : libs.versions.selenium.get(),
-        'groovy-version'       : libs.versions.groovy.get(),
-        'sauce-connect-version': libs.versions.sauceConnect.get(),
-        'home-page'            : 'groovy.apache.org/geb/',
-        docinfo1               : true,
-        linkcss                : true,
-        stylesheet             : 'css/style.css',
-        imagesdir              : 'images'
+        toc                       : 'left',
+        encoding                  : 'utf-8',
+        'snippets-dir'            : snippetsPath,
+        'snippets-res-dir'        : snippetsPath,
+        'rb-snippets-dir'         : snippetsPath,
+        'cm-snippets-dir'         : snippetsPath,
+        'ct-snippets-dir'         : snippetsPath,
+        numbered                  : true,
+        sectlinks                 : true,
+        idprefix                  : '',
+        idseparator               : '-',
+        icons                     : 'font',
+        'source-highlighter'      : 'rouge',
+        'geb-version'             : project.version,
+        'geb-group'               : project.group,
+        'geb-group-dir'           : project.group.replace('.', '/'),
+        'spock-core-version'      : libs.versions.spock.get(),
+        'selenium-version'        : libs.versions.selenium.get(),
+        'htmlunit-driver-version' : libs.versions.htmlUnitDriver.get(),
+        'groovy-version'          : libs.versions.groovy.get(),
+        'sauce-connect-version'   : libs.versions.sauceConnect.get(),
+        'home-page'               : 'groovy.apache.org/geb/',
+        docinfo1                  : true,
+        linkcss                   : true,
+        stylesheet                : 'css/style.css',
+        imagesdir                 : 'images',
+        'tabs-sync-option'        : true,
+        'tabs-sync-storage-key'   : 'tabs'
     ]
 
     modules {
@@ -110,24 +120,37 @@ asciidoctorj {
     docExtensions project(":doc:asciidoctor-extension")
 }
 
-asciidoctor {
-    jvm {
+def asciidoctorGemsPrepare = tasks.named("asciidoctorGemsPrepare") {
+    foo().jvm {
         jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
     }
 }
 
 tasks.named("asciidoctor") {
+    jvm {
+        jvmArgs("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.base/java.io=ALL-UNNAMED")
+    }
+
     sources {
         include 'index.adoc'
     }
 
     resources {
         from file('src/resources')
+        from(asciidoctorGemsPrepare.map { new File(it.outputDir.get(), "gems/asciidoctor-tabs-${libs.versions.asciidoctorTabs.get()}/data/js/tabs.js") }) {
+            rename { 'asciidoctor-tabs.js' }
+        }
+        from(asciidoctorGemsPrepare.map { new File (it.outputDir.get(), "gems/asciidoctor-tabs-${libs.versions.asciidoctorTabs.get()}/data/css/tabs.css") }) {
+            rename { 'asciidoctor-tabs.css' }
+        }
     }
 
     baseDirFollowsSourceDir()
+    withGemJar(tasks.named('asciidoctorGemsJar'))
 
     inputs.files(snippetsTask)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(asciidoctorGemsPrepare)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 }
 

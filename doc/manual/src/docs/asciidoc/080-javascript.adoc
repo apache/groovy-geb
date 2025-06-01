@@ -9,11 +9,11 @@ endif::[]
 This section discusses how to deal with some of the challenges in testing and/or automating modern web applications.
 
 [[js-object]]
-== The "js" object
+== The "`js`" object
 
-The browser instance exposes a “link:api/geb/Browser.html#getJs()[`js`]” object that provides support for working with JavaScript over and above what WebDriver provides.
-It's important to understand how WebDriver does handle JavaScript, which is through a driver's implementation of 
-`{javascript-executor-execute-script-api}` 
+The browser instance exposes a link:api/geb/Browser.html#getJs()[`js`] object that provides support for working with JavaScript over and above what WebDriver provides.
+It's important to understand how WebDriver does handle JavaScript, which is through a driver's implementation of
+`{javascript-executor-execute-script-api}`
 method.
 
 [IMPORTANT]
@@ -21,7 +21,7 @@ method.
 Before reading further, it's *strongly* recommended to read the description of `{javascript-executor-execute-script-api}` in order to understand how type conversion works between the two worlds.
 ====
 
-You can execute JavaScript like you would with straight WebDriver using the driver instance via the browser…
+You can execute JavaScript like you would with straight WebDriver using the driver instance via the browser...
 
 [source,groovy]
 ----
@@ -32,7 +32,7 @@ This is a bit long winded, and as you would expect Geb uses the dynamism of Groo
 
 [NOTE]
 ====
-The `{javascript-executor-api}` interface does not define any contract in regards to the driver's responsibility when there is some issue executing JavaScript. 
+The `{javascript-executor-api}` interface does not define any contract in regards to the driver's responsibility when there is some issue executing JavaScript.
 All drivers however throw _some kind_ of exception when this happens.
 ====
 
@@ -40,28 +40,30 @@ All drivers however throw _some kind_ of exception when this happens.
 
 Any _global_ JavaScript variables inside the browser can be read as _properties_ of the `js` object.
 
-Given the following page…
+Given the following page...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/AccessingVariablesSpec.groovy[tag=html,indent=0]
 ----
 
-We could access the JavaScript variable “`aVariable`” with…
+We could access the JavaScript variable `aVariable` with...
 
 [source,groovy]
 ----
 include::{snippets-dir}/javascript/AccessingVariablesSpec.groovy[tag=accessing,indent=0]
 ----
 
-Or if we wanted to map it to page content…
+Or if we wanted to map it to page content...
 
 [source,groovy]
 ----
+include::{snippets-dir}/javascript/AccessingVariablesSpec.groovy[tag=mapping_class,indent=0]
+
 include::{snippets-dir}/javascript/AccessingVariablesSpec.groovy[tag=mapping,indent=0]
 ----
 
-We can even access _nested_ variables…
+We can even access _nested_ variables...
 
 [source,groovy]
 ----
@@ -72,14 +74,14 @@ include::{snippets-dir}/javascript/AccessingVariablesSpec.groovy[tag=nested,inde
 
 Any _global_ JavaScript functions can be called as methods on the `js` object.
 
-Given the following page…
+Given the following page...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/CallingMethodsSpec.groovy[tag=calling_methods_html,indent=0]
 ----
 
-We can call the `addThem()` function with…
+We can call the `addThem()` function with...
 
 [source,groovy]
 ----
@@ -88,13 +90,13 @@ include::{snippets-dir}/javascript/CallingMethodsSpec.groovy[tag=calling_methods
 
 This also works from pages and modules.
 
-To call _nested_ methods, given the following page…
+To call _nested_ methods, given the following page...
 [source,html]
 ----
 include::{snippets-dir}/javascript/CallingMethodsSpec.groovy[tag=nested_methods_html,indent=0]
 ----
 
-We use the same syntax as for properties…
+We use the same syntax as for properties...
 
 [source,groovy]
 ----
@@ -104,14 +106,14 @@ include::{snippets-dir}/javascript/CallingMethodsSpec.groovy[tag=nested_methods,
 === Executing arbitrary code
 
 The `js` object also has an `exec()` method that can be used to run snippets of JavaScript.
-It is identical to the `{javascript-executor-execute-script-api}` method, except that it takes its arguments in the other order…
+It is identical to the `{javascript-executor-execute-script-api}` method, except that it expects the code as last argument...
 
 [source,groovy]
 ----
 include::{snippets-dir}/javascript/ExecutingArbitraryCodeSpec.groovy[tag=single_line,indent=0]
 ----
 
-You might be wondering why the order has been changed (i.e. the arguments go _before_ the script). It makes writing multiline JavaScript more convenient…
+You might be wondering why the order has been changed (i.e. the arguments go _before_ the script). It makes writing multiline JavaScript more convenient...
 
 [source,groovy]
 ----
@@ -138,7 +140,7 @@ waitFor("quick") {} //<4>
 <1> Use default configuration.
 <2> Wait for up to 10 seconds, using the default retry interval.
 <3> Wait for up to 10 seconds, waiting half a second in between retries. See the section on <<waiting-configuration, wait configuration>> for how to change the default values and define presets.
-<4> Use the preset “quick” as the wait settings
+<4> Use the preset "`quick`" as the wait settings
 
 [NOTE]
 ====
@@ -159,12 +161,12 @@ include::{snippets-dir}/javascript/WaitingExamplesSpec.groovy[tag=page,indent=0]
 include::{snippets-dir}/javascript/WaitingExamplesSpec.groovy[tag=using_page,indent=0]
 ----
 
-Recall that the `return` keyword is optional in Groovy, so in the example above the `$(&quot;div#result&quot;).present` statement acts as the return value for the closure and is used as the basis on
+Recall that the `return` keyword is optional in Groovy, so in the example above `theResultDiv.present` acts as the return value for the closure and is used as the basis on
 whether the closure _passed_ or not.
 This means that you must ensure that the last statement inside the closure returns a value that is `true` according to the {groovy-truth} (if you're unfamiliar with the Groovy Truth *do* read that
 page).
 
-Because the browser delegates method calls to the page object, the above could have been written as…
+Because the browser delegates method calls to the page object, the above could have been written as...
 
 [source,groovy]
 ----
@@ -291,24 +293,24 @@ include::{cm-snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=alert,indent
 The first method, `withAlert()`, is used to verify actions that will produce an alert dialog.
 This method returns the alert message.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/AlertSpec.groovy[tag=alert_html,indent=0]
 ----
 
-The `withAlert()` method is used like so…
+The `withAlert()` method is used like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/javascript/AlertSpec.groovy[tag=alert,indent=0]
 ----
 
-If an alert dialog is not raised by the given “actions” closure, an `AssertionError` will be thrown.
+If an alert dialog is not raised by the given "`actions`" closure, an `AssertionError` will be thrown.
 
 The `withAlert()` method also accepts a wait option.
-It is useful if the code in your “actions” closure is raising a dialog in an asynchronous manner and can be used like that:
+It is useful if the code in your "`actions`" closure is raising a dialog in an asynchronous manner and can be used like that:
 
 [source,groovy]
 ----
@@ -318,16 +320,16 @@ include::{snippets-dir}/javascript/AlertSpec.groovy[tag=async_alert,indent=0]
 The possible values for the `wait` option are consistent with the <<content-dsl-wait, ones for `wait` option of content definitions>>.
 
 The second method, `withNoAlert()`, is used to verify actions that will not produce an `alert()` dialog.
-If an alert dialog is raised by the given “actions” closure, an `AssertionError` will be thrown.
+If an alert dialog is raised by the given "`actions`" closure, an `AssertionError` will be thrown.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/AlertSpec.groovy[tag=no_alert_html,indent=0]
 ----
 
-The `withNoAlert()` method is used like so…
+The `withNoAlert()` method is used like so...
 
 [source,groovy]
 ----
@@ -357,37 +359,37 @@ include::{cm-snippets-dir}/geb/js/AlertAndConfirmSupport.groovy[tag=confirm,inde
 
 The first method, `withConfirm()` (and its ‘`ok`’ defaulted relative), is used to verify actions that will produce a confirm dialog.
 This method returns the confirmation message.
-The `ok` parameter controls whether the “OK” or “Cancel” button should be clicked.
+The `ok` parameter controls whether the "`OK`" or "`Cancel`" button should be clicked.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/ConfirmSpec.groovy[tag=confirm_html,indent=0]
 ----
 
-The `withConfirm()` method is used like so…
+The `withConfirm()` method is used like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/javascript/ConfirmSpec.groovy[tag=confirm,indent=0]
 ----
 
-If a confirmation dialog is not raised by the given “actions” closure, an `AssertionError` will be thrown.
+If a confirmation dialog is not raised by the given "`actions`" closure, an `AssertionError` will be thrown.
 
 The `withConfirm()` method also accepts a wait option just like the `withAlert()` method. See the <<alert, description of `withAlert()`>> to learn about the possible values and usage.
 
 The other method, `withNoConfirm()`, is used to verify actions that will not produce a confirm dialog.
-If a confirmation dialog is raised by the given “actions” closure, an `AssertionError` will be thrown.
+If a confirmation dialog is raised by the given "`actions`" closure, an `AssertionError` will be thrown.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/javascript/ConfirmSpec.groovy[tag=no_confirm_html,indent=0]
 ----
 
-The `withNoConfirm()` method is used like so…
+The `withNoConfirm()` method is used like so...
 
 [source,groovy]
 ----
@@ -396,7 +398,7 @@ include::{snippets-dir}/javascript/ConfirmSpec.groovy[tag=no_confirm,indent=0]
 
 [TIP]
 ====
-It's a good idea to use `withNoConfirm()` when doing something that _might_ raise a a confirmation.
+It's a good idea to use `withNoConfirm()` when doing something that _might_ raise a confirmation.
 If you don't, the browser is going to raise a real confirmation dialog and sit there waiting for someone to click it, which means your test is going to hang.
 Using `withNoConfirm()` prevents this.
 ====
@@ -430,19 +432,19 @@ include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=html,indent=0
 ----
 
 We want to click the Geb link, but can't because it's hidden (WebDriver does not let you interact with hidden elements).
-The div containing the link (div “a”) is only displayed when the mouse moves over div “a”.
+The div containing the link (div "`b`") is only displayed when the mouse moves over div "`a`".
 
 The jQuery library provides convenient methods for triggering browser events.
-We can use this to simulate the mouse being moved over the div “a”.
+We can use this to simulate the mouse being moved over the div "`a`".
 
-In straight jQuery JavaScript we would do…
+In straight jQuery JavaScript we would do...
 
 [source,javascript]
 ----
 jQuery("div#a").mouseover();
 ----
 
-Which we could invoke via Geb easy enough…
+Which we could invoke via Geb easy enough...
 
 [source,groovy]
 ----
@@ -451,14 +453,14 @@ include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_javascr
 
 That will work, but can be inconvenient as it duplicates content definitions in our Geb pages.
 Geb's jQuery integration allows you to use your defined content in Geb with jQuery.
-Here is how we could call the `mouseover` jQuery function on an element from Geb…
+Here is how we could call the `mouseover` jQuery function on an element from Geb...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=using_adapter,indent=0]
 ----
 
-To be clear, that is Groovy (not JavaScript code). It can be used with pages…
+To be clear, that is Groovy (not JavaScript) code. It can be used with pages...
 
 [source,groovy]
 ----
@@ -470,9 +472,9 @@ include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=page,indent=0
 include::{rb-snippets-dir}/javascript/JQuerySupportSpec.groovy[tag=on_content,indent=0]
 ----
 
-The `jquery` property of a navigator is conceptually equivalent to a jQuery object for _all_ of the navigator's matched page elements. 
+The `jquery` property of a navigator is conceptually equivalent to a jQuery object for _all_ of the navigator's matched page elements.
 
-The methods can also take arguments…
+The methods can also take arguments...
 
 [source,groovy]
 ----

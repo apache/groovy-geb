@@ -29,7 +29,7 @@ import org.openqa.selenium.WebElement
 
 /**
  * Navigator is a jQuery-style DOM traversal tool that wraps a set of WebDriver WebElements.
- * The code is based on the Doj library written by Kevin Wetzels: http://code.google.com/p/hue/
+ * The code is based on the Doj library written by Kevin Wetzels: https://code.google.com/archive/p/hue/
  */
 interface Navigator extends Iterable<Navigator>, Locator, StringRepresentationProvider {
 

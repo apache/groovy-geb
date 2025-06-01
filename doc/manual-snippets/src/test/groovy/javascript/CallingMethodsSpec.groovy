@@ -69,10 +69,8 @@ class CallingMethodsSpec extends DriveMethodSupportingSpecWithServer {
         expect:
         // tag::nested_methods[]
         Browser.drive {
-            Browser.drive {
-                go "/"
-                assert js."functionContainer.addThem"(1, 2) == 3
-            }
+            go "/"
+            assert js."functionContainer.addThem"(1, 2) == 3
         }
         // end::nested_methods[]
     }

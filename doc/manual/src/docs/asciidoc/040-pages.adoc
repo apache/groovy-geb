@@ -24,7 +24,7 @@ The implementation of how to search and how to find the results is going to have
 As soon as something as trivial as the name of the search field changes you have to update a lot of code.
 The Page Object Pattern allows us to apply the same principles of modularity, reuse and encapsulation that we use in other aspects of programming to avoid such issues in browser automation code.
 
-Here is the same script, utilising page objects…
+Here is the same script, utilising page objects...
 
 [source,groovy]
 ----
@@ -48,21 +48,21 @@ All page objects *must* inherit from `{page-api}`.
 Geb features a DSL for defining page content in a _templated_ fashion, which allows very concise yet flexible page definitions.
 Pages define a `static` closure property called `content` that describes the page content.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=html,indent=0]
 ----
 
-We could define this content as so…
+We could define this content as so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_div,indent=0]
 ----
 
-The structure to the content DSL is…
+The structure to the content DSL is...
 
 [source]
 ----
@@ -71,7 +71,7 @@ The structure to the content DSL is…
 
 Where `«definition»` is Groovy code that is evaluated against the instance of the page.
 
-Here is how it could be used…
+Here is how it could be used...
 
 [source,groovy]
 ----
@@ -80,14 +80,14 @@ include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_div_usage,inde
 
 So how is this working?
 First, remember that the `Browser` instance delegates any method calls or property accesses that it doesn't know about to the current page instance.
-So the above code is the same as…
+So the above code is the same as...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=verbose_page_with_div_usage,indent=0]
 ----
 
-Secondly, defined content becomes available as properties and methods on instance of the page…
+Secondly, defined content becomes available as properties and methods on instance of the page...
 
 [source,groovy]
 ----
@@ -95,7 +95,7 @@ include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=accessing_content_using_
 ----
 
 The Content DSL actually defines content _templates_.
-This is best illustrated by example…
+This is best illustrated by example...
 
 [source,groovy]
 ----
@@ -117,21 +117,21 @@ include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_string_content
 ----
 
 It's important to realise that `«definition»` code is evaluated against the page instance.
-This allows code like the following…
+This allows code like the following...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_content_reuse,indent=0]
 ----
 
-And this is not restricted to other content…
+And this is not restricted to other content...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_content_using_a_field,indent=0]
 ----
 
-Or…
+Or...
 
 [source,groovy]
 ----
@@ -141,14 +141,14 @@ include::{snippets-dir}/pages/ContentDslSpec.groovy[tag=page_with_content_using_
 [[template-options]]
 === Template options
 
-Template definitions can take different options. The syntax is…
+Template definitions can take different options. The syntax is...
 
 [source]
 ----
 «name»(«options map») { «definition» }
 ----
 
-For example…
+For example...
 
 [source,groovy]
 ----
@@ -166,7 +166,7 @@ This is only relevant when the definition returns a `Navigator` object (via the 
 
 If the `required` option is set to `true` and the returned content does not exist, a `{required-page-content-not-present-api}` exception will be thrown.
 
-Given a completely empty html document the following will pass…
+Given a completely empty html document the following will pass...
 
 [source,groovy]
 ----
@@ -189,14 +189,14 @@ If the number of elements returned is lower than the specified value then `{cont
 The value should be a non-negative integer.
 This option cannot be used together with the <<content-dsl-times,`times` option>>.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=min_html,indent=0]
 ----
 
-Accessing the following content definition…
+Accessing the following content definition...
 
 [source,groovy]
 ----
@@ -221,14 +221,14 @@ If the number of elements returned is higher than the specified value then `{con
 The value should be a non-negative integer.
 This option cannot be used together with the <<content-dsl-times,`times` option>>.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=max_html,indent=0]
 ----
 
-Accessing the following content definition…
+Accessing the following content definition...
 
 [source,groovy]
 ----
@@ -253,14 +253,14 @@ If the number of elements returned is out of bounds specified then `{content-pag
 The value should be a non-negative integer (when the minimum and maximum number of elements are desired to be equal) or an integer range.
 This option cannot be used together with `min` and `max` options.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=times_html,indent=0]
 ----
 
-Accessing the following content definition…
+Accessing the following content definition...
 
 [source,groovy]
 ----
@@ -278,7 +278,7 @@ include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=times_exception_mes
 
 Default value: `false`
 
-The `cache` option controls whether or not the definition is evaluated each time the content is requested (the content is cached for each unique set of parameters). 
+The `cache` option controls whether or not the definition is evaluated each time the content is requested (the content is cached for each unique set of parameters).
 
 [source,groovy]
 ----
@@ -319,7 +319,7 @@ This option also supports all types that can be passed to any of the <<changing-
 * a list of page classes
 * a list of page instances
 
-When using lists variants (here shown with page classes)…
+When using lists variants (here shown with page classes)...
 
 [source,groovy]
 ----
@@ -330,7 +330,7 @@ Then, on click, the browser's page is set to the first page in the list whose at
 This is equivalent to the link:api/geb/Browser.html#page(Class)[`page(Class&lt;? extends Page&gt;[\])`] and
 link:api/geb/Browser.html#page(T)[`page(Page[\])`] browser methods which are explained in the section on <<changing-pages, changing pages>>.
 
-All of the page classes and classes of the page instances passed in when using any variant of the `to` option have to have an “at” checker defined otherwise an `UndefinedAtCheckerException` will be
+All of the page classes and classes of the page instances passed in when using any variant of the `to` option have to have an "`at`" checker defined otherwise an `UndefinedAtCheckerException` will be
 thrown.
 
 [[content-dsl-wait]]
@@ -388,7 +388,7 @@ include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=non_navigator_waiti
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=non_navigator_waiting,indent=0]
 ----
 
-In this case, we are inherently waiting for the `status` content to be on the page and for it to contain the string “Success”.
+In this case, we are inherently waiting for the `status` content to be on the page and for it to contain the string "`Success`".
 If the `status` element is not present when we request `success`, the `{required-page-content-not-present-api}` exception that would be thrown is swallowed and Geb will try again after the
 retry interval has expired.
 
@@ -402,7 +402,7 @@ include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=not_required_waitin
 Then if wait timeout expires when retrieving `dynamicallyAdded`, there will be no `WaitTimeoutException` thrown, and the last closure evaluation value will be returned.
 If there is an exception thrown during closure evaluation, it will be wrapped in an link:api/geb/waiting/UnknownWaitForEvaluationResult.html[`UnknownWaitForEvaluationResult`] instance and returned.
 
-Waiting content blocks are subject to “implicit assertions”.
+Waiting content blocks are subject to "`implicit assertions`".
 See the section on <<implicit-assertions, implicit assertions>> for more information.
 
 [[content-dsl-wait-condition]]
@@ -423,14 +423,14 @@ Consider the following example:
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=wait_condition_page,indent=0]
 ----
 
-Accessing content named…
+Accessing content named...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=wait_condition_page_content_access,indent=0]
 ----
 
-…will essentially cause Geb to wait until the content is not only in the DOM but also displayed.
+...will essentially cause Geb to wait until the content is not only in the DOM but also displayed.
 If the condition is not fulfilled before waiting timeout elapses then `WaitTimeoutException` will be thrown.
 
 The amount of waiting used when `waitCondition` option is provided can be controlled using the `wait` option but if it's not specified then it defaults to `true` which means that <<default-waiting-configuration, default waiting is applied>>.
@@ -443,7 +443,7 @@ Default value: `false`
 Allowed values are the same as for the <<content-dsl-wait,`wait`>> option.
 
 Can be used together with the <<content-dsl-to, `to`>> option to specify that the page changing action performed when the content is clicked is asynchronous.
-This essentially means that verification of page transition (“at checking”) should be wrapped in a `waitFor()` call.
+This essentially means that verification of page transition ("`at checking`") should be wrapped in a `waitFor()` call.
 
 [source,groovy]
 ----
@@ -466,21 +466,21 @@ Default value: `null`
 
 The `page` option allows the definition of a page the browser will be set to if the content describes a frame and is used in a `withFrame()` call.
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=page_html,indent=0]
 ----
 
-…and the contents of frame.html…
+...and the contents of frame.html...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/TemplateOptionsSpec.groovy[tag=frame_html,indent=0]
 ----
 
-…the following will pass…
+...the following will pass...
 
 [source,groovy]
 ----
@@ -510,7 +510,7 @@ Remember that the aliased content has to be defined before the aliasing content,
 
 === Accessing content names
 
-Should you need to access names of the content defined using the DSL at runtime you can use the `contentName` property of a page instance:
+Should you need to access names of the content defined using the DSL at runtime you can use the `contentNames` property of a page instance:
 
 [source,groovy]
 ----
@@ -523,10 +523,10 @@ include::{snippets-dir}/pages/ContentNamesSpec.groovy[tag=usage,indent=0]
 ----
 
 [[at-checker]]
-== “At” verification
+== "`At`" verification
 
 Each page can define a way to check whether the underlying browser is at the page that the page class actually represents.
-This is done via a `static` `at` closure…
+This is done via a `static` `at` closure...
 
 [source,groovy]
 ----
@@ -536,23 +536,23 @@ include::{snippets-dir}/pages/AtSpec.groovy[tag=introduction,indent=0]
 This closure can either return a `false` value or throw an `AssertionError` (via the `assert` method).
 The `verifyAt()` method call will either:
 
-* return `true` if the “at” checker passes
-* if <<implicit-assertions, implicit assertions>> are <<implicit-assertions-mechanics, enabled>> and the “at” checker fails it will throw an `AssertionError`
-* return `false` if implicit assertions are not enabled and the “at” checker fails
+* return `true` if the "`at`" checker passes
+* if <<implicit-assertions, implicit assertions>> are <<implicit-assertions-mechanics, enabled>> and the "`at`" checker fails it will throw an `AssertionError`
+* return `false` if implicit assertions are not enabled and the "`at`" checker fails
 
 [TIP]
 ====
-“At checkers” should be kept simple - they should only verify that the expected page is rendered and not deal with any page specific logic.
+"`At checkers`" should be kept simple - they should only verify that the expected page is rendered and not deal with any page specific logic.
 
 They should only allow to check that the browser is, for example, at the order summary page and not at the product details or, even worse, the not found page.
 They should not, on the other hand, verify anything related to the logic associated with the page checked, like for example the structure of it or some predicate that should always be fulfilled.
-Such checks are better suited for a test than an “at checker”.
-That's because “at checkers” are evaluated multiple times, quite often implicitly, like when using `to()` method, effectively meaning that the same thing is verified over and over again.
+Such checks are better suited for a test than an "`at checker`".
+That's because "`at checkers`" are evaluated multiple times, quite often implicitly, like when using `to()` method, effectively meaning that the same thing is verified over and over again.
 
-A good rule of thumb is to keep “at checkers” of your pages fairly similar - they should all access pretty much the same information, like page title or text of the heading and only differ in the values they expect.
+A good rule of thumb is to keep "`at checkers`" of your pages fairly similar - they should all access pretty much the same information, like page title or text of the heading and only differ in the values they expect.
 ====
 
-Considering the example above you could use it like this…
+Considering the example above you could use it like this...
 
 [source,groovy]
 ----
@@ -565,7 +565,7 @@ include::{snippets-dir}/pages/AtSpec.groovy[tag=verify_at,indent=0]
 ----
 
 The `verifyAt()` method is used by the `Browser.at()` method that takes a page class or instance.
-It behaves the same as `verifyAt()` if the “at” checker fails and returns a page instance if the checker succeeds (which is useful if you wish to write <<strong-typing, strongly typed>> code with Geb)…
+It behaves the same as `verifyAt()` if the "`at`" checker fails and returns a page instance if the checker succeeds (which is useful if you wish to write <<strong-typing, strongly typed>> code with Geb)...
 
 [source,groovy]
 ----
@@ -574,29 +574,29 @@ include::{snippets-dir}/pages/AtSpec.groovy[tag=at,indent=0]
 
 [TIP]
 ====
-There is no need to perform “at” verification after navigating to a page using <<using-pages, `to()` method>> or clicking on content with <<content-dsl-to, `to` option>> specified as it is performed
+There is no need to perform "`at`" verification after navigating to a page using <<using-pages, `to()` method>> or clicking on content with <<content-dsl-to, `to` option>> specified as it is performed
 implicitly in these cases.
 ====
 
-At checkers are subject to “implicit assertions”. See the section on <<implicit-assertions, implicit assertions>> for more information.
+At checkers are subject to "`implicit assertions`". See the section on <<implicit-assertions, implicit assertions>> for more information.
 
-If you don't wish to get an exception when “at” checking fails there are methods that return `false` in that case: link:api/geb/Page.html#verifyAtSafely(boolean)[`Page#verifyAtSafely()`] and
+If you don't wish to get an exception when "`at`" checking fails there are methods that return `false` in that case: link:api/geb/Page.html#verifyAtSafely(boolean)[`Page#verifyAtSafely()`] and
 link:api/geb/Browser.html#isAt(Class,%20boolean)[`Browser#isAt(Class&lt;? extends Page&gt;)`].
 
 As mentioned previously, when a content template defines a <<content-dsl-to, `to` option>> of more than one page the page's `verifyAt()` method is used to determine which one of the pages to use.
-In this situation, any `AssertionError` thrown by “at” checkers are suppressed.
+In this situation, any `AssertionError` thrown by "`at`" checkers are suppressed.
 
-The “at” checker is evaluated against the page instance, and can access defined content or any other variables or methods…
+The "`at`" checker is evaluated against the page instance, and can access defined content or any other variables or methods...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/AtSpec.groovy[tag=at_checker_using_content_definition,indent=0]
 ----
 
-If a page does not have an “at” checker, the `verifyAt()` and `at()` methods will throw an `UndefinedAtCheckerException`.
-The same will happen if any of the pages in the list used as `to` content template option doesn't define an “at” checker.
+If a page does not have an "`at`" checker, the `verifyAt()` and `at()` methods will throw an `UndefinedAtCheckerException`.
+The same will happen if any of the pages in the list used as `to` content template option doesn't define an "`at`" checker.
 
-It can sometimes prove useful to wrap “at” verification in `waitFor()` calls by default - some drivers are known to return control after URL change before the page is fully loaded in some
+It can sometimes prove useful to wrap "`at`" verification in `waitFor()` calls by default - some drivers are known to return control after URL change before the page is fully loaded in some
 circumstances or before one might consider it to be loaded. This behaviour can be required using <<at-check-waiting, `atCheckWaiting` configuration entry>>.
 
 :numbered!:
@@ -609,13 +609,13 @@ A list of unexpected pages can be provided via <<unexpected-pages-config, `unexp
 [IMPORTANT]
 ====
 Note that this feature does not operate on HTTP response codes as these are not exposed by WebDriver thus Geb does not have access to them.
-To use this feature your application has to render custom error pages that can be modeled as page classes and detected by an “at” checker.
+To use this feature your application has to render custom error pages that can be modeled as page classes and detected by an "`at`" checker.
 ====
 
-If configured, the classes from the list specified as `unexpectedPages` configuration entry will be checked for first when “at” checking is performed for any page, and an `UnexpectedPageException`
+If configured, the classes from the list specified as `unexpectedPages` configuration entry will be checked for first when "`at`" checking is performed for any page, and an `UnexpectedPageException`
 with an appropriate message will be raised if any of them is encountered.
 
-Given that your application renders a custom error page when a page is not found with a text like "Sorry but we could not find that page", you can model that page with the following class:
+Given that your application renders a custom error page when a page is not found with a text like "`Sorry but we could not find that page`", you can model that page with the following class:
 
 [source,groovy]
 ----
@@ -629,18 +629,18 @@ Then register that page in configuration:
 include::{snippets-dir}/pages/UnexpectedPagesSpec.groovy[tag=config,indent=0]
 ----
 
-When checking if the browser is at a page while the “at” checker for `PageNotFoundPage` is fulfilled, an `UnexpectedPageException` will be raised.
+When checking if the browser is at a page while the "`at`" checker for `PageNotFoundPage` is fulfilled, an `UnexpectedPageException` will be raised.
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/UnexpectedPagesSpec.groovy[tag=usage,indent=0]
 ----
 
-Unexpected pages will be checked for whenever “at” checking is performed, even implicitly like when using `to` content template option or passing one or many page classes to `Navigator.click()`
+Unexpected pages will be checked for whenever "`at`" checking is performed, even implicitly like when using `to` content template option or passing one or many page classes to `Navigator.click()`
 method.
 
 It is possible to explicitly check if the browser is at an unexpected page.
-Following will pass without throwing an `UnexpectedPageException` if “at” checking for `PageNotFoundPage` succeeds:
+Following will pass without throwing an `UnexpectedPageException` if "`at`" checking for `PageNotFoundPage` succeeds:
 
 [source,groovy]
 ----
@@ -660,10 +660,10 @@ include::{snippets-dir}/pages/UnexpectedPagesSpec.groovy[tag=usage_with_custom_m
 [WARNING]
 ====
 The <<at-check-waiting,global `atCheckWaiting` configuration>> does not apply when checking for unexpected pages.
-That is, even if configuration calls for implicitly wrapping “at checks” in a `waitFor()` call it is not done when verifying “at checkers” of unexpected pages.
-This is due to the fact that “at checkers” for unexpected pages are not fulfilled for most of the time and they are checked for every `at()` and `to()` call thus wrapping them in an implicit
+That is, even if configuration calls for implicitly wrapping "`at checks`" in a `waitFor()` call it is not done when verifying "`at checkers`" of unexpected pages.
+This is due to the fact that "`at checkers`" for unexpected pages are not fulfilled for most of the time and they are checked for every `at()` and `to()` call thus wrapping them in an implicit
 `waitFor()` call would make these methods extremely slow.
-The <<page-level-at-check-waiting, page level `atCheckWaiting` configuration>> on the other hand applies to unexpected pages so you can use it if you actually need to wait around “at checkers”
+The <<page-level-at-check-waiting, page level `atCheckWaiting` configuration>> on the other hand applies to unexpected pages so you can use it if you actually need to wait around "`at checkers`"
 of such pages.
 ====
 
@@ -733,9 +733,9 @@ The `atCheckWaiting` value configured at page level takes priority over the glob
 [[advanced-page-navigation]]
 == Advanced page navigation
 
-Page classes can customise how they generate URLs when used in conjunction with the browser `to()` method. 
+Page classes can customise how they generate URLs when used in conjunction with the browser `to()` method.
 
-Consider the following example…
+Consider the following example...
 
 [source,groovy]
 ----
@@ -747,7 +747,7 @@ include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=pages_page,inden
 include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=to,indent=0]
 ----
 
-The `to()` method can also take arguments…
+The `to()` method can also take arguments...
 
 [source,groovy]
 ----
@@ -759,12 +759,12 @@ include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=manuals_page,ind
 include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=to_with_args,indent=0]
 ----
 
-Any arguments passed to the `to()` method after the page class are converted to a URL path by calling `toString()` on each argument and joining them with “`/`”.
+Any arguments passed to the `to()` method after the page class are converted to a URL path by calling `toString()` on each argument and joining them with `/`.
 
 However, this is extensible.
 You can specify how a set of arguments is converted to a URL path to be added to the page URL.
 This is done by overriding the `{convert-to-path-api}` method.
-The `{page-api}` implementation of this method looks like this…
+The `{page-api}` implementation of this method looks like this...
 
 [source,groovy]
 ----
@@ -772,7 +772,7 @@ include::{cm-snippets-dir}/geb/Page.groovy[tag=convert_to_path,indent=0]
 ----
 
 You can either overwrite this catchall method to control path conversion for all invocations or provide an overloaded version for a specific type signature.
-Consider the following…
+Consider the following...
 
 [source,groovy]
 ----
@@ -790,7 +790,7 @@ include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=convert_to_path,
 
 Any type of argument can be used with the `to()` method, *except* named parameters (i.e. a `Map`).
 Named parameters are *always* interpreted as query parameters and they are never sent
-Using the classes from the above example…
+using the classes from the above example...
 
 [source,groovy]
 ----
@@ -803,7 +803,7 @@ include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=to_with_named_pa
 An instance of `{url-fragment-api}` can be passed as an argument which follows a page class or instance when calling `to()` in order to dynamically control the fragment identifier part of the url.
 The `UrlFragment` class comes with two static factory methods: {string-url-fragment-factory-link}[one for creating a fragment from an explicit `String`] and {map-url-fragment-factory-link}[one for creating a fragment from a `Map` which is then form encoded].
 
-The following shows a usage example utilising the classes from the examples above…
+The following shows a usage example utilising the classes from the examples above...
 
 [source,groovy]
 ----
@@ -823,7 +823,7 @@ include::{snippets-dir}/pages/AdvancedNavigationSpec.groovy[tag=to_with_paramete
 == Parametrized pages
 
 `Browser` methods like `{to-api}`, `{via-api}`, `{at-api}` and `{page-method-api}` accept not only page classes but page instances as well.
-This is useful for example when parameterizing pages to use property values in “at” checkers:
+This is useful for example when parameterizing pages to use property values in "`at`" checkers:
 
 [source,groovy]
 ----
@@ -845,7 +845,7 @@ Failing to pass the page instance to one of these methods and calling any method
 [[pages-inheritance]]
 == Inheritance
 
-Pages can be arranged in an inheritance hierarchy. The content definitions are merged…
+Pages can be arranged in an inheritance hierarchy. The content definitions are merged...
 
 [source,groovy]
 ----
@@ -899,7 +899,7 @@ If you wish to only listen to a subset of page events then `{page-event-listener
 
 One of the use cases for utilising a page event listener would be to enhance reporting by writing a report every time an at checker fails.
 
-The below example shows how to register a page event listener as part of the config script which simply prints page title and current url when an at checker fails…
+The below example shows how to register a page event listener as part of the config script which simply prints page title and current url when an at checker fails...
 
 [source,groovy]
 ----
@@ -925,28 +925,28 @@ at index `2`
 * `withFrame(Navigator, Closure)` - `Navigator` parameter should contain a frame element
 * `withFrame(SimplePageContent, Closure)` - `SimplePageContent`, which is a type returned by content templates, should contain a frame element
 
-Given the following HTML…
+Given the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/FramesSpec.groovy[tag=html,indent=0]
 ----
 
-…the code for frame.html…
+...the code for frame.html...
 
 [source,html]
 ----
 include::{snippets-dir}/pages/FramesSpec.groovy[tag=frame,indent=0]
 ----
 
-…and a page class…
+...and a page class...
 
 [source,groovy]
 ----
 include::{snippets-dir}/pages/FramesSpec.groovy[tag=page,indent=0]
 ----
 
-…then this code will pass…
+...then this code will pass...
 
 [source,groovy]
 ----
@@ -958,7 +958,7 @@ If a frame cannot be found for a given first argument of the `withFrame()` call,
 === Switching pages and frames at once
 
 All of the aforementioned `withFrame()` variants also accept an optional second argument (a page class or a page instance) which allows to switch page for the execution of the closure passed as
-the last parameter. If the page used specifies an “at” checker it will be verified after switching the context to the frame.
+the last parameter. If the page used specifies an "`at`" checker it will be verified after switching the context to the frame.
 
 Given the html and page class from the previous example the following is an example usage with a page class:
 
