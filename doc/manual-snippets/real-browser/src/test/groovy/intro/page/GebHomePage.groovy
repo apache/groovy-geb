@@ -25,7 +25,7 @@ import intro.module.ManualsMenuModule
 
 // tag::class[]
 class GebHomePage extends Page {
-    static url = "http://groovy.apache.org/geb/" //<5>
+    static url = "https://groovy.apache.org/geb/" //<5>
 
     static at = { title == "Geb - Very Groovy Browser Automation" } //<6>
 

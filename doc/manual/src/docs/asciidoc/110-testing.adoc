@@ -23,14 +23,14 @@ Taking a look at the code of the superclasses providing the built-in support for
 Recall that the browser instance also forwards any method calls or property accesses/references that it can't handle to its current page object, which helps to remove a lot of noise from the test.
 ====
 
-Consider the following Spock spec…
+Consider the following Spock spec...
 
 [source,groovy]
 ----
 include::{snippets-dir}/testing/FunctionalSpec.groovy[tag=concise,indent=0]
 ----
 
-Which is equivalent to…
+Which is equivalent to...
 
 [source,groovy]
 ----
@@ -44,8 +44,8 @@ The browser instance is created by the testing integrations via use of `{geb-tes
 [[testing-reporting]]
 === Reporting
 
-The Spock, JUnit and TestNG integrations also ship a superclass (the name of the class for each integration module is provided below) that automatically takes reports with the label “failure” if a test fails.
-They also set the <<report-group, report group>> to the name of the test class (substituting “.” with “/”).
+The Spock, JUnit and TestNG integrations also ship a superclass (the name of the class for each integration module is provided below) that automatically takes reports with the label "`failure`" if a test fails.
+They also set the <<report-group, report group>> to the name of the test class (substituting "`.`" with "`/`").
 
 The `{browser-report-method-api}` browser method is replaced with a specialised version.
 This method works the same as the browser method, but adds counters and the current test method name as prefixes to the given label.
@@ -94,7 +94,7 @@ This happens when `GebTestManager.afterTest()` is called unless `GebTestManager.
 === Restarting the browser mid-test
 
 Should you ever wish to restart the browser mid-test you have to be aware that there are two layers of caching of the driver instance within Geb's testing support.
-Firstly the lazy initialised `Browser` instance stored as a field in the `{geb-test-manager-api}` instance held by base classes providing support for various test frameworks holds a reference to a `WebDriver` instance - you will therefore need to call `resetBrowser()` method from the base class or directly on the `{geb-test-manager-api}` instance to clear that field.
+Firstly the lazy initialised `Browser` instance stored as a field in the `{geb-test-manager-api}` instance held by base classes providing support for various test frameworks holds a reference to a `WebDriver` instance - you will therefore need to call the `resetBrowser()` method on the `{geb-test-manager-api}` instance to clear that field.
 Secondly, Geb caches `WebDriver` instances by default as described in the section about <<implicit-driver-lifecycle, implicit driver lifecycle>>. To clear the cache and quit the browser you will need to call `{clear-browser-cache-and-quit-api}`.
 
 Therefore, you can use the following code within a test to restart the browser:
@@ -110,10 +110,10 @@ The following table illustrates the specific JARs and class names for various te
 |===
 |Framework |JAR |Base Class |Reporting Base Class
 
-|Spock |http://mvnrepository.com/artifact/{geb-group}/geb-spock[geb-spock] |link:api/geb/spock/GebSpec.html[`geb.spock.GebSpec`] |link:api/geb/spock/GebReportingSpec.html[`geb.spock.GebReportingSpec`]
-|JUnit 4 |http://mvnrepository.com/artifact/{geb-group}/geb-junit4[geb-junit4] |link:api/geb/junit4/GebTest.html[`geb.junit4.GebTest`] |link:api/geb/junit4/GebReportingTest.html[`geb.junit4.GebReportingTest`]
-|JUnit 5 |http://mvnrepository.com/artifact/{geb-group}/geb-junit5[geb-junit5] |link:api/geb/junit5/GebTest.html[`geb.junit5.GebTest`] |link:api/geb/junit5/GebReportingTest.html[`geb.junit5.GebReportingTest`]
-|TestNG |http://mvnrepository.com/artifact/{geb-group}/geb-testng[geb-testng] |link:api/geb/testng/GebTest.html[`geb.testng.GebTest`] |link:api/geb/testng/GebReportingTest.html[`geb.testng.GebReportingTest`]
+|Spock |https://mvnrepository.com/artifact/{geb-group}/geb-spock[geb-spock] |link:api/geb/spock/GebSpec.html[`geb.spock.GebSpec`] |link:api/geb/spock/GebReportingSpec.html[`geb.spock.GebReportingSpec`]
+|JUnit 4 |https://mvnrepository.com/artifact/{geb-group}/geb-junit4[geb-junit4] |link:api/geb/junit4/GebTest.html[`geb.junit4.GebTest`] |link:api/geb/junit4/GebReportingTest.html[`geb.junit4.GebReportingTest`]
+|JUnit 5 |https://mvnrepository.com/artifact/{geb-group}/geb-junit5[geb-junit5] |link:api/geb/junit5/GebTest.html[`geb.junit5.GebTest`] |link:api/geb/junit5/GebReportingTest.html[`geb.junit5.GebReportingTest`]
+|TestNG |https://mvnrepository.com/artifact/{geb-group}/geb-testng[geb-testng] |link:api/geb/testng/GebTest.html[`geb.testng.GebTest`] |link:api/geb/testng/GebReportingTest.html[`geb.testng.GebReportingTest`]
 |===
 
 === Example projects

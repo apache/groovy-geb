@@ -14,6 +14,7 @@
 # limitations under the License.
 
 [versions]
+asciidoctorTabs = "1.0.0.beta.6"
 groovy = "4.0.26"
 jetty = "10.0.24"
 junit4 = "4.13.2"
@@ -21,6 +22,7 @@ junit5 = "5.12.0"
 ratpack = "1.10.0-milestone-38"
 sauceConnect = "1.153"
 selenium = "4.27.0"
+htmlUnitDriver = "4.13.0"
 spock = "2.3-groovy-4.0"
 threeTen = "1.8.0"
 micronaut = "3.10.1" # Micronaut 3 is still supports Java 11
@@ -36,7 +38,7 @@ grolifant = 'org.ysb33r.gradle:grolifant80:4.0.0'
 groovy-bom = { module = 'org.apache.groovy:groovy-bom', version.ref = 'groovy' }
 groovy25 = 'org.codehaus.groovy:groovy-all:2.5.23'
 guava = 'com.google.guava:guava:33.4.0-jre'
-htmlUnitDriver = 'org.seleniumhq.selenium:htmlunit-driver:4.13.0'
+htmlUnitDriver = { module = 'org.seleniumhq.selenium:htmlunit-driver', version.ref = 'htmlUnitDriver' }
 jetty-server = { module = 'org.eclipse.jetty:jetty-server', version.ref = 'jetty' }
 jetty-servlet = { module = 'org.eclipse.jetty:jetty-servlet', version.ref = 'jetty' }
 jodd-core = 'org.jodd:jodd-core:5.3.0'
@@ -70,7 +72,8 @@ testng = 'org.testng:testng:7.5.1'
 threeTen-extra = { module = 'org.threeten:threeten-extra', version.ref = 'threeTen' }
 
 [plugins]
-asciidoc = { id = 'org.asciidoctor.jvm.convert', version = '4.0.4' }
+asciidoc = { id = 'org.asciidoctor.jvm.convert' }
+asciidoc-gems = { id = 'org.asciidoctor.jvm.gems' }
 asl2 = { id = 'com.energizedwork.asl2', version = '1.1' }
 nexusPublish = { id = 'io.github.gradle-nexus.publish-plugin', version = '2.0.0' }
 node = { id = 'com.github.node-gradle.node', version = '7.1.0' }

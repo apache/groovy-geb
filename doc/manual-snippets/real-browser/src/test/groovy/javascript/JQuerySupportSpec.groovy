@@ -50,7 +50,7 @@ class JQuerySupportSpec extends GebSpecWithServerUsingJavascript {
                         </head>
                         <body>
                             <div id="a"></div>
-                            <div id="b" style="display:none;"><a href="http://groovy.apache.org/geb/">Geb!</a></div>
+                            <div id="b" style="display:none;"><a href="https://groovy.apache.org/geb/">Geb!</a></div>
                         </body>
                     </html>
                     // end::html[]

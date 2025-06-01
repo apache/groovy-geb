@@ -23,6 +23,12 @@ plugins {
     // updating this, check the compatibility from https://docs.gradle.com/enterprise/compatibility/#develocity_compatibility and https://develocity.apache.org/scans.
     id "com.gradle.develocity" version "3.18.2"
     id 'com.gradle.common-custom-user-data-gradle-plugin' version '2.0.2'
+    // The Ratpack server providing the gem repository uses classes from
+    // jakarta.activation-api.jar brought in here by org.kordamp.gradle.oci-build-cache
+    // but the classes in there cannot work properly as classes from
+    // the activation implementation are missing, so bring the plugin
+    // to the classpath here to fix compatibility problems
+    id 'org.asciidoctor.jvm.gems' version '4.0.4' apply false
 }
 
 apply from: 'gradle/build-scans.gradle'

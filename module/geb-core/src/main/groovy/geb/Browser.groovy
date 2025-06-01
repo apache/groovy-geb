@@ -291,6 +291,7 @@ class Browser {
      *   <li>If none of the pages match:
      *     <ul>
      *     <li>Check if not at an unexpected page
+     *     <li>Throw an {@link UnexpectedPageException}
      *     </ul>
      *   </ul>
      * </ul>
@@ -348,6 +349,7 @@ class Browser {
      *   <li>If none of the pages match:
      *     <ul>
      *     <li>Check if not at an unexpected page
+     *     <li>Throw an {@link UnexpectedPageException}
      *     </ul>
      * </ul>
      *
