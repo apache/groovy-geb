@@ -1,7 +1,7 @@
 = The Book Of Geb
 :author: Luke Daley, Marcin Erdmann, Erik Pragt
 :revnumber: {geb-version}
-:revremark: Very groovy browser automation… web testing, screen scraping and more
+:revremark: Very groovy browser automation... web testing, screen scraping and more
 :toclevels: 10
 
 image::logo.svg[Geb,align="center"]

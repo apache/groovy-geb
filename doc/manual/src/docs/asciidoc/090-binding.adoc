@@ -14,7 +14,7 @@ This is also the same mechanism that can be used with <<cucumber-jvm, Cucumber-J
 
 == Setup
 
-To use the binding support, you simply create a {binding-updater-link}[`BindingUpdater`] object with a {groovy-binding-link}[`Binding`] and `{browser-api}`…
+To use the binding support, you simply create a {binding-updater-link}[`BindingUpdater`] object with a {groovy-binding-link}[`Binding`] and `{browser-api}`...
 
 [source,groovy]
 ----
@@ -32,7 +32,7 @@ include::{snippets-dir}/binding/BindingUpdatingSpec.groovy[tag=example,indent=0]
 
 The {binding-updater-link}[`BindingUpdater`] installs shortcuts into the binding for most of the `{browser-api}` public methods.
 
-The following is an example script that will work if `BindingUpdater` is initialized on its binding…
+The following is an example script that will work if `BindingUpdater` is initialized on its binding...
 
 [source,groovy]
 ----
@@ -67,7 +67,7 @@ The JavaScript interface property <<js-object, `js`>> is also available. The `Br
 
 === The current page
 
-The binding updater also updates the `page` property of the binding to be the browser's current page…
+The binding updater also updates the `page` property of the binding to be the browser's current page...
 
 [source,groovy]
 ----

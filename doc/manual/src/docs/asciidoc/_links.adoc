@@ -1,32 +1,32 @@
 :linkattrs:
 
-:groovy: link:http://groovy-lang.org/[Groovy]
-:jquery: link:http://jquery.com/[jQuery]
+:groovy: link:https://groovy-lang.org/[Groovy]
+:jquery: link:https://jquery.com/[jQuery]
 :webdriver: link:https://github.com/SeleniumHQ/selenium[WebDriver]
-:selenium-api-link: link:http://static.javadoc.io/org.seleniumhq.selenium/selenium-api/{selenium-version}
+:selenium-api-link: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-api/{selenium-version}
 :webdriver-api: {selenium-api-link}/org/openqa/selenium/WebDriver.html[WebDriver]
 :webelement-api: {selenium-api-link}/org/openqa/selenium/WebElement.html[WebElement]
 :by-api: {selenium-api-link}/org/openqa/selenium/By.html[By]
 :actions-api: {selenium-api-link}/org/openqa/selenium/interactions/Actions.html[Actions]
-:htmlunitdriver: link:http://static.javadoc.io/org.seleniumhq.selenium/selenium-htmlunit-driver/{selenium-version}/org/openqa/selenium/htmlunit/HtmlUnitDriver.html
-:iedriver: link:http://static.javadoc.io/org.seleniumhq.selenium/selenium-ie-driver/{selenium-version}/org/openqa/selenium/ie/InternetExplorerDriver.html
-:firefoxdriver: link:http://static.javadoc.io/org.seleniumhq.selenium/selenium-firefox-driver/{selenium-version}/org/openqa/selenium/firefox/FirefoxDriver.html
-:chromedriver: link:http://static.javadoc.io/org.seleniumhq.selenium/selenium-chrome-driver/{selenium-version}/org/openqa/selenium/chrome/ChromeDriver.html
-:edgedriver: link:https://seleniumhq.github.io/selenium/docs/api/java/org/openqa/selenium/edge/EdgeDriver.html
-:webdriver-send-keys-api: {selenium-api-link}/org/openqa/selenium/WebElement.html#sendKeys(java.lang.CharSequence%2E%2E%2E)[sendKeys()]
+:htmlunitdriver: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/htmlunit-driver/{htmlunit-driver-version}/org/openqa/selenium/htmlunit/HtmlUnitDriver.html
+:iedriver: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-ie-driver/{selenium-version}/org/openqa/selenium/ie/InternetExplorerDriver.html
+:firefoxdriver: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-firefox-driver/{selenium-version}/org/openqa/selenium/firefox/FirefoxDriver.html
+:chromedriver: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-chrome-driver/{selenium-version}/org/openqa/selenium/chrome/ChromeDriver.html
+:edgedriver: link:https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-edge-driver/{selenium-version}/org/openqa/selenium/edge/EdgeDriver.html
+:webdriver-send-keys-api: {selenium-api-link}/org/openqa/selenium/WebElement.html#sendKeys(java.lang.CharSequence...)[sendKeys()]
 :webdriver-keys-api: {selenium-api-link}/org/openqa/selenium/Keys.html[Keys]
 :no-such-frame-exception-api: {selenium-api-link}/org/openqa/selenium/NoSuchFrameException.html[NoSuchFrameException]
 :stale-element-reference-exception-api: {selenium-api-link}/org/openqa/selenium/StaleElementReferenceException.html[StaleElementReferenceException]
-:spock-link: link:http://spockframework.org/
+:spock-link: link:https://spockframework.org/
 :spock: {spock-link}[Spock]
-:spock-with: {spock-link}/spock/javadoc/1.1/spock/lang/Specification.html#with-java.lang.Object-groovy.lang.Closure-[Specification.with(Object, Closure<?>)]
-:junit: link:http://www.junit.org/[JUnit]
-:testng: link:http://testng.org/[TestNg]
+:spock-with: {spock-link}/spock/javadoc/2.3/spock/lang/Specification.html#with(U,groovy.lang.Closure)[Specification.with(U, Closure<?>)]
+:junit: link:https://www.junit.org/[JUnit]
+:testng: link:https://testng.org/[TestNG]
 :cucumber-jvm: link:https://github.com/cucumber/cucumber-jvm[Cucumber-JVM]
 :geb-cucumber: link:https://github.com/tomdcc/geb-cucumber[geb-cucumber]
-:remotewebdriver: link:http://code.google.com/p/selenium/wiki/RemoteWebDriver[RemoteWebDriver]
-:remotewebdriver-server: link:https://github.com/SeleniumHQ/selenium/wiki/RemoteWebDriverServer[RemoteWebDriverServer]
-:groovy-api-link: link:http://docs.groovy-lang.org/docs/groovy-{groovy-version}/html
+:remotewebdriver: link:https://www.selenium.dev/documentation/webdriver/drivers/remote_webdriver/[Remote WebDriver]
+:selenium-grid: link:https://www.selenium.dev/documentation/grid/[Selenium Grid]
+:groovy-api-link: link:https://docs.groovy-lang.org/docs/groovy-{groovy-version}/html
 :config-slurper-api: {groovy-api-link}/gapi/groovy/util/ConfigSlurper.html[ConfigSlurper]
 :groovy-binding-link: {groovy-api-link}/api/groovy/lang/Binding.html
 :java-api-link: link:https://docs.oracle.com/javase/8/docs/api
@@ -37,8 +37,8 @@
 :module-api: link:api/geb/Module.html[Module]
 :navigator-api: link:api/geb/navigator/Navigator.html[Navigator]
 :binding-updater-link: link:api/geb/binding/BindingUpdater.html
-:groovy-truth-link: link:http://groovy-lang.org/semantics.html#Groovy-Truth
-:groovy-truth: {`}[Groovy Truth]
+:groovy-truth-link: link:https://groovy-lang.org/semantics.html#the-groovy-truth
+:groovy-truth: {groovy-truth-link}[Groovy Truth]
 :drive-method-link: link:api/geb/Browser.html#drive(groovy.lang.Closure)
 :drive-method-api: {drive-method-link}[drive()]
 :page-method-taking-class-api-link: link:api/geb/Browser.html#page(Class)
@@ -69,7 +69,7 @@
 :page-method-api: link:api/geb/Browser.html#page(Class)[page()]
 :build-adapter-api: link:api/geb/BuildAdapter.html[BuildAdapter]
 :system-properties-build-adapter-api: link:api/geb/buildadapter/SystemPropertiesBuildAdapter.html[SystemPropertiesBuildAdapter]
-:javascript-executor-execute-script-api: {selenium-api-link}/org/openqa/selenium/JavascriptExecutor.html#executeScript(java.lang.String,%20java.lang.Object...)[JavascriptExecutor.executeScript()]
+:javascript-executor-execute-script-api: {selenium-api-link}/org/openqa/selenium/JavascriptExecutor.html#executeScript(java.lang.String,java.lang.Object...)[JavascriptExecutor.executeScript()]
 :javascript-executor-api: {selenium-api-link}/org/openqa/selenium/JavascriptExecutor.html[JavascriptExecutor]
 :waiting-support-api: link:api/geb/waiting/WaitingSupport.html[WaitingSupport]
 :wait-api: link:api/geb/waiting/Wait.html[Wait]
@@ -91,7 +91,7 @@
 :page-event-listener-api: link:api/geb/PageEventListener.html
 :page-event-listener-support-api: link:api/geb/PageEventListenerSupport.html[PageEventListenerSupport]
 :clean-report-group-dir-api: link:api/geb/Browser.html#cleanReportGroupDir()[cleanReportGroupDir()]
-:sauce-connect: link:https://docs.saucelabs.com/secure-connections/sauce-connect-5/operation/configuration/[SauceConnect]
+:sauce-connect: link:https://docs.saucelabs.com/secure-connections/sauce-connect-5/guides/configuration/[SauceConnect]
 :geb-module-package: link:api/geb/module/package-summary.html
 :form-element-api: link:api/geb/module/FormElement.html[FormElement]
 :checkbox-api: link:api/geb/module/Checkbox.html[Checkbox]
@@ -124,4 +124,3 @@
 :geb-test-manager-api: link:api/geb/test/GebTestManager.html[GebTestManager]
 :dynamically-dispatches-to-browser-api: link:api/geb/transform/DynamicallyDispatchesToBrowser.html[DynamicallyDispatchesToBrowser]
 :navigator-factory-create-dynamic-api: link:api/geb/navigator/factory/NavigatorFactory.html#createDynamic(Supplier)[NavigatorFactory.createDynamic()]
-

@@ -25,11 +25,11 @@ include::{snippets-dir}/reporting/ReportingSpec.groovy[tag=reporting,indent=0]
 
 [WARNING]
 ====
-The `report()` method will thrown an exception if it is called and there is no configured `reportsDir`.
+The `report()` method will throw an exception if it is called and there is no configured `reportsDir`.
 If you are going to use reporting you *must* specify a `reportsDir` via config.
 ====
 
-Assuming that we configured a `reportsDir` of “`reports/geb`”, after running this script we will find two files in this directory:
+Assuming that we configured a `reportsDir` of `reports/geb`, after running this script we will find two files in this directory:
 
 * `google home page.html` - A HTML dump of the page source
 * `google home page.png` - A screenshot of the browser as a PNG file (if the driver implementation supports this)
@@ -69,7 +69,7 @@ It is also possible to change the link:api/geb/Browser.html#reportGroup(java.lan
 include::{snippets-dir}/reporting/ReportingSpec.groovy[tag=reporting_groups,indent=0]
 ----
 
-We have now created the following files inside the `reportsDir`…
+We have now created the following files inside the `reportsDir`...
 
 * `google/home page.html`
 * `google/home page.png`
@@ -91,7 +91,7 @@ It is common for test integrations to manage the report group for you, setting i
 It is possible to register a listener on the reporter that gets notified when a report is taken.
 This was added to make it possible to write something to stdout when a report is taken, which is how the
 link:https://plugins.jenkins.io/junit-attachments/[Jenkins JUnit Attachments Plugin] makes it possible to associate arbitrary files to test execution.
-Reporting listeners are of type `{reporting-listener-api}` can be specified as part of the config…
+Reporting listeners are of type `{reporting-listener-api}` can be specified as part of the config...
 
 [source,groovy]
 ----

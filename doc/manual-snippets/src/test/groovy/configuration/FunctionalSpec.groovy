@@ -23,7 +23,7 @@ import geb.spock.GebReportingSpec
 
 class FunctionalSpec extends GebReportingSpec {
 
-    def setupSpec() {
+    def setup() {
         browser.config.autoClearCookies = false
     }
 

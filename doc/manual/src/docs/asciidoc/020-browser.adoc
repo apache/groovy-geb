@@ -6,7 +6,7 @@ endif::[]
 = The `Browser`
 
 The entry point to Geb is the `{browser-api}` object.
-A browser object marries a `{webdriver-api}` instance (which drives the actual web browser being automated) with the concept of a “current page”.
+A browser object marries a `{webdriver-api}` instance (which drives the actual web browser being automated) with the concept of a "`current page`".
 
 Browser objects are created with a `{configuration-api}` that specifies which driver implementation to use, the base URL to resolve relative links against and other bits of config.
 The configuration mechanism allows you to externalise how Geb should operate, which means you can use the same suite of Geb code or tests with different browsers or site instances.
@@ -30,7 +30,7 @@ include::{snippets-dir}/browser/BrowserCreationSpec.groovy[tag=driver_imports]
 include::{snippets-dir}/browser/BrowserCreationSpec.groovy[tag=setting_driver_in_constructor,indent=0]
 ----
 
-Which is the same as…
+Which is the same as...
 
 [source,groovy]
 ----
@@ -85,7 +85,7 @@ and a closure.
 The closure is evaluated against created browser instance (i.e. the browser is made the _delegate_ of the closure).
 The net result is that all top level method calls and property accesses are implied to be against the browser.
 
-The `drive()` method always returns the browser object that was used, so if you need to quit the browser after the drive session you can do something like…
+The `drive()` method always returns the browser object that was used, so if you need to quit the browser after the drive session you can do something like...
 
 [source,groovy,indent=0]
 ----
@@ -111,15 +111,15 @@ The following table illustrates the resolution of different types of URLs.
 |===
 |Base |Navigating To |Result
 
-|\http://myapp.com/ |abc |\http://myapp.com/abc
-|\http://myapp.com |abc |\http://myapp.comabc
-|\http://myapp.com |/abc |\http://myapp.com/abc
-|\http://myapp.com/abc/ |def |\http://myapp.com/abc/def
-|\http://myapp.com/abc |def |\http://myapp.com/def
-|\http://myapp.com/abc/ |/def |\http://myapp.com/def
-|\http://myapp.com/abc/def/ |jkl |\http://myapp.com/abc/def/jkl
-|\http://myapp.com/abc/def |jkl |\http://myapp.com/abc/jkl
-|\http://myapp.com/abc/def |/jkl |\http://myapp.com/jkl
+|\https://myapp.com/ |abc |\https://myapp.com/abc
+|\https://myapp.com |abc |\https://myapp.comabc
+|\https://myapp.com |/abc |\https://myapp.com/abc
+|\https://myapp.com/abc/ |def |\https://myapp.com/abc/def
+|\https://myapp.com/abc |def |\https://myapp.com/def
+|\https://myapp.com/abc/ |/def |\https://myapp.com/def
+|\https://myapp.com/abc/def/ |jkl |\https://myapp.com/abc/def/jkl
+|\https://myapp.com/abc/def |jkl |\https://myapp.com/abc/jkl
+|\https://myapp.com/abc/def |/jkl |\https://myapp.com/jkl
 |===
 
 It is usually most desirable to define your base urls with trailing slashes and not to use leading slashes on relative URLs.
@@ -153,7 +153,7 @@ You can also make a new request to a URL without setting or changing the page us
 include::{snippets-dir}/browser/GoogleSpec.groovy[tag=class]
 ----
 
-The following examples use a baseUrl of “`\http://localhost/`”.
+The following examples use a baseUrl of `\http://localhost/`.
 
 [source,groovy]
 ----
@@ -161,7 +161,7 @@ include::{snippets-dir}/browser/GoSpec.groovy[tag=examples,indent=0]
 ----
 <1> Go to the base URL.
 <2> Go to a URL relative to base URL.
-<3> Go to a URL with request params i.e `+http://localhost/signup?param1=value1&param2=value2+`
+<3> Go to a URL with request params i.e. `+http://localhost/signup?param1=value1&param2=value2+`
 
 [[the-page]]
 == The `Page`
@@ -202,7 +202,7 @@ Page objects are discussed in depth in the <<pages>> chapter, which also explore
 [[changing-pages]]
 === Changing the page
 
-We have already seen that that `to()` methods change the browser's page instance.
+We have already seen that the `to()` methods change the browser's page instance.
 It is also possible to change the page instance without initiating a new request with the `page()` methods.
 
 The `{page-method-taking-class-api}` method allows you to change the page to a new instance of *the given class*.
@@ -214,11 +214,13 @@ Similarly to the method taking a page class it *does not* verify that the given 
 
 The `{page-method-taking-classes-array-api}` method allows you to specify a number of _potential_ page types.
 Each of the potential pages is instantiated and checked to see if it matches the content the browser is actually currently at by running each page's at checker.
-All of the page classes passed in must have an “at” checker defined otherwise an `UndefinedAtCheckerException` will be thrown.
+All of the page classes passed in must have an "`at`" checker defined otherwise an `UndefinedAtCheckerException` will be thrown.
+If no page's at checker matches the page, an `UnexpectedPageException` will be thrown.
 
 The `{page-method-taking-instances-array-api}` method allows you to specify a number of _potential_ page instances.
 Each of the potential page instances is initialized and checked to see if it matches the content the browser is actually currently at by running each pages at checker.
-All of the page instances passed in must have an “at” checker defined otherwise an `UndefinedAtCheckerException` will be thrown.
+All of the page instances passed in must have an "`at`" checker defined otherwise an `UndefinedAtCheckerException` will be thrown.
+If no page's at checker matches the page, an `UnexpectedPageException` will be thrown.
 
 These two methods taking arrays as arguments are not typically used explicitly but are used by the `to()` method and content definitions that specify the page that the content navigates to when
 clicked (see the section on the <<content-dsl-to,`to` attribute of the Content DSL>> for more information about this).
@@ -228,7 +230,7 @@ However, should you need to manually change the page type, they are there.
 
 == At checking
 
-Pages define an <<at-checker,“at checker”>> that the browser uses for checking if it is pointing at a given page.
+Pages define an <<at-checker,"`at checker`">> that the browser uses for checking if it is pointing at a given page.
 
 [source,groovy]
 ----
@@ -239,10 +241,10 @@ include::{snippets-dir}/browser/PageSpec.groovy[tag=using_to,indent=0]
 
 [WARNING]
 ====
-Not using explicit `return` statements in “at checkers” is preferred.
-Geb transforms all “at checkers” so that each statement in them is asserted (just like for `then:` blocks in Spock specifications).
-Thanks to that you can immediately see evaluated values of your “at checker” if it fails.
-See the <<at-checker,“at checker”>> section for more details.
+Not using explicit `return` statements in "`at checkers`" is preferred.
+Geb transforms all "`at checkers`" so that each statement in them is asserted (just like for `then:` blocks in Spock specifications).
+Thanks to that you can immediately see evaluated values of your "`at checker`" if it fails.
+See the <<at-checker,"`at checker`">> section for more details.
 ====
 
 The `to()` method that takes a single page type or instance *verifies* that the browser ends up at the given page.
@@ -256,23 +258,23 @@ include::{snippets-dir}/browser/ViaSpec.groovy[tag=using_via,indent=0]
 Browser objects have `{at-method-taking-class-api}` and `{at-method-taking-instance-api}` methods that test whether or not the browser is currently at the page modeled by the given page
 class or instance.
 
-The `at AccessDeniedPage` method call return a page instance if the “at checker” is fulfilled.
-If on the other hand it is not then an `AssertionError` will be thrown even if there are no explicit assertions in the “at checker” (the default, see the section on <<implicit-assertions>> for
+The `at AccessDeniedPage` method call returns a page instance if the "`at checker`" is fulfilled.
+If on the other hand it is not then an `AssertionError` will be thrown even if there are no explicit assertions in the "`at checker`" (the default, see the section on <<implicit-assertions>> for
 details) or return null if implicit assertions are disabled.
 
-It's always a good idea to either use the `to()` method which implicitly verifies the “at checker” or the `via()` method followed by an `at()` check whenever the page changes in order to _fail fast_.
+It's always a good idea to either use the `to()` method which implicitly verifies the "`at checker`" or the `via()` method followed by an `at()` check whenever the page changes in order to _fail fast_.
 Otherwise, subsequent steps may fail in harder to diagnose ways due to the content not matching what is expected and content look-ups returning strange results.
 
-If you pass a page class or instance  that doesn't define an “at checker” to `at()` you will get an `UndefinedAtCheckerException` - “at checkers” are mandatory when doing explicit “at checks”.
-By default this is not the case when implicit “at checks” are being performed, like when using `to()`, but <<require-page-at-checkers, it's configurable>>.
-This behaviour is intended to make you aware that you probably want to define an “at checker” when explicitly verifying if you're at a given page but not forcing you to do so when using implicit
-“at checking”.
+If you pass a page class or instance  that doesn't define an "`at checker`" to `at()` you will get an `UndefinedAtCheckerException` - "`at checkers`" are mandatory when doing explicit "`at checks`".
+By default this is not the case when implicit "`at checks`" are being performed, like when using `to()`, but <<require-page-at-checkers, it's configurable>>.
+This behaviour is intended to make you aware that you probably want to define an "`at checker`" when explicitly verifying if you're at a given page but not forcing you to do so when using implicit
+"`at checking`".
 
-The `at()` method will also update the browser's page instance if the “at checker” is successful.
-This means that you don't have to manually set browser's page to the new one after “at checking”.
+The `at()` method will also update the browser's page instance if the "`at checker`" is successful.
+This means that you don't have to manually set browser's page to the new one after "`at checking`".
 
 Pages can also define content that declares what the browser's page type should change to when that content is clicked.
-After clicking on such content the declared page is automatically ”at checked” if it defines an “at checker” (see the content DSL reference for the <<content-dsl-to,`to`>> parameter).
+After clicking on such content the declared page is automatically "`at checked`" if it defines an "`at checker`" (see the content DSL reference for the <<content-dsl-to,`to`>> parameter).
 
 [source,groovy]
 ----
@@ -293,7 +295,7 @@ windows.
 === Already opened windows
 
 If you know the name of the window in context of which you want to execute the code you can use
-`link:api/geb/Browser.html#withWindow(java.lang.String,%20Closure)["withWindow(String windowName, Closure block)"]`.
+`link:api/geb/Browser.html#withWindow(java.lang.String,%20Closure)[withWindow(String windowName, Closure block)]`.
 
 Given that this HTML is rendered for the `baseUrl`:
 
@@ -310,13 +312,13 @@ include::{snippets-dir}/browser/WithWindowSpec.groovy[tag=using_name]
 ----
 
 If you don't know the name of the window but you know something about the content of the window you can use the
-`link:api/geb/Browser.html#withWindow(groovy.lang.Closure,%20Closure)["withWindow(Closure specification, Closure block)"]` method.
+`link:api/geb/Browser.html#withWindow(groovy.lang.Closure,%20Closure)[withWindow(Closure specification, Closure block)]` method.
 The first closure passed should return true for the window, or windows, you want to use as context for execution of the second closure.
 
 [WARNING]
 ====
 If there is no window for which the window specification closure returns `true` then
-http://static.javadoc.io/org.seleniumhq.selenium/selenium-api/{selenium-version}/org/openqa/selenium/NoSuchWindowException.html[`NoSuchWindowException`] is thrown.
+https://www.javadoc.io/doc/org.seleniumhq.selenium/selenium-api/{selenium-version}/org/openqa/selenium/NoSuchWindowException.html[`NoSuchWindowException`] is thrown.
 ====
 
 So given:
@@ -364,12 +366,12 @@ If you pass any _truthy_ value as the `close` option then all matching windows w
 Default value: `null`
 
 If you pass a class or an instance of a class that extends `Page` as `page` option, then browser's page will be set to that value before executing the closure passed as the last argument and will be
-reverted to its original value afterwards. If the page class defines an “at checker” then it will be verified when the page is set on the browser.
+reverted to its original value afterwards. If the page class defines an "`at checker`" then it will be verified when the page is set on the browser.
 
 === Newly opened windows
 
 If you wish to execute code in a window that is newly opened by some of your actions, use the
-`link:api/geb/Browser.html#withNewWindow(groovy.lang.Closure,%20Closure)["withNewWindow(Closure windowOpeningBlock, Closure block)"]` method.
+`link:api/geb/Browser.html#withNewWindow(groovy.lang.Closure,%20Closure)[withNewWindow(Closure windowOpeningBlock, Closure block)]` method.
 Given that this HTML is rendered for the `baseUrl`:
 
 [source,html,indent=0]

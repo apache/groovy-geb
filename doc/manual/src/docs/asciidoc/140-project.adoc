@@ -34,16 +34,16 @@ mailto:geb-dev-unsubscribe@groovy.apache.org[Unsubscribe]
 
 === Contributors
 
-* link:http://adhockery.blogspot.com/[Robert Fletcher]
-* link:http://pniederw.wordpress.com/[Peter Niederwieser]
+* github-profile:robfletcher[Robert Fletcher]
+* link:https://pniederw.wordpress.com/[Peter Niederwieser]
 * github-profile:chris-prior[Chris Prior]
 * github-profile:zolotov[Alexander Zolotov] - TestNG Integration
-* link:http://c089.wordpress.com/[Christoph Neuroth] - Various fixes and patches
+* github-profile:c089[Christoph Neuroth] - Various fixes and patches
 * github-profile:antony[Antony Jones] - Various fixes and patches, doc improvements
 * github-profile:hennr[Jan-Hendrik Peters] - Doc improvements
-* link:http://fbflex.wordpress.com/[Tomás Lin] - Doc improvements
+* link:https://fbflex.wordpress.com/[Tomás Lin] - Doc improvements
 * github-profile:measlyweasel[Jason Cahoon] - Bug fix around text matchers
-* link:http://refaktor.blogspot.com/[Tomasz Kalkosiński] - Doc improvements
+* link:https://refaktor.blogspot.com/[Tomasz Kalkosiński] - Doc improvements
 * github-profile:richdouglasevans[Rich Douglas Evans] - Doc improvements
 * github-profile:idurkan[Ian Durkan] - Doc improvements
 * github-profile:ColinHarrington[Colin Harrington] - Doc improvements
@@ -172,7 +172,7 @@ This page lists the more important changes between versions of Geb.
 
 ==== 🐛 Fixes
 
-* Fix a bug under Groovy 3 which caused PageInstanceNotInitializedException when "container" was used as a content element name. [issueh:640[]]
+* Fix a bug under Groovy 3 which caused PageInstanceNotInitializedException when "`container`" was used as a content element name. [issueh:640[]]
 
 ==== 💥 Breaking changes
 
@@ -185,7 +185,7 @@ This page lists the more important changes between versions of Geb.
 ==== 🐛 Fixes
 
 * Minor fix to confusing statement in the documentation section about finding and filtering web elements. [issueh:625[]]
-* Improve information about IntelliJ support in the section on IDE authoring assistance in the manual. [issueh:629[]]
+* Improve information about IntelliJ IDEA support in the section on IDE authoring assistance in the manual. [issueh:629[]]
 * Fix `Browser.go()` not to fail for non-hierarchical, opaque URIs. [issueh:634[]]
 
 ==== 🚀 New features
@@ -431,7 +431,7 @@ This page lists the more important changes between versions of Geb.
 ==== 🐛 Fixes
 
 * Delegate to `browser` instead of the module from blocks passed to `withFrame()` in module classes. [issueh:461[]]
-* Fix implicit assertions in “at checkers” to not return `null` if the last call is to a void method. [issueh:462[]]
+* Fix implicit assertions in "`at checkers`" to not return `null` if the last call is to a void method. [issueh:462[]]
 
 ==== 💪 Improvements
 
@@ -522,7 +522,7 @@ This page lists the more important changes between versions of Geb.
 
 ==== 🐛 Fixes
 
-* Change implementation of `waitFor()` method delegation so that IntelliJ does not complain that page and module classes supposedly need to implement it. [issueh:391[]]
+* Change implementation of `waitFor()` method delegation so that IntelliJ IDEA does not complain that page and module classes supposedly need to implement it. [issueh:391[]]
 * Properly handle class attribute when it's passed to `$()` together with a css selector. [issueh:390[]]
 
 === 0.12.0
@@ -559,7 +559,7 @@ This page lists the more important changes between versions of Geb.
 * Provide better error reporting when unexpected pages configuration is not a collection that contains classes which extend `Page`. [issueh:270[]]
 * Don't fail when creating a report and driver's screenshot taking method returns null. [issueh:292[]]
 * Classes that can define content should not throw custom exceptions from `propertyMissing()`. [issueh:367[]]
-* “At checkers” of pages passed to `withFrame()` methods are now verified. [issueh:358[]]
+* "`At checkers`" of pages passed to `withFrame()` methods are now verified. [issueh:358[]]
 
 ==== 💥 Breaking changes
 
@@ -605,7 +605,7 @@ new <<form-element, `FormElement`>> module class.
 * The value passed to `aliases` content option in documentation examples should be a String [issueh:338[]]
 * Added `$()` method on Navigator with all signatures of `find()`. [issueh:321[]]
 * `geb-saucelabs` plugin now uses a native version of SauceConnect. [issueh:341[]]
-* Don't modify the predicate map passed to link:api/geb/navigator/BasicLocator.html#find(Map,%20java.lang.String)["`Navigator.find(Map&lt;String, Object&gt;, String)`"]. [issueh:339[]]
+* Don't modify the predicate map passed to link:api/geb/navigator/BasicLocator.html#find(Map,%20java.lang.String)[`Navigator.find(Map&lt;String, Object&gt;, String)`]. [issueh:339[]]
 * Functional tests implemented using JUnit and Geb run twice in Grails 2.3+. [issueh:314[]]
 * Mention in the manual where snapshot artifacts can be downloaded from. [issueh:305[]]
 * Document that `withNewWindow()` and `withWindow()` switch page back to the original one. [issueh:279[]]
@@ -617,7 +617,7 @@ new <<form-element, `FormElement`>> module class.
 * Setup CI for all of the example projects. [issueh:188[]]
 * Incorporate the example projects into the main build. [issueh:189[]]
 * Add a test crawling the site in search for broken links. [issueh:327[]]
-* Document the link:https://github.com/geb/geb/blob/master/RELEASING.md[release process]. [issueh:325[]]
+* Document the link:https://github.com/apache/groovy-geb/blob/master/RELEASING.md[release process]. [issueh:325[]]
 
 ==== 💥 Breaking changes
 
@@ -632,7 +632,7 @@ new <<form-element, `FormElement`>> module class.
 * Added `baseNavigatorWaiting` setting to prevent intermittent Firefox driver errors when creating base navigator. [issueh:269[]]
 * Page content classes including `Module` now implement `Navigator` interface [issueh:181[]]
 * Added some tests that guard performance by verifying which WebDriver commands are executed [issueh:302[]]
-* Added link:http://www.browserstack.com[BrowserStack] integration [issueh:307[]]
+* Added link:https://www.browserstack.com[BrowserStack] integration [issueh:307[]]
 * Added a shortcut to `Browser` for getting current url [issueh:294[]]
 * Verify pages at checker when passed as an option to open a new window via `withWindow()` and `withNewWindow()` [issueh:278[]]
 
@@ -665,7 +665,7 @@ new <<form-element, `FormElement`>> module class.
 ==== 🚀 New features
 
 * `page` and `close` options can be passed to `withWindow()` calls, see <<already-opened-windows, this manual section>> for more information.
-* Unexpected pages can be specified to fail fast when performing “at” checks. This feature was contributed at a Hackergarten thanks to Andy Duncan. See <<unexpected-pages, this manual section>> for details. [issueh:70[]]
+* Unexpected pages can be specified to fail fast when performing "`at`" checks. This feature was contributed at a Hackergarten thanks to Andy Duncan. See <<unexpected-pages, this manual section>> for details. [issueh:70[]]
 * Support for running Geb using SauceLabs provided browsers, see <<cloud-browser-testing, this manual section>> for details.
 * New `isEnabled()` and `isEditable()` methods on `Navigator`.
 * Support for ephemeral port allocation with Grails integration
@@ -691,7 +691,7 @@ new <<form-element, `FormElement`>> module class.
 
 * Support for dealing with self-signed certificates in Download API using `SelfSignedCertificateHelper`. [issueh:150[]]
 * Connections created when using Download API can be configured globally using `defaultDownloadConfig` configuration option.
-* New `atCheckWaiting` configuration option allowing to implicitly wrap “at” checkers in `waitFor` calls. [issueh:253[]]
+* New `atCheckWaiting` configuration option allowing to implicitly wrap "`at`" checkers in `waitFor` calls. [issueh:253[]]
 
 ==== 🐛 Fixes
 
@@ -832,7 +832,7 @@ new <<form-element, `FormElement`>> module class.
 * Added Direct Download API which can be used for directly downloading content (PDFs, CSVs etc.) into your Geb program (not via the browser)
 * Introduced new configuration mechanism for more flexible and environment sensitive configuration of Geb (e.g. driver implementation, base url)
 * Default wait timeout and retry interval is now configurable, and can now also use user configuration presets (e.g. quick, slow)
-* Added a “build adapter” mechanism, making it easier for build systems to take control of relevant configuration
+* Added a "`build adapter`" mechanism, making it easier for build systems to take control of relevant configuration
 * The JUnit 3 integration now includes the test method name in the automatically generated reports
 * The reporting support has been rewritten, making it much friendlier to use outside of testing
 * Added the TestNG support (contributed by Alexander Zolotov)
@@ -859,8 +859,8 @@ new <<form-element, `FormElement`>> module class.
 ==== 🚀 New features
 
 * Navigator objects now implement the Groovy truth (empty == false, non empty == true)
-* Introduced “js” short notation
-* Added “easyb” support (`geb-easyb`) and Grails support
+* Introduced "`js`" short notation
+* Added "`easyb`" support (`geb-easyb`) and Grails support
 * Page change listening support through `geb.PageChangeListener`
 * `waitFor()` methods added, making dealing with dynamic pages easier
 * Support for `alert()` and `confirm()` dialogs

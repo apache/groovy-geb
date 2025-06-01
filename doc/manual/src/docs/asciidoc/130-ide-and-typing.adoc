@@ -71,21 +71,21 @@ In summary:
 . Use the page instance returned by the `to()` and `at()` methods instead of calling through the browser
 . Use methods on the `Page` classes instead of the `content {}` block and dynamic properties
 . If you need to use content definition options like `required:` and `wait:` then you can still reference content elements defined using the DSL in methods on `Page` and `Module` classes as usual, e.g.:
-
-[NOTE]
-====
-IntelliJ IDEA contains support for certain constructs introduced by Geb which makes some of the above not necessary.
-Ensure that you familiarise yourself with the <<intellij-support, section on what that support entails>> if you are an user of IntelliJ Idea.
-====
-
++
 [source,groovy]
 ----
 include::{snippets-dir}/ide/StrongTypingSpec.groovy[tag=types_with_content,indent=0]
 ----
-<1> Wait here for the async definition to return a non-empty Navigator…
+<1> Wait here for the async definition to return a non-empty Navigator...
 
-Using this “typed” style is not an all or nothing proposition.
-The typing options exist on a spectrum and can be used selectively where/when the cost of the extra “noise” is worth it to achieve better IDE support.
+[NOTE]
+====
+IntelliJ IDEA contains support for certain constructs introduced by Geb which makes some of the above not necessary.
+Ensure that you familiarise yourself with the <<intellij-support, section on what that support entails>> if you are a user of IntelliJ IDEA.
+====
+
+Using this "`typed`" style is not an all or nothing proposition.
+The typing options exist on a spectrum and can be used selectively where/when the cost of the extra "`noise`" is worth it to achieve better IDE support.
 For example, a mix of using the `content {}` DSL and methods can easily be used.
 The key enabler is to capture the result of the `to()` and `at()` methods in order to access the page object instance.
 
@@ -116,18 +116,42 @@ The support provides:
 * Completion in `at {}` and `content {}` blocks
 
 This effectively enables more authoring support with less explicit type information.
-As an example of that means, let's revisit the sample from the <<strong-typing, section about strong typing>> and see how it can be simplified while keeping full autocompletion support if using Intellij IDEA:
+As an example of that means, let's revisit the sample from the <<strong-typing, section about strong typing>> and see how it can be simplified while keeping full autocompletion support if using IntelliJ IDEA:
 
+[tabs]
+====
+IntelliJ IDEA::
++
 [source,groovy]
 ----
 include::{snippets-dir}/intellij/StrongTypingSpec.groovy[tag=typed,indent=0]
 ----
 
+Others::
++
+[source,groovy]
+----
+include::{snippets-dir}/ide/StrongTypingSpec.groovy[tag=typed,indent=0]
+----
+====
+
 Where the page objects are:
 
+[tabs]
+====
+IntelliJ IDEA::
++
 [source,groovy]
 ----
 include::{snippets-dir}/intellij/StrongTypingSpec.groovy[tag=pages,indent=0]
 ----
 
-The Geb development team would like to thank the good folks at JetBrains for adding this explicit support for Geb to IDEA.
+Others::
++
+[source,groovy]
+----
+include::{snippets-dir}/ide/StrongTypingSpec.groovy[tag=pages,indent=0]
+----
+====
+
+The Geb development team would like to thank the good folks at JetBrains for adding this explicit support for Geb to IntelliJ IDEA.

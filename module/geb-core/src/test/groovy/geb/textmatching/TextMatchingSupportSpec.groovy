@@ -27,9 +27,7 @@ class TextMatchingSupportSpec extends Specification {
     @Shared
     def matchers = new TextMatchingSupport()
 
-    // Can't have expected in name due to
-    // http://code.google.com/p/spock/issues/detail?id=115
-    @Unroll("pattern methods: #method - #input")
+    @Unroll("pattern methods: #method - #input - #expected")
     def "t"() {
         expect:
         matchers."$method"(input).pattern.toString() == expected

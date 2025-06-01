@@ -9,35 +9,35 @@ endif::[]
 Modules are re-usable definitions of content that can be used across multiple pages.
 They are useful for modelling things like UI widgets that are used across multiple pages, or even for defining more complex UI elements in a page.
 
-They are defined in a manner similar to pages, but extend `{module-api}`…
+They are defined in a manner similar to pages, but extend `{module-api}`...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/FormContentSpec.groovy[tag=form_module,indent=0]
 ----
 
-Pages can “include” modules using the following syntax…
+Pages can "`include`" modules using the following syntax...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=module_page,indent=0]
 ----
 
-The `module` method returns an instance of a module class which can then be used in the following way…
+The `module` method returns an instance of a module class which can then be used in the following way...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=using_modules,indent=0]
 ----
 
-Modules can also be parameterised…
+Modules can also be parameterised...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=parameterized_module,indent=0]
 ----
 
-Where the parameters are passed to constructor of the module…
+Where the parameters are passed to constructor of the module...
 
 [source,groovy]
 ----
@@ -49,7 +49,7 @@ include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=parameterized_module
 include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=using_parameterized_modules,indent=0]
 ----
 
-Modules can also include other modules…
+Modules can also include other modules...
 
 [source,groovy]
 ----
@@ -67,7 +67,7 @@ include::{snippets-dir}/modules/IntroductionSpec.groovy[tag=using_nested_modules
 Modules can be localised to a specific section of the page that they are used in, or they can specify an absolute context as part of their definition.
 There are two ways that a modules base/context can be defined.
 
-Module can be based on a `Navigator` instance…
+Module can be based on a `Navigator` instance...
 
 [source,groovy]
 ----
@@ -81,7 +81,7 @@ include::{snippets-dir}/modules/BaseAndContextSpec.groovy[tag=module_with_base_p
 include::{snippets-dir}/modules/BaseAndContextSpec.groovy[tag=using_module_with_dynamic_base,indent=0]
 ----
 
-It can also be done outside of a content definition…
+It can also be done outside of a content definition...
 
 [source,groovy]
 ----
@@ -91,7 +91,7 @@ include::{snippets-dir}/modules/BaseAndContextSpec.groovy[tag=creating_module_in
 We can define a `Navigator` context when including the module using the above syntax.
 This now means that calls to _all_ `Navigator` (e.g. `$()`) method calls that occur within the module are against the given context (in this case, the `form` element).
 
-However, module classes can also define their own base…
+However, module classes can also define their own base...
 
 [source,groovy]
 ----
@@ -103,21 +103,21 @@ include::{snippets-dir}/modules/BaseAndContextSpec.groovy[tag=form_module_with_b
 include::{snippets-dir}/modules/BaseAndContextSpec.groovy[tag=using_module_with_static_base,indent=0]
 ----
 
-Basing a module on a `Navigator` and defining a base in a module can be combined. Consider the following HTML…
+Basing a module on a `Navigator` and defining a base in a module can be combined. Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/CombinedModuleBaseSpec.groovy[tag=html,indent=0]
 ----
 
-And the following content definitions…
+And the following content definitions...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/CombinedModuleBaseSpec.groovy[tag=content,indent=0]
 ----
 
-Then they can be used in the following way…
+Then they can be used in the following way...
 
 [source,groovy]
 ----
@@ -131,28 +131,28 @@ If the initialization statement does not use a `Navigator`, the module's base is
 
 Modules always have a base navigator associated with them (if you don't specify a base for a module at all then it will be assigned the root element of the document as the base) so it is natural to
 think of them as navigators.
-Keeping in mind that `Module` implements `Navigator` and considering the following HTML…
+Keeping in mind that `Module` implements `Navigator` and considering the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/ModuleIsANavigatorSpec.groovy[tag=html,indent=0]
 ----
 
-As well as these content definitions…
+As well as these content definitions...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/ModuleIsANavigatorSpec.groovy[tag=content,indent=0]
 ----
 
-The following will pass…
+The following will pass...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/ModuleIsANavigatorSpec.groovy[tag=on_module,indent=0]
 ----
 
-It's also possible to use `Navigator` methods inside of a module implementation…
+It's also possible to use `Navigator` methods inside of a module implementation...
 
 [source,groovy]
 ----
@@ -168,7 +168,7 @@ include::{snippets-dir}/modules/ModuleIsANavigatorSpec.groovy[tag=in_module,inde
 
 As previously stated, modules can be used to model page fragments that are reused across multiple pages.
 For example, many different types of pages in your application may show information about the user's shopping cart.
-You could handle this with modules…
+You could handle this with modules...
 
 [source,groovy]
 ----
@@ -231,7 +231,7 @@ include::{snippets-dir}/modules/RepeatingContentSpec.groovy[tag=parameterized_mo
 You might be wondering why the `moduleList()` method flavour that allows the use parameterized module instances takes a closure instead of a module instance, which is what the `module()` method for
 creating parameterized modules does.
 If it took a single instance then it could only initialize it multiple times and return a list which would contain the same instance but many times!
-To be able to return a list of different instances it's needs a closure which acts as a factory of module instances.
+To be able to return a list of different instances it needs a closure which acts as a factory of module instances.
 ====
 
 == The content DSL
@@ -241,7 +241,7 @@ The Content DSL used for modules is _exactly_ the same as the <<content-dsl, one
 == Inheritance
 
 Modules can use inheritance in the <<pages-inheritance, same way that pages can>>.
-That is, their content definitions are merged with any content redefined in the subclass taking precedence of the superclass.
+That is, their content definitions are merged with any content redefined in the subclass taking precedence over the superclass.
 
 == Form control modules
 
@@ -264,14 +264,14 @@ They also verify that the base contains an element of the expected type providin
 only.
 You will usually call these methods on the module classes for specific control types and rarely use this module directly.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/FormElementSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-Following is an example of using the shortcut property methods provided…
+Following is an example of using the shortcut property methods provided...
 
 [source,groovy]
 ----
@@ -283,14 +283,14 @@ include::{snippets-dir}/modules/FormElementSnippetSpec.groovy[tag=example,indent
 
 The `{checkbox-api}` module provides utility methods for checking and unchecking checkboxes as well as property methods for retrieving their state.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/CheckboxSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -301,14 +301,14 @@ include::{snippets-dir}/modules/CheckboxSnippetSpec.groovy[tag=example,indent=0]
 
 The `{select-api}` module provides property methods for selecting options as well as retrieving selected option's value and text of a single choice select element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/SelectSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -320,14 +320,14 @@ include::{snippets-dir}/modules/SelectSnippetSpec.groovy[tag=example,indent=0]
 The `{multiple-select-api}` module provides property methods for selecting options as well as retrieving selected option's value and text of a multiple choice select element.
 These methods take and return lists of strings.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/MultipleSelectSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -338,14 +338,14 @@ include::{snippets-dir}/modules/MultipleSelectSnippetSpec.groovy[tag=example,ind
 
 The `{text-input-api}` module provides property methods for setting and retrieving text of an input text element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/TextInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -356,14 +356,14 @@ include::{snippets-dir}/modules/TextInputSnippetSpec.groovy[tag=example,indent=0
 
 The `{textarea-api}` module provides property methods for setting and retrieving text of a textarea element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/TextareaSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -375,14 +375,14 @@ include::{snippets-dir}/modules/TextareaSnippetSpec.groovy[tag=example,indent=0]
 The `{file-input-api}` module provides a setter for the file location of a file input element.
 The method takes a `File` instance.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/FileInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -394,14 +394,14 @@ include::{snippets-dir}/modules/FileInputSnippetSpec.groovy[tag=example,indent=0
 
 The `{radio-buttons-api}` module provides property methods for checking radio buttons as well as retrieving selected button's value and text of the label associated with it.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/RadioButtonsSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -412,14 +412,14 @@ include::{snippets-dir}/modules/RadioButtonsSnippetSpec.groovy[tag=example,inden
 
 The `{search-input-api}` module provides property methods for setting and retrieving text of a search input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/SearchInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -430,14 +430,14 @@ include::{snippets-dir}/modules/SearchInputSnippetSpec.groovy[tag=example,indent
 
 The `{date-input-api}` module provides property methods for setting and retrieving date of a date input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -448,14 +448,14 @@ include::{rb-snippets-dir}/modules/DateInputSnippetSpec.groovy[tag=example,inden
 
 The `{datetime-local-input-api}` module provides property methods for setting and retrieving date and time of a datetime-local input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -466,21 +466,21 @@ include::{rb-snippets-dir}/modules/DateTimeLocalInputSnippetSpec.groovy[tag=exam
 
 The `{time-input-api}` module provides property methods for setting and retrieving time of a time input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used either with a `java.time.LocalTime` object…
+It can be used either with a `java.time.LocalTime` object...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_time,indent=0]
 ----
 
-…or with a string…
+...or with a string...
 
 [source,groovy]
 ----
@@ -491,21 +491,21 @@ include::{rb-snippets-dir}/modules/TimeInputSnippetSpec.groovy[tag=example_strin
 
 The `{month-input-api}` module provides property methods for setting and retrieving the month of a month input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used either with a `java.time.YearMonth` object…
+It can be used either with a `java.time.YearMonth` object...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_month,indent=0]
 ----
 
-…or with a string…
+...or with a string...
 
 [source,groovy]
 ----
@@ -516,21 +516,21 @@ include::{rb-snippets-dir}/modules/MonthInputSnippetSpec.groovy[tag=example_stri
 
 The `{week-input-api}` module provides property methods for setting and retrieving the week of a week input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used either with a `org.threeten.extra.YearWeek` object…
+It can be used either with a `org.threeten.extra.YearWeek` object...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_week,indent=0]
 ----
 
-…or with a string…
+...or with a string...
 
 [source,groovy]
 ----
@@ -541,14 +541,14 @@ include::{rb-snippets-dir}/modules/WeekInputSnippetSpec.groovy[tag=example_strin
 
 The `{email-input-api}` module provides property methods for setting and retrieving text of an email input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/EmailInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -559,14 +559,14 @@ include::{snippets-dir}/modules/EmailInputSnippetSpec.groovy[tag=example,indent=
 
 The `{tel-input-api}` module provides property methods for setting and retrieving text of a tel input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/TelInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -577,14 +577,14 @@ include::{snippets-dir}/modules/TelInputSnippetSpec.groovy[tag=example,indent=0]
 
 The `{number-input-api}` module provides property methods for setting and retrieving the current number value of a number input element. It also provides methods to retrieve the values of its `min`, `max` and `step` attributes.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/NumberInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -593,16 +593,16 @@ include::{snippets-dir}/modules/NumberInputSnippetSpec.groovy[tag=example,indent
 
 === `RangeInput`
 
-The `{range-input-api}` module provides property methods for setting and retrieving the current number value of a number input element. It also provides methods to retrieve the values of its `min`, `max` and `step` attributes.
+The `{range-input-api}` module provides property methods for setting and retrieving the current number value of a range input element. It also provides methods to retrieve the values of its `min`, `max` and `step` attributes.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -613,14 +613,14 @@ include::{rb-snippets-dir}/modules/RangeInputSnippetSpec.groovy[tag=example,inde
 
 The `{url-input-api}` module provides property methods for setting and retrieving text of a url input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/UrlInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -631,14 +631,14 @@ include::{snippets-dir}/modules/UrlInputSnippetSpec.groovy[tag=example,indent=0]
 
 The `{password-input-api}` module provides property methods for setting and retrieving text of a password input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/PasswordInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used this way…
+It can be used this way...
 
 [source,groovy]
 ----
@@ -649,21 +649,21 @@ include::{snippets-dir}/modules/PasswordInputSnippetSpec.groovy[tag=example,inde
 
 The `{color-input-api}` module provides property methods for setting and retrieving the color of a color input element.
 
-Given the html…
+Given the html...
 
 [source,html]
 ----
 include::{snippets-dir}/modules/ColorInputSnippetSpec.groovy[tag=html,indent=0]
 ----
 
-It can be used either with a `org.openqa.selenium.support.Color` object…
+It can be used either with a `org.openqa.selenium.support.Color` object...
 
 [source,groovy]
 ----
 include::{snippets-dir}/modules/ColorInputSnippetSpec.groovy[tag=example_color,indent=0]
 ----
 
-…or with a hex string…
+...or with a hex string...
 
 [source,groovy]
 ----
@@ -716,7 +716,7 @@ include::{snippets-dir}/modules/UnwrappingModulesSnippetSpec.groovy[tag=module_c
 
 [NOTE]
 ====
-Bear in mind that casting of a module to its declared type means the module gets unwrapped. By doing so the convenient error messages for such module are gone.
+Bear in mind that casting of a module to its declared type means the module gets unwrapped. By doing so the convenient error messages for such a module are gone.
 ====
 
 What's the trade-off? Calling `toString()` on any content element, including module, gives a meaningful path like:

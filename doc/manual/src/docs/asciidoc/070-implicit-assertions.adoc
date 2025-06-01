@@ -6,14 +6,14 @@ endif::[]
 [[implicit-assertions]]
 = Implicit assertions
 
-As of Geb 0.7.0, certain parts of Geb utilise “*implicit assertions*”. This sole goal of this feature is to provide more informative error messages. Put simply, it means that for a given block of code, all _expressions_ are automatically turned into assertions. So the following code:
+As of Geb 0.7.0, certain parts of Geb utilise "`*implicit assertions*`". The sole goal of this feature is to provide more informative error messages. Put simply, it means that for a given block of code, all _expressions_ are automatically turned into assertions. So the following code:
 
 [source,groovy]
 ----
 1 == 1
 ----
 
-Becomes…
+Becomes...
 
 [source,groovy]
 ----
@@ -25,14 +25,14 @@ assert 1 == 1
 If you've used the {spock-link}[Spock Framework] you will be well familiar with the concept of implicit assertions from Spock's `then:` blocks.
 ====
 
-In Geb, waiting expressions and at expressions automatically use implicit assertions. Take the following page object…
+In Geb, waiting expressions and at expressions automatically use implicit assertions. Take the following page object...
 
 [source,groovy]
 ----
 include::{snippets-dir}/assertions/ImplicitAssertionsExamplePage.groovy[tag=introduction_page,indent=0]
 ----
 
-This automatically becomes…
+This automatically becomes...
 
 [source,groovy]
 ----
@@ -47,11 +47,11 @@ class ImplicitAssertionsExamplePage extends Page {
 ----
 
 Because of this, Geb is able to provide much better error messages when the expression fails due to Groovy's
-http://docs.groovy-lang.org/latest/html/documentation/core-testing-guide.html#_power_assertions[power assertions].
+https://docs.groovy-lang.org/latest/html/documentation/core-testing-guide.html#_power_assertions[power assertions].
 
 A special form of `assert` is used by Geb that returns the value of the expression, whereas a regular `assert` returns `null`.
 
-This means that given…
+This means that given...
 
 [source,groovy]
 ----
@@ -63,25 +63,25 @@ This means that even when implicit assertions are used, the value is still retur
 
 == At verification
 
-Let's take the “at checker” case.
+Let's take the "`at checker`" case.
 
 [NOTE]
 ====
-If you're unfamiliar with Geb's “at checking”, please read <<at-checker, this section>>.
+If you're unfamiliar with Geb's "`at checking`", please read <<at-checker, this section>>.
 ====
 
-Consider the following small Geb script…
+Consider the following small Geb script...
 
 [source,groovy]
 ----
 include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=at_checker,indent=0]
 ----
 
-At checking works by verifying that the page's “at check” returns a _trueish_ value.
+At checking works by verifying that the page's "`at check`" returns a _trueish_ value.
 If it does, the `at()` method returns `true`. If not, the `at()` method will return `false`.
-However, due to implicit assertions, the “at check” will never return `false`.
+However, due to implicit assertions, the "`at check`" will never return `false`.
 Instead, the at checker will throw an `AssertionError`.
-Because the page's “at check” is turned into an assertion, you'll see the following in the stacktrace:
+Because the page's "`at check`" is turned into an assertion, you'll see the following in the stacktrace:
 
 ----
 include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=at_checker_message,indent=0]
@@ -99,19 +99,19 @@ These methods were introduced primarily for <<at-check-assertions-ide, better ID
 Because every statement of the closure passed as the last argument to `at()` is implicitly asserted they can be used in an expressive way in `then:` and `expect:` blocks of Spock specifications and provide better error messages when the implicit assertions fail.
 You might be familiar with Spock's `{spock-with}` method which has very similar characteristics and aim.
 
-So given the following code…
+So given the following code...
 [source,groovy]
 ----
 include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=at_checking_with_assertions,indent=0]
 ----
 
-…you might see an error similar to…
+...you might see an error similar to...
 [source,groovy]
 ----
 include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=at_checking_with_assertions_message,indent=0]
 ----
 
-…when the condition in the closure is not fulfilled.
+...when the condition in the closure is not fulfilled.
 
 :numbered:
 
@@ -122,7 +122,7 @@ Another place where implicit assertions are utilised is for _waiting_.
 
 [NOTE]
 ====
-If you're unfamiliar with Geb's “waiting” support, please read <<waiting, this section>>.
+If you're unfamiliar with Geb's "`waiting`" support, please read <<waiting, this section>>.
 ====
 
 Consider the following Geb script:
@@ -132,7 +132,7 @@ Consider the following Geb script:
 include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=waiting,indent=0]
 ----
 
-The `waitFor` method verifies that the given clause returns a _trueish_ value within a certain timeframe. 
+The `waitFor` method verifies that the given clause returns a _trueish_ value within a certain timeframe.
 Because of implicit assertions, when this fails you'll see the following in the stacktrace:
 
 ----
@@ -149,7 +149,7 @@ The same implicit assertion semantics apply to content definitions that are wait
 
 [NOTE]
 ====
-If you're unfamiliar with Geb's “waiting content” support, please read <<content-dsl-wait, this section>>.
+If you're unfamiliar with Geb's "`waiting content`" support, please read <<content-dsl-wait, this section>>.
 ====
 
 Any content definitions that declare a `wait` parameter have implicit assertions added to each expression just like `waitFor()` method calls.
@@ -162,10 +162,10 @@ The same implicit assertion semantics apply to usages of `refreshWaitFor()` meth
 
 [NOTE]
 ====
-If you're unfamiliar with Geb's “Reloading page when waiting” support, please read <<reloading-page-when-waiting, this section>>.
+If you're unfamiliar with Geb's "`Reloading page when waiting`" support, please read <<reloading-page-when-waiting, this section>>.
 ====
 
-Any calls to `refreshWaitFor()` method have implicit assertions added to each expression in the bloc passed to it just like for `waitFor()` method calls.
+Any calls to `refreshWaitFor()` method have implicit assertions added to each expression in the block passed to it just like for `waitFor()` method calls.
 
 === Selectively disabling implicit assertions
 
@@ -183,16 +183,16 @@ include::{snippets-dir}/assertions/ImplicitAssertionsSpec.groovy[tag=disable_imp
 [[implicit-assertions-mechanics]]
 == How it works
 
-The “implicit assertions” feature is implemented as a link:http://www.groovy-lang.org/metaprogramming.html#_compile_time_metaprogramming[Groovy compile time transformation], which literally 
+The "`implicit assertions`" feature is implemented as a link:https://www.groovy-lang.org/metaprogramming.html#_compile_time_metaprogramming[Groovy compile time transformation], which literally
 turns all expressions in a candidate block of code into assertions.
 
-This transform is packaged as a separate JAR named `geb-implicit-assertions`. 
+This transform is packaged as a separate JAR named `geb-implicit-assertions`.
 This JAR needs to be on the compilation classpath of your Geb test/pages/modules (and any other code that you want to use implicit assertions) in order for this feature to work.
 
-If you are obtaining Geb via a dependency management system, this is typically not something you need to be concerned about as it will happen automatically. 
-Geb is distributed via the Maven Central repository in Apache Maven format (i.e. via POM files). 
-The main Geb module, `geb-core` depends on the `geb-implicit-assertions` module as a `compile` dependency. 
+If you are obtaining Geb via a dependency management system, this is typically not something you need to be concerned about as it will happen automatically.
+Geb is distributed via the Maven Central repository in Apache Maven format (i.e. via POM files).
+The main Geb module, `geb-core` depends on the `geb-implicit-assertions` module as a `compile` dependency.
 
-If your dependency management system _inherits_ transitive compile dependencies (i.e. also makes compile dependencies of first class compile dependencies first class compile dependencies) then you 
+If your dependency management system _inherits_ transitive compile dependencies (i.e. also makes compile dependencies of first class compile dependencies first class compile dependencies) then you
 will automatically have the `geb-implicit-assertions` module as a compile dependency and everything will work fine (Maven, Gradle and most configurations of Ivy do this).
 If your dependency management system does not do this, or if you are manually managing the `geb-core` dependency, be sure to include the `geb-implicit-assertions` dependency as a compile dependency.

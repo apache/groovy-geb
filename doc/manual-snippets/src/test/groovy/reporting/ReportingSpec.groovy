@@ -30,7 +30,7 @@ class ReportingSpec extends DriveMethodSupportingSpecWithServer {
             // end::reporting[]
             driver.javascriptEnabled = false
             // tag::reporting[]
-            go "http://google.com"
+            go "https://google.com"
             report "google home page"
             // end::reporting[]
             assert new File(config.reportsDir, "google home page.html").exists()
@@ -47,7 +47,7 @@ class ReportingSpec extends DriveMethodSupportingSpecWithServer {
             driver.javascriptEnabled = false
             // tag::reporting_groups[]
             reportGroup "google"
-            go "http://google.com"
+            go "https://google.com"
             report "home page"
 
             // end::reporting_groups[]
@@ -55,7 +55,7 @@ class ReportingSpec extends DriveMethodSupportingSpecWithServer {
 
             // tag::reporting_groups[]
             reportGroup "geb"
-            go "http://groovy.apache.org/geb/"
+            go "https://groovy.apache.org/geb/"
             report "home page"
             // end::reporting_groups[]
             assert new File(config.reportsDir, "geb/home page.html").exists()
@@ -72,7 +72,7 @@ class ReportingSpec extends DriveMethodSupportingSpecWithServer {
             driver.javascriptEnabled = false
             // tag::cleaning[]
             cleanReportGroupDir()
-            go "http://google.com"
+            go "https://google.com"
             report "home page"
         }
         // end::cleaning[]

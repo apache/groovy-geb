@@ -49,7 +49,7 @@ class TraversingSpec extends GebSpecWithCallbackServer {
         assert $("p.d").next() == $("p.e")
         assert $("p.c").nextAll() == $("p.d").add("p.e")
         assert $("p.d").parent() == $("div.b")
-        assert $("p.c").siblings() == $("p.d").add("p.e")
+        assert $("p.d").siblings() == $("p.c").add("p.e")
         assert $("div.a").children() == $("div.b").add("div.f")
         // end::siblings[]
     }

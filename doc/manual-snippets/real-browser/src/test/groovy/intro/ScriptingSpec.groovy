@@ -31,7 +31,7 @@ class ScriptingSpec extends Specification {
         expect:
         // tag::inline[]
         Browser.drive {
-            go "http://groovy.apache.org/geb/"
+            go "https://groovy.apache.org/geb/"
 
             assert title == "Geb - Very Groovy Browser Automation" // <1>
 

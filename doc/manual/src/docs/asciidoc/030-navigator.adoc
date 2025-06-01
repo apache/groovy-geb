@@ -14,24 +14,24 @@ This is implemented through the `Navigator` API which is a jQuery inspired mecha
 The `$()` function is the access point to the browser's page content.
 It returns a `{navigator-api}` object that is roughly analogous to a jQuery object.
 It is analogous in that it represents one or more elements on the page and can be used to refine the matched content or query the matched content.
-When a `$()` function is called that does not match any content, an “empty” navigator object is returned that represents no content.
-Operations on “empty” navigators return `null` or another “empty” navigator or other values that make sense (e.g. the `size()` method returns `0`).
+When a `$()` function is called that does not match any content, an "`empty`" navigator object is returned that represents no content.
+Operations on "`empty`" navigators return `null` or another "`empty`" navigator or other values that make sense (e.g. the `size()` method returns `0`).
 
-The signature of the `$()` function is as follows…
+The signature of the `$()` function is as follows...
 
 [source,groovy]
 ----
 $(«css selector», «index or range», «attribute / text / visibility matchers»)
 ----
 
-The following is a concrete example…
+The following is a concrete example...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=concrete_example,indent=0]
 ----
 
-This would find the 3rd (elements are 0 indexed) `h1` element whose `class` _attribute_ is exactly “`heading`”.
+This would find the 3rd (elements are 0 indexed) `h1` element whose `class` _attribute_ is exactly `heading`.
 
 All arguments are optional, meaning the following calls are all valid:
 
@@ -42,12 +42,12 @@ include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=other_examples,i
 
 [NOTE]
 ====
-There is an alias for the dollar function named “find” if a method named “$” is not to your taste.
+There is an alias for the dollar function named "`find`" if a method named "`$`" is not to your taste.
 ====
 
 === CSS Selectors
 
-You can use any CSS selector that the underlying `WebDriver` implementation supports…
+You can use any CSS selector that the underlying `WebDriver` implementation supports...
 
 [source,groovy]
 ----
@@ -61,7 +61,7 @@ For all signatures of `$()` function that accept a css selector there is an equi
 Using CSS selectors is the idiomatic way of using Geb and should be preferred to using `By` selectors.
 It is always possible to select the same elements using a css selector as when using a certain `By` selector apart from certain XPath selectors which is why this convenience mechanism is provided.
 
-Following are some examples of using `By` selectors…
+Following are some examples of using `By` selectors...
 
 [source,groovy]
 ----
@@ -81,7 +81,7 @@ This is because the reference to the base `Navigator` of a module is fixed at mo
 When the part of the DOM which contains elements of that `Navigator` is recreated, these references become stale causing any methods called on them to throw `{stale-element-reference-exception-api}` and their staleness cannot be rectified from within the code of the module method in question.
 The solution to this problem is to declare the base `Navigator` to be dynamic which means that the list of the DOM elements underpinning that `Navigator` will be refreshed every time a method accessing the elements is called on it.
 
-Any method which returns a `Navigator` and takes a map of attributes as one of the parameters (most of these methods are described in <<finding-and-filtering>> and <<traversing>>) can be used to create a dynamic `Navigator` by simply passing a {groovy-truth-link}[truthy] value as the `dynamic` attribute…
+Any method which returns a `Navigator` and takes a map of attributes as one of the parameters (most of these methods are described in <<finding-and-filtering>> and <<traversing>>) can be used to create a dynamic `Navigator` by simply passing a {groovy-truth-link}[truthy] value as the `dynamic` attribute...
 
 [source,groovy]
 ----
@@ -95,14 +95,14 @@ The longer the `Navigator` creation chain (a creation chain is when a `Navigator
 Therefore, you should only use dynamic navigators when dealing with content which is actually dynamic and might change during the life of the `Navigator` instance.
 ====
 
-Let's consider a simple link:https://vuejs.org/[Vue.js] application which renders a list of items which can be reordered using the following template…
+Let's consider a simple link:https://vuejs.org/[Vue.js] application which renders a list of items which can be reordered using the following template...
 
 [source,html]
 ----
 include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=template,indent=0]
 ----
 
-…and the following javascript code…
+...and the following javascript code...
 
 [source,groovy]
 ----
@@ -111,35 +111,35 @@ include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=vue_app,in
 
 The important thing to note is that the `li` elements re re-rendered when they are reordered.
 
-Let's model each item in the list using the following module…
+Let's model each item in the list using the following module...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=module,indent=0]
 ----
 
-Given the following content definition…
+Given the following content definition...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=static_navigator,indent=0]
 ----
 
-The code below will fail with `StaleElementReferenceException`…
+The code below will fail with `StaleElementReferenceException`...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=exception,indent=0]
 ----
 
-If we change the base navigator of the list element module to be dynamic as in the following page class…
+If we change the base navigator of the list element module to be dynamic as in the following page class...
 
 [source,groovy]
 ----
 include::{rb-snippets-dir}/navigator/DynamicModuleBaseSpec.groovy[tag=dynamic_navigator,indent=0]
 ----
 
-Then the following will pass…
+Then the following will pass...
 
 [source,groovy]
 ----
@@ -158,7 +158,7 @@ It's also worth noting that the risk of it occurring is exacerbated for navigato
 ==== Creating directly from `WebElement` objects
 
 Certain selection logic, for example selecting elements based on their size, cannot be expressed via Geb's `$()` method but can be expressed by filtering Selenium's {webelement-api} instances.
-So, if you for example wanted to create a dynamic `Navigator` matching all divs in a page which are exactly 10 pixel high you could do so using {navigator-factory-create-dynamic-api}…
+So, if you for example wanted to create a dynamic `Navigator` matching all divs in a page which are exactly 10 pixel high you could do so using {navigator-factory-create-dynamic-api}...
 
 [source,groovy]
 ----
@@ -169,14 +169,14 @@ include::{snippets-dir}/navigator/DynamicNavigatorSpec.groovy[tag=navigator_fact
 
 When matching, a single positive integer or integer range can be given to restrict by index.
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=indexes_and_ranges_html,indent=0]
 ----
 
-We can use indexes to match content like so…
+We can use indexes to match content like so...
 
 [source,groovy]
 ----
@@ -193,35 +193,35 @@ All other values are matched against their corresponding attribute values.
 
 ==== Attributes and text
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=attributes_html,indent=0]
 ----
 
-We can use attribute matchers like so…
+We can use attribute matchers like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=attributes,indent=0]
 ----
 
-Attribute values are `and`ed together…
+Attribute values are ``and``ed together...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=multiple_attributes,indent=0]
 ----
 
-We can use text matchers like so…
+We can use text matchers like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=text_matchers,indent=0]
 ----
 
-You can mix attribute and text matchers…
+You can mix attribute and text matchers...
 
 [source,groovy]
 ----
@@ -230,14 +230,14 @@ include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=matchers_and_att
 
 ===== Using patterns
 
-To match the entire value of an attribute, or the text you use a `String` value. It is also possible to use a `Pattern` to do regexp matching…
+To match the entire value of an attribute, or the text you use a `String` value. It is also possible to use a `Pattern` to do regexp matching...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=pattern,indent=0]
 ----
 
-Geb also ships with a bunch of shortcut pattern methods…
+Geb also ships with a bunch of shortcut pattern methods...
 
 [source,groovy]
 ----
@@ -259,7 +259,7 @@ The following is the complete listing:
 |`notContainsWord` |`iNotContainsWord` |Matches values that DO NOT contain the given value surrounded by either whitespace or the beginning or end of the value
 |===
 
-All of these methods themselves can take a `String` or a `Pattern`…
+All of these methods themselves can take a `String` or a `Pattern`...
 
 [source,groovy]
 ----
@@ -292,14 +292,14 @@ include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=pattern_composit
 
 ==== Visibility
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=visibility_html,indent=0]
 ----
 
-We can use visibility matchers like so…
+We can use visibility matchers like so...
 
 [source,groovy]
 ----
@@ -308,23 +308,23 @@ include::{snippets-dir}/navigator/DollarExamplesSpec.groovy[tag=visibility,inden
 
 === Navigators are iterable
 
-The navigator objects implement the Java `Iterable` interface, which allows you to do lots of Groovy stuff like use the `max()` function…
+The navigator objects implement the Java `Iterable` interface, which allows you to do lots of Groovy stuff like using the `max()` function...
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/IterableSpec.groovy[tag=iterable_html,indent=0]
 ----
 
-You can use the `max()` function on `Navigator` instances…
+You can use the `max()` function on `Navigator` instances...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/IterableSpec.groovy[tag=max,indent=0]
 ----
 
-This also means that navigator objects work with the Groovy spread operator…
+This also means that navigator objects work with the Groovy spread operator...
 
 [source,groovy]
 ----
@@ -341,7 +341,7 @@ If you wish to only listen to a subset of navigator events then `{navigator-even
 
 One of the use cases for utilising a navigator event listener would be to enhance reporting by writing a report every time a navigator is clicked, its value is changed, etc.
 
-The below example shows how to register a navigator event listener as part of the config script which simply prints navigator tags after navigators are clicked…
+The below example shows how to register a navigator event listener as part of the config script which simply prints navigator tags after navigators are clicked...
 
 [source,groovy]
 ----
@@ -353,14 +353,14 @@ include::{snippets-dir}/navigator/NavigatorEventListenerSpec.groovy[tag=config,i
 It's possible to check `Navigator` instances for equality.
 The rules are simple - two empty navigators are always equal and two non empty navigators are only equal if they contain the exact same elements in the same order.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/EqualsSpec.groovy[tag=html,indent=0]
 ----
 
-Here are some examples of equal Navigator instances…
+Here are some examples of equal Navigator instances...
 
 [source,groovy]
 ----
@@ -372,7 +372,7 @@ include::{snippets-dir}/navigator/EqualsSpec.groovy[tag=equal,indent=0]
 <4> Two multi element navigators containing the same elements
 <5> Two multi element navigators containing the same elements created using different methods
 
-And some that are not equal…
+And some that are not equal...
 
 [source,groovy]
 ----
@@ -387,14 +387,14 @@ include::{snippets-dir}/navigator/EqualsSpec.groovy[tag=not_equal,indent=0]
 
 Navigator objects have `find()` and `$()` methods for finding descendants, and `filter()` and `not()` methods for reducing the matched content.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=html,indent=0]
 ----
 
-We can select `p.b` by…
+We can select `p.b` by...
 
 [source,groovy]
 ----
@@ -402,49 +402,49 @@ include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=find,indent
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=dollar,indent=0]
 ----
 
-We can select `div.b` by…
+We can select `div.b` by...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=filter,indent=0]
 ----
 
-or…
+or...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=not,indent=0]
 ----
 
-We can select the `div` containing the `p` with…
+We can select the `div` containing the `p` with...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=a_has,indent=0]
 ----
 
-Or select the `div` containing the `input` with a type attribute of "text" like so…
+Or select the `div` containing the `input` with a type attribute of "`text`" like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=b_has,indent=0]
 ----
 
-We can select the `div` that does not contain the `p` with…
+We can select the `div` that does not contain the `p` with...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=b_has_not,indent=0]
 ----
 
-Or select the `div` that does not contain the `input` with a type attribute of "text" like so…
+Or select the `div` that does not contain the `input` with a type attribute of "`text`" like so...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FindingAndFilteringSpec.groovy[tag=a_has_not,indent=0]
 ----
 
-Or select the two `div` that do not contain `input` with a type attribute of "submit" like so…
+Or select the two `div` that do not contain `input` with a type attribute of "`submit`" like so...
 
 [source,groovy]
 ----
@@ -462,7 +462,7 @@ These methods return a new navigator object that represents the new content.
 It is also possible to compose navigator objects from other navigator objects, for situations where you can't express a content set in one query.
 To do this, simply call the `$()` function and pass in the navigators to compose.
 
-Consider the following markup…
+Consider the following markup...
 
 [source,html]
 ----
@@ -502,28 +502,28 @@ include::{snippets-dir}/navigator/CompositionSpec.groovy[tag=content,indent=0]
 
 Navigators also have methods for selecting content _around_ the matched content.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=siblings_html,indent=0]
 ----
 
-You can select content _around_ `p.d` by…
+You can select content _around_ `p.d` by...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=siblings,indent=0]
 ----
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=next_html,indent=0]
 ----
 
-The following code will select `p.b` &amp; `p.c`…
+The following code will select `p.b` &amp; `p.c`...
 
 [source,groovy]
 ----
@@ -532,21 +532,21 @@ include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=next,indent=0]
 
 The `previous()`, `prevAll()`, `next()`, `nextAll()`, `parent()`, `parents()`, `closest()`, `siblings()` and `children()` methods can also take CSS selectors and attribute matchers.
 
-Using the same html, the following examples will select `p.c`…
+Using the same html, the following examples will select `p.c` twice...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=next_with_args,indent=0]
 ----
 
-Likewise, consider the following HTML…
+Likewise, consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=parent_closest_html,indent=0]
 ----
 
-The following examples will select `div.b`…
+The following examples will select `div.b`...
 
 [source,groovy]
 ----
@@ -555,7 +555,7 @@ include::{snippets-dir}/navigator/TraversingSpec.groovy[tag=parent,indent=0]
 
 The `closest()` method is a special case in that it will select the first ancestor of the current elements that matches a selector.
 There is no no-argument version of the `closest()` method.
-For example, these will select `div.a`…
+For example, these will select `div.a`...
 
 [source,groovy]
 ----
@@ -590,7 +590,7 @@ There are also `click(Class)` , `click(Page)` and `click(List)` methods that are
 <<changing-pages,`page(Class&lt;? extends Page&gt;)`, `page(Page)`, and `page(Class&lt;? extends Page&gt;[])`, `page(Page[])` methods respectively>>.
 This allow page changes to be specified at the same time as click actions.
 
-For example…
+For example...
 
 [source,groovy]
 ----
@@ -599,7 +599,7 @@ include::{snippets-dir}/navigator/ClickingSpec.groovy[tag=click,indent=0]
 
 Would click the `a.login` element, then effectively call `browser.page(LoginPage)` and verify that the browser is at the expected page.
 
-All of the page classes passed in when using the list variant have to have an “at” checker defined, otherwise an `UndefinedAtCheckerException` will be thrown.
+All of the page classes passed in when using the list variant have to have an "`at`" checker defined, otherwise an `UndefinedAtCheckerException` will be thrown.
 
 == Determining visibility
 
@@ -613,14 +613,14 @@ Geb comes with an easy way for finding the currently focused element in the form
 It is also possible to verify if a given `Navigator` object holds the currently focused element using its `focused` property.
 `Navigator` objects that don't match any elements will return `false` as the value of `focused` property and ones that match multiple elements will throw a `SingleElementNavigatorOnlyMethodException`.
 
-Given the following html…
+Given the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/FocusSpec.groovy[tag=html,indent=0]
 ----
 
-`focused()` method and Navigator's `focused` property can be used in the following way…
+`focused()` method and Navigator's `focused` property can be used in the following way...
 
 [source,groovy]
 ----
@@ -636,14 +636,14 @@ The size is available via the `height` and `width` properties, while the locatio
 
 All of these properties operate on the *sole* matched element only and a `SingleElementNavigatorOnlyMethodException` is thrown if they are accessed on a multi element `Navigator`.
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/SizeAndLocationSpec.groovy[tag=html,indent=0]
 ----
 
-The following conditions are satisfied for it…
+The following conditions are satisfied for it...
 
 [source,groovy]
 ----
@@ -663,21 +663,21 @@ The `tag()`, `text()` and `classes()` methods as well as accessing attributes vi
 If these methods are called on a multi element `Navigator` then a `SingleElementNavigatorOnlyMethodException` is thrown.
 The `classes()` method returns a `java.util.List` of class names sorted alphabetically.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/TagTextClassesAttributesSpec.groovy[tag=html,indent=0]
 ----
 
-The following assertions are valid…
+The following assertions are valid...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/TagTextClassesAttributesSpec.groovy[tag=single_element,indent=0]
 ----
 
-To obtain information about all matched content, you use the Groovy _spread operator_…
+To obtain information about all matched content, you use the Groovy _spread operator_...
 
 [source,groovy]
 ----
@@ -689,14 +689,14 @@ include::{snippets-dir}/navigator/TagTextClassesAttributesSpec.groovy[tag=multip
 Css properties of a single element navigator can be accessed using the `css()` method.
 If that method is called on a multi element `Navigator` then a `SingleElementNavigatorOnlyMethodException` is thrown.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/CssPropertiesSpec.groovy[tag=html,indent=0]
 ----
 
-You can obtain the value of `float` css property in the following way…
+You can obtain the value of `float` css property in the following way...
 
 [source,css]
 ----
@@ -713,7 +713,7 @@ in accordance with the DOM CSS2 specification - you should directly access the l
 
 == Sending keystrokes
 
-Given the following html…
+Given the following html...
 
 [source,html]
 ----
@@ -733,7 +733,7 @@ How content responds to the keystrokes depends on what the content is.
 
 === Non characters (e.g. delete key, key chords, etc.)
 
-It is possible to send non-textual characters to content by using the WebDriver `{webdriver-keys-api}` enumeration…
+It is possible to send non-textual characters to content by using the WebDriver `{webdriver-keys-api}` enumeration...
 
 [source,groovy]
 ----
@@ -741,7 +741,7 @@ include::{rb-snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=impor
 include::{rb-snippets-dir}/navigator/NonCharacterKeystrokesSpec.groovy[tag=keystrokes,indent=0]
 ----
 
-Here we are sending a “control-c” to an input.
+Here we are sending a "`control-c`" to an input.
 
 See the documentation for `{webdriver-keys-api}` enumeration for more information on the possible keys.
 
@@ -763,28 +763,28 @@ Interacting with form controls (`input`, `select` etc.) is such a common task in
 
 Geb supports the following shortcuts for dealing with form controls.
 
-Consider the following HTML…
+Consider the following HTML...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/FormShortcutsSpec.groovy[tag=html,indent=0]
 ----
 
-The value can be read and written via property notation…
+The value can be read and written via property notation...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FormShortcutsSpec.groovy[tag=value_shortcuts,indent=0]
 ----
 
-These are literally shortcuts for…
+These are literally shortcuts for...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/FormShortcutsSpec.groovy[tag=value_equivalents,indent=0]
 ----
 
-There is also a shortcut for obtaining a navigator based on a control name…
+There is also a shortcut for obtaining a navigator based on a control name...
 
 [source,groovy]
 ----
@@ -799,7 +799,7 @@ In the examples we are using `$(&quot;form&quot;).someInput` to hopefully be cle
 ====
 
 If your content definition (either a page or a module) describes content which is an `input`, `select` or `textarea`, you can access and set its value the same way as described above for forms.
-Given a page and module definitions for the above mentioned HTML:
+Given page and module definitions for the above mentioned HTML:
 
 [source,groovy]
 ----
@@ -835,14 +835,14 @@ Trying to set a value on an element which is not one of `input`, `select` or `te
 
 === Select
 
-Select values are set by assigning the value or text of the required option. Assigned values are automatically coerced to String. For example…
+Select values are set by assigning the value or text of the required option. Assigned values are automatically coerced to String. For example...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/SelectSpec.groovy[tag=html,indent=0]
 ----
 
-We can select options with…
+We can select options with...
 
 [source,groovy]
 ----
@@ -858,14 +858,14 @@ If you attempt to set a select to a value that does not match the value or text 
 
 If the select has the `multiple` attribute it is set with a array or `Collection` of values.
 Any options not in the values are un-selected.
-For example…
+For example...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/MultiSelectSpec.groovy[tag=html,indent=0]
 ----
 
-We can select options with…
+We can select options with...
 
 
 [source,groovy]
@@ -883,21 +883,21 @@ If the collection being assigned contains a value that does not match the value 
 
 Checkboxes are generally checked/unchecked by setting their value to `true` or `false`.
 
-Consider the following html…
+Consider the following html...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/CheckboxSpec.groovy[tag=single_html,indent=0]
 ----
 
-You can set a single checkbox in the following manner…
+You can set a single checkbox in the following manner...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/CheckboxSpec.groovy[tag=single,indent=0]
 ----
 
-Calling `value()` on a checked checkbox will return the value of its `value` attribute, i.e:
+Calling `value()` on a checked checkbox will return the value of its `value` attribute, i.e.:
 
 [source,html]
 ----
@@ -909,7 +909,7 @@ include::{snippets-dir}/navigator/CheckboxSpec.groovy[tag=checked_html,indent=0]
 include::{snippets-dir}/navigator/CheckboxSpec.groovy[tag=checked,indent=0]
 ----
 
-Calling `value()` on an unchecked checkbox will return `null`, i.e:
+Calling `value()` on an unchecked checkbox will return `null`, i.e.:
 
 [source,html]
 ----
@@ -972,21 +972,21 @@ include::{snippets-dir}/navigator/CheckboxSpec.groovy[tag=truth_multiple,indent=
 
 Radio values are set by assigning the value of the radio button that is to be selected or the label text associated with a radio button.
 
-For example, with the following radio buttons…
+For example, with the following radio buttons...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/RadioSpec.groovy[tag=html,indent=0]
 ----
 
-We can select the radios by value…
+We can select the radios by value...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/RadioSpec.groovy[tag=by_value,indent=0]
 ----
 
-Or by label text…
+Or by label text...
 
 [source,groovy]
 ----
@@ -1007,14 +1007,14 @@ include::{snippets-dir}/navigator/TextInputAndAreaSpec.groovy[tag=html,indent=0]
 include::{snippets-dir}/navigator/TextInputAndAreaSpec.groovy[tag=setting_value,indent=0]
 ----
 
-It is also possible to append text by using the send keys shorthand…
+It is also possible to append text by using the send keys shorthand...
 
 [source,groovy]
 ----
 include::{snippets-dir}/navigator/TextInputAndAreaSpec.groovy[tag=typing,indent=0]
 ----
 
-Which an also be used for non-character keys…
+Which can also be used for non-character keys...
 
 [source,groovy]
 ----
@@ -1033,14 +1033,14 @@ You can track this issue link:https://github.com/SeleniumHQ/selenium-google-code
 
 It's currently not possible with WebDriver to simulate the process of a user clicking on a file upload control and choosing a file to upload via the normal file chooser.
 However, you can directly set the value of the upload control to the _absolute path_ of a file on the system where the driver is running and on form submission that file will be uploaded.
-So if your html looks like…
+So if your html looks like...
 
 [source,html]
 ----
 include::{snippets-dir}/navigator/FileUploadSpec.groovy[tag=html,indent=0]
 ----
 
-And the `uploadedFile` variable holds a `File` instance pointing at the file you want to upload then this is how you can set the value of the upload control…
+And the `uploadedFile` variable holds a `File` instance pointing at the file you want to upload then this is how you can set the value of the upload control...
 
 [source,groovy]
 ----

@@ -117,7 +117,7 @@ class DriverConfigSpec extends Specification implements InlineConfigurationLoade
                 // when system property 'geb.env' is set to 'remote' use a remote Firefox driver
                 remote {
                     driver = {
-                        def remoteWebDriverServerUrl = new URL("http://example.com/webdriverserver")
+                        def remoteWebDriverServerUrl = new URL("https://example.com/webdriverserver")
                         // end::env_sensitive_driver_config[]
                         remoteWebDriverServerUrl = new URL("${standaloneWebDriverServer.url}")
                         // tag::env_sensitive_driver_config[]
