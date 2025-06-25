@@ -38,6 +38,8 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
                     }
                 </script>
             <body>
+                <div id="a"></div>
+                <div id="b"></div>
             </body>
             </html>"""
         }
@@ -137,6 +139,42 @@ class JavascriptInterfaceSpec extends GebSpecWithCallbackServer {
     def "nested property"() {
         expect:
         js."document.title" == "geb"
+    }
+
+    def "web element argument"() {
+        given:
+        def divA = $('div#a')
+
+        when:
+        js.exec(divA.singleElement(), 'arguments[0].innerText = "foo"')
+
+        then:
+        divA.text() == 'foo'
+    }
+
+    def "single element navigator argument"() {
+        given:
+        def divA = $('div#a')
+
+        when:
+        js.exec(divA, 'arguments[0].innerText = "foo"')
+
+        then:
+        divA.text() == 'foo'
+    }
+
+    def "multi element navigator argument"() {
+        given:
+        def divA = $('div#a')
+        def divB = $('div#b')
+        def div = $('div')
+
+        when:
+        js.exec(div, 'arguments[0].forEach(it => it.innerText = "foo")')
+
+        then:
+        divA.text() == 'foo'
+        divB.text() == 'foo'
     }
 }
 
