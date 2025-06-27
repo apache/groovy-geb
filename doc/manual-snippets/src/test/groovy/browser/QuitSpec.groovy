@@ -27,7 +27,7 @@ class QuitSpec extends Specification {
         expect:
         // tag::quit[]
         Browser.drive {
-            //…
+            //...
         }.quit()
         // end::quit[]
         cleanup:

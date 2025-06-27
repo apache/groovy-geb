@@ -80,8 +80,10 @@ class AccessingVariablesSpec extends DriveMethodSupportingSpecWithServer {
     }
 }
 
+// tag::mapping_class[]
 class JsVariablePage extends Page {
     static content = {
         aVar { js.aVariable }
     }
 }
+// end::mapping_class[]

@@ -10,37 +10,76 @@ Using Geb with Gradle simply involves pulling in the appropriate dependencies, a
 
 Below is a valid Gradle `build.gradle` file for working with Geb for testing.
 
-[source,groovy,subs="attributes"]
+[tabs]
+====
+Kotlin::
++
+[source,kotlin,subs="+attributes"]
 ----
-apply plugin: "groovy"
+plugins {
+    groovy
+}
 
 repositories {
     mavenCentral()
 }
 
-ext {
-    gebVersion = "{geb-version}"
-    seleniumVersion = "{selenium-version}"
-}
+val gebVersion = "{geb-version}"
+val seleniumVersion = "{selenium-version}"
 
 dependencies {
+    testImplementation("org.spockframework:spock-core:{spock-core-version}")
+
     // If using Spock, need to depend on geb-spock
-    testCompile "{geb-group}:geb-spock:$\{gebVersion\}"
-    testCompile "org.spockframework:spock-core:{spock-core-version}"
+    testImplementation("{geb-group}:geb-spock:$gebVersion")
 
     // If using JUnit, need to depend on geb-junit (4 or 5)
-    testCompile "{geb-group}:geb-junit4:$\{gebVersion\}"
-    testCompile "junit:junit-dep:4.8.2"
+    //testImplementation("{geb-group}:geb-junit5:$gebVersion")
 
     // Need a driver implementation
-    testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$\{seleniumVersion\}"
-    testRuntime "org.seleniumhq.selenium:selenium-support:$\{seleniumVersion\}"
+    testRuntimeOnly("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
 }
 
-test {
-    systemProperties "geb.build.reportsDir": "$reportsDir/geb"
+tasks.test {
+    useJUnitPlatform()
+    systemProperty("geb.build.baseUrl", "https://google.com")
 }
 ----
+
+Groovy::
++
+[source,groovy,subs="+attributes"]
+----
+plugins {
+    id "groovy"
+}
+
+repositories {
+    mavenCentral()
+}
+
+def gebVersion = "{geb-version}"
+def seleniumVersion = "{selenium-version}"
+
+dependencies {
+    testImplementation "org.spockframework:spock-core:{spock-core-version}"
+
+    // If using Spock, need to depend on geb-spock
+    testImplementation "{geb-group}:geb-spock:$gebVersion"
+
+    // If using JUnit, need to depend on geb-junit (4 or 5)
+    //testImplementation "{geb-group}:geb-junit5:$gebVersion"
+
+    // Need a driver implementation
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+}
+
+tasks.test {
+    useJUnitPlatform()
+    systemProperty("geb.build.baseUrl", "https://google.com")
+}
+----
+====
 
 There is a Gradle example project available.
 
@@ -54,80 +93,67 @@ Below is a valid `pom.xml` file for working with Geb for testing (with Spock).
 
 [source,xml,subs="+attributes"]
 ----
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>{geb-group}.example</groupId>
-  <artifactId>geb-maven-example</artifactId>
-  <packaging>jar</packaging>
-  <version>1</version>
-  <name>Geb Maven Example</name>
-  <url>http://groovy.apache.org/geb/</url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.spockframework</groupId>
-      <artifactId>spock-core</artifactId>
-      <version>{spock-core-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>{geb-group}</groupId>
-      <artifactId>geb-spock</artifactId>
-      <version>{geb-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-firefox-driver</artifactId>
-      <version>{selenium-version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-support</artifactId>
-      <version>{selenium-version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.18.1</version>
-        <configuration>
-          <includes>
-            <include>*Spec.*</include>
-          </includes>
-          <systemPropertyVariables>
-            <geb.build.baseUrl>http://google.com/ncr</geb.build.baseUrl>
-            <geb.build.reportsDir>target/test-reports/geb</geb.build.reportsDir>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.gmaven</groupId>
-        <artifactId>gmaven-plugin</artifactId>
-        <version>1.3</version>
-        <configuration>
-          <providerSelection>1.7</providerSelection>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="
+             http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd
+         ">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>{geb-group}.example</groupId>
+    <artifactId>geb-maven-example</artifactId>
+    <packaging>jar</packaging>
+    <version>1</version>
+    <name>Geb Maven Example</name>
+    <url>https://groovy.apache.org/geb/</url>
+    <dependencies>
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>{spock-core-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>{geb-group}</groupId>
+            <artifactId>geb-spock</artifactId>
+            <version>{geb-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>{selenium-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.3</version>
+                <configuration>
+                    <includes>
+                        <include>*Spec.*</include>
+                    </includes>
+                    <systemPropertyVariables>
+                        <geb.build.baseUrl>https://google.com</geb.build.baseUrl>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmavenplus</groupId>
+                <artifactId>gmavenplus-plugin</artifactId>
+                <version>4.1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compileTests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 ----
 

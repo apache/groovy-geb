@@ -7,7 +7,7 @@ endif::[]
 = Direct downloading
 
 Geb features an API that can be used to make direct HTTP requests from the application that is executing the Geb scripts or tests.
-This facilitates fine grained requests and downloading content such as PDF, CSVs, images etc. into your scripts or tests to then do something with.
+This facilitates fine grained requests and downloading content such as PDFs, CSVs, images, etc. into your scripts or tests to then do something with them.
 
 The direct download API works by using {http-url-connection-link}[`java.net.HttpURLConnection`] to directly connect to a URL from the application executing Geb, bypassing WebDriver.
 

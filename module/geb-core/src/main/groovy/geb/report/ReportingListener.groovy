@@ -24,7 +24,7 @@ package geb.report
  * Reporting listeners are notified by reporters whenever reports are taken. This can be used to output links
  * to report files which is sometimes utilized by continuous integration servers.
  * <p>
- * They can be registered via the config mechanism…
+ * They can be registered via the config mechanism...
  * <pre>
  * reportingListener = new ReportingListener() {
  *   void onReport(Reporter reporter, ReportState reportState, List<File> reportFiles) {

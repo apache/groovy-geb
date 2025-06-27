@@ -28,7 +28,7 @@ using the class loader that loaded Geb.
 
 [NOTE]
 ====
-If you are using a build tool such as link:http://gradle.org/[Gradle] or link:http://maven.apache.org/[Maven] that has the concept of test “resources”, then that directory is a suitable place.
+If you are using a build tool such as link:https://gradle.org/[Gradle] or link:https://maven.apache.org/[Maven] that has the concept of test "`resources`", then that directory is a suitable place.
 You can also put your script together with your compilation source and then the compiled version of the script will be used.
 ====
 
@@ -36,17 +36,31 @@ You can also put your script together with your compilation source and then the 
 
 The Groovy `{config-slurper-api}` mechanism has built in support for environment sensitive configuration, and Geb leverages this by using the *`geb.env`* system property to determine the environment
 to use.
-An effective use of this mechanism is to configure different drivers based on the designated Geb “environment” (concrete details on how to do this further down).
+An effective use of this mechanism is to configure different drivers based on the designated Geb "`environment`" (concrete details on how to do this further down).
 
 How you set the environment system property is going to be dependent on the build system you are using.
-For example, when using Gradle you could control the Geb environment by specifying it in the configuration of the test task running your tests…
+For example, when using Gradle you could control the Geb environment by specifying it in the configuration of the test task running your tests...
 
+[tabs]
+====
+Kotlin::
++
+[source,kotlin]
+----
+tasks.test {
+    systemProperty("geb.env", "windows")
+}
+----
+
+Groovy::
++
 [source,groovy]
 ----
 test {
     systemProperty 'geb.env', 'windows'
 }
 ----
+====
 
 Other build environments will allow you to do this in different ways.
 
@@ -64,7 +78,7 @@ The build adapter mechanism exists to allow Geb to integrate with development/bu
 This mechanism works by loading the name of the class (fully qualified) by the system property `geb.build.adapter` that must implement the `{build-adapter-api}` interface.
 Currently, the build adapter can only influence the base URL to use, and the location of the reports directory.
 
-If the `geb.build.adapter` system property is not explicitly set, it defaults to `{system-properties-build-adapter-api}.
+If the `geb.build.adapter` system property is not explicitly set, it defaults to `{system-properties-build-adapter-api}`.
 As you can probably deduce, this default implementation uses system properties to specify values, so is usable in most circumstances.
 See the linked API doc for the details of the specific system properties it looks for.
 
@@ -83,7 +97,7 @@ The driver to use is specified by the config key `driver`, or the system propert
 [[driver-factory-closure]]
 ==== Factory closure
 
-In the config script it can be a closure that when invoked with no arguments returns an instance of `{webdriver-api}`…
+In the config script it can be a closure that when invoked with no arguments returns an instance of `{webdriver-api}`...
 
 [source,groovy]
 ----
@@ -92,7 +106,7 @@ include::{snippets-dir}/configuration/DriverConfigSpec.groovy[tag=configuring_dr
 
 This is the preferred mechanism, as it allows the most control over the drivers creation and configuration.
 
-You can use the `{config-slurper-api}` mechanism's environment sensitivity to configure different drivers per environment…
+You can use the `{config-slurper-api}` mechanism's environment sensitivity to configure different drivers per environment...
 
 [source,groovy]
 ----
@@ -102,7 +116,7 @@ include::{snippets-dir}/configuration/DriverConfigSpec.groovy[tag=env_sensitive_
 [TIP]
 ====
 WebDriver has the ability to drive browsers on a remote host, which is what we are using above.
-For more information consult the WebDriver documentation on `{remotewebdriver}` and `{remotewebdriver-server}`.
+For more information consult the WebDriver documentation on `{remotewebdriver}` and `{selenium-grid}`.
 ====
 
 ==== Driver class name
@@ -115,7 +129,7 @@ The name of the driver class to use (it will be constructed with no arguments) c
 include::{snippets-dir}/configuration/DriverConfigSpec.groovy[tag=configuring_driver_using_class_name,indent=0]
 ----
 
-Or it can be one of the following short names: `ie`, `htmlunit`, `firefox`, `chrome` or `edge`. These will be implicitly expanded to their fully qualified class names…
+Or it can be one of the following short names: `ie`, `htmlunit`, `firefox`, `chrome` or `edge`. These will be implicitly expanded to their fully qualified class names...
 
 [source,groovy]
 ----
@@ -134,8 +148,8 @@ The following table gives the possible short names that can be used:
 |`edge` |{edgedriver}[org.openqa.selenium.edge.EdgeDriver]
 |===
 
-If no explicit driver is specified then Geb will look for the following drivers on the classpath in the order they are listed in the above table.
-If none of these classes can be found, a link:api/geb/error/UnableToLoadAnyDriversException.html[`UnableToLoadAnyDriversException`] will be thrown.
+If no explicit driver is specified then Geb will look for the drivers on the classpath in the order they are listed in the above table.
+If none of these classes can be found, an link:api/geb/error/UnableToLoadAnyDriversException.html[`UnableToLoadAnyDriversException`] will be thrown.
 
 === Navigator factory
 
@@ -143,7 +157,7 @@ It is possible to specify your own implementation of link:api/geb/navigator/fact
 This is useful if you want to extend the `{navigator-api}` class to provide your own behaviour extensions.
 
 Rather than inject your own `NavigatorFactory`, it is simpler to inject a custom link:api/geb/navigator/factory/InnerNavigatorFactory.html[`InnerNavigatorFactory`] which is a much simpler interface.
-To do this, you can specify a closure for the config key `innerNavigatorFactory`…
+To do this, you can specify a closure for the config key `innerNavigatorFactory`...
 
 [source,groovy]
 ----
@@ -167,11 +181,11 @@ to `false`.
 However, if you do this you become <<explicit-driver-lifecycle, responsible for quitting>> every driver that is created at the appropriate time.
 
 The default caching behavior is to cache the driver globally across the JVM.
-If you are using Geb in multiple threads this may not be what you want, as neither Geb `Browser` objects nor WebDriver at the core is thread safe.
+If you are using Geb in multiple threads this may not be what you want, as neither Geb `Browser` objects nor WebDriver at the core are thread safe.
 To remedy this, you can instruct Geb to cache the driver instance per thread by setting the config option `cacheDriverPerThread` to `true`.
 
 Also, by default Geb will register a shutdown hook to quit any cached browsers when the JVM exits.
-You can disable this by setting te config property `quitCachedDriverOnShutdown` to `false`.
+You can disable this by setting the config property `quitCachedDriverOnShutdown` to `false`.
 
 === Quitting driver on browser reset
 
@@ -191,7 +205,7 @@ If <<driver-caching-configuration, driver caching>> is disabled then `quitDriver
 [[configuration-base-url]]
 === Base URL
 
-The <<base-url, base URL>> to be used can be specified by setting the `baseUrl` config property (with a `String`) value or via the build adapter (the default implementation of which looks at the
+The <<base-url, base URL>> to be used can be specified by setting the `baseUrl` config property (to a `String` value) or via the build adapter (the default implementation of which looks at the
 `geb.build.baseUrl` system property).
 Any value set in the config script will take precedence over the value provided by the build adapter.
 
@@ -220,7 +234,7 @@ Defaults can be specified via:
 include::{snippets-dir}/configuration/WaitingConfigSpec.groovy[tag=default_config,indent=0]
 ----
 
-Both values are optional and in seconds. If unspecified, the values of `5` for `timeout` and `0.1` for `retryInterval`.
+Both values are optional and in seconds. If unspecified, the used values are `5` for `timeout` and `0.1` for `retryInterval`.
 
 [[waiting-presets]]
 ==== Presets
@@ -249,7 +263,7 @@ include::{snippets-dir}/configuration/WaitingConfigSpec.groovy[tag=include_cause
 ----
 
 [[at-check-waiting]]
-=== Waiting in “at” checkers
+=== Waiting in "`at`" checkers
 
 At checkers can be configured to be implicitly wrapped with `waitFor()` calls. This can be set with:
 
@@ -263,11 +277,11 @@ The possible values for the `atCheckWaiting` property are consistent with the <<
 This global setting can also be overridden on a <<page-level-at-check-waiting,per page class basis>>.
 
 [[require-page-at-checkers]]
-=== Requiring “at” checkers for implicit “at” checks
+=== Requiring "`at`" checkers for implicit "`at`" checks
 
-When explicitly “at” checking a page, that is passing it to `Browser`'s `at()` method, which does not define an “at” checker an `UndefinedAtCheckerException` is thrown.
-That is not the case by default when implicit “at checks” are being performed, like when using Browser`'s `to()` method.
-This behaviour can be changed to also throw `UndefinedAtCheckerException` when implicit “at checks” are being performed and the page does not define an “at” checker by setting `requirePageAtCheckers` config property to a "truthy" value:
+When explicitly "`at`" checking a page, that is passing it to ``Browser``'s `at()` method, which does not define an "`at`" checker an `UndefinedAtCheckerException` is thrown.
+That is not the case by default when implicit "`at checks`" are being performed, like when using Browser`'s `to()` method.
+This behaviour can be changed to also throw `UndefinedAtCheckerException` when implicit "`at checks`" are being performed and the page does not define an "`at`" checker by setting `requirePageAtCheckers` config property to a "`truthy`" value:
 
 [source,groovy]
 ----
@@ -281,7 +295,7 @@ Sometimes Firefox driver times out when trying to find the root HTML element of 
 ----
 org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"tag name","selector":"html"}
 Command duration or timeout: 576 milliseconds
-For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/#nosuchelementexception
 ----
 
 You can prevent this error from happening by configuring a wait timeout to use when the driver is locating the root HTML element, using:
@@ -296,7 +310,7 @@ The possible values for the `baseNavigatorWaiting` option are consistent with th
 [[unexpected-pages-config]]
 === Unexpected pages
 
-The `unexpectedPages` configuration property allows to specify a list of unexpected `Page` classes that will be checked for when “at” checks are performed.
+The `unexpectedPages` configuration property allows to specify a list of unexpected `Page` classes that will be checked for when "`at`" checks are performed.
 Given that `PageNotFoundPage` and `InternalServerErrorPage` have been defined you can use the following to configure them as unexpected pages:
 
 [source,groovy]
@@ -343,7 +357,7 @@ include::{snippets-dir}/configuration/ReporterConfigSpec.groovy[tag=config,inden
 
 The reports dir configuration is used by to control where the browser should write reports (see the <<reporting>> chapter for details).
 
-In the config script, you can set the path to the directory to use for reports via the `reportsDir` key…
+In the config script, you can set the path to the directory to use for reports via the `reportsDir` key...
 
 [source,groovy]
 ----
@@ -418,7 +432,7 @@ include::{snippets-dir}/configuration/AutoClearWebStorageConfigSpec.groovy[tag=c
 
 The {configuration-api} object also has setters for all of the config properties it exposes, allowing you to override config properties at runtime in particular circumstances if you need to.
 
-For example, you may have one Spock spec that requires the `autoClearCookies` property to be disabled. You could disable it for just this spec by doing something like…
+For example, you may have one Spock spec that requires the `autoClearCookies` property to be disabled. You could disable it for just this spec by doing something like...
 
 [source,groovy]
 ----

@@ -27,7 +27,7 @@ class WithNewWindowSpec extends DriveMethodSupportingSpecWithServer {
         given:
         server.responseHtml """
             // tag::html[]
-            <a href="http://groovy.apache.org/geb/" target="_blank">Geb</a>
+            <a href="https://groovy.apache.org/geb/" target="_blank">Geb</a>
             // end::html[]
         """
 
@@ -57,7 +57,7 @@ class WithNewWindowSpec extends DriveMethodSupportingSpecWithServer {
                 </script>
             </head>
             // tag::waiting_html[]
-            <a href="http://google.com" target="_blank" id="new-window-link">Google</a>
+            <a href="https://google.com" target="_blank" id="new-window-link">Google</a>
             // end::waiting_html[]
         """
 
