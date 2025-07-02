@@ -120,6 +120,13 @@ You might be wondering why the order has been changed (i.e. the arguments go _be
 include::{snippets-dir}/javascript/ExecutingArbitraryCodeSpec.groovy[tag=multiline,indent=0]
 ----
 
+Alternatively, you can give a `Closure` as last argument that returns the script to enable the following syntax...
+
+[source,groovy]
+----
+include::{snippets-dir}/javascript/ExecutingArbitraryCodeSpec.groovy[tag=closure,indent=0]
+----
+
 [[waiting]]
 == Waiting
 
