@@ -47,14 +47,16 @@ publishing {
             }
             developers {
                 developer {
-                    id = "alkemist"
-                    name = "Luke Daley"
-                    roles = ["Founder"]
+                    id = "paulk-asert"
+                    name = "Paul King"
                 }
                 developer {
-                    id = "erdi"
-                    name = "Marcin Erdmann"
-                    roles = ["Lead"]
+                    id = "jonnybot"
+                    name = "Jonny Carter"
+                }
+                developer {
+                    id = "sdelamo"
+                    name = " Sergio del Amo"
                 }
             }
         }
