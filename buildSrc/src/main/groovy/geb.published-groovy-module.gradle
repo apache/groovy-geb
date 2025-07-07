@@ -54,3 +54,7 @@ publishing {
         }
     }
 }
+
+tasks.register("publishJarsAndManual") {
+    dependsOn 'publishMainPublicationToApacheRepository'
+}
