@@ -41,7 +41,7 @@ dependencies {
 
 gradlePlugin {
     website = "https://groovy.apache.org/geb/manual/current/#gradle-plugins"
-    vcsUrl = "https://github.com/geb/geb"
+    vcsUrl = "https://github.com/apache/groovy-geb"
 }
 
 apply from: 'plugin-definitions.gradle'
