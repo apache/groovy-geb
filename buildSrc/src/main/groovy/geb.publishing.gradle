@@ -56,7 +56,7 @@ publishing {
                 }
                 developer {
                     id = "sdelamo"
-                    name = " Sergio del Amo"
+                    name = "Sergio del Amo"
                 }
             }
         }
