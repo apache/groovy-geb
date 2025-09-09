@@ -174,7 +174,11 @@ def apiDocTask = tasks.register("apiDoc", Groovydoc) {
 
 def packageManualTask = tasks.register("packageManual", Sync) {
     into project.layout.buildDirectory.dir('manual')
-    from asciidoctor
+    from(asciidoctor, rootProject.layout.projectDirectory.files('LICENSE'))
+
+    from(rootProject.layout.projectDirectory.dir('licenses')) {
+        into 'licenses'
+    }
 
     into("api") {
         from apiDocTask
