@@ -178,7 +178,7 @@
    APPENDIX: How to apply the Apache License to your work.
 
       To apply the Apache License to your work, attach the following
-      boilerplate notice, with the fields enclosed by brackets "{}"
+      boilerplate notice, with the fields enclosed by brackets "[]"
       replaced with your own identifying information. (Don't include
       the brackets!)  The text should be enclosed in the appropriate
       comment syntax for the file format. We also recommend that a
@@ -186,7 +186,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright {yyyy} {name of copyright owner}
+   Copyright [yyyy] [name of copyright owner]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -199,132 +199,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
-------------------------------------------------------------------------
-
-JQuery License
-
-The following files are used within documentation and test sources:
-
-    doc/manual-snippets/real-browser/src/test/resources/jquery-2.1.4.min.js
-    doc/manual-snippets/src/test/resources/jquery-2.1.4.min.js
-    doc/site/public/js/jquery.min.js
-    internal/test-support/src/main/resources/jquery-1.4.2.min.js
-
-These files are made available under the following MIT license:
-licenses/jquery-js-license.txt
-
-------------------------------------------------------------------------
-
-Font Awesome License
-
-The following files are used within documentation:
-
-    doc/site/src/main/resources/public/css/font-awesome.min.css
-    doc/site/public/css/font-awesome.min.css
-    doc/site/public/fonts/fontawesome-webfont.eot
-    doc/site/public/fonts/fontawesome-webfont.svg
-    doc/site/public/fonts/fontawesome-webfont.woff
-    doc/site/public/fonts/fontawesome-webfont.woff2
-
-These files are made available under the following MIT license:
-licenses/font-awesome-license.txt
-
-------------------------------------------------------------------------
-
-Semantic UI License
-
-The following file is used within documentation:
-
-    doc/site/public/js/semantic.min.js
-
-This file is made available under the following MIT license:
-
-licenses/semantic-ui-license.txt
-
-------------------------------------------------------------------------
-
-Code Prettify License
-
-The following file is used within documentation:
-
-    doc/site/public/js/prettify.min.js
-
-This file is made available under following Apache 2.0 License.
-
-licenses/google-prettify-license.txt
-
-------------------------------------------------------------------------
-
-Syntax Highlighter License
-
-The following files are used within documentation:
-
-    doc/site/public/js/shCore.js
-    doc/site/public/js/shBrushGroovy.js
-
-These files are made available under following MIT License:
-licenses/syntax-highlighter-license.txt
-
-------------------------------------------------------------------------
-
-Lato Font License
-
-The following files are used within documentation:
-
-    doc/site/public/fonts/lato_v24/S6u8w4BMUTPHjxsAXC-v.ttf
-    doc/site/public/fonts/lato_v24/S6u9w4BMUTPHh6UVSwiPHA.ttf
-    doc/site/public/fonts/lato_v24/S6u_w4BMUTPHjxsI5wq_Gwfo.ttf
-    doc/site/public/fonts/lato_v24/S6uyw4BMUTPHjx4wWw.ttf
-
-These files are made available under following OpenFont License:
-licenses/lato-license.txt
-
-------------------------------------------------------------------------
-
-MavenPro Font License
-
-The following file is used within documentation:
-
-    doc/site/public/fonts/mavenpro_v36/7Auup_AqnyWWAxW2Wk3swUz56MS91Eww8SX21nejpw.ttf
-
-This file is made available under following OpenFont license.
-licenses/mavenpro-license.txt
-
-------------------------------------------------------------------------
-
-Roboto Font License
-
-The following file is used within documentation:
-
-    doc/site/public/fonts/roboto_v47/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmUiA8.ttf
-
-This file is made available under following OpenFont license.
-licenses/roboto-license.txt
-
-------------------------------------------------------------------------
-
-Roboto Slab Font License
-
-The following file is used within documentation:
-
-    doc/site/public/fonts/robotoslab_v34/BngbUXZYTXPIvIBgJJSb6s3BzlRRfKOFbvjojISmb2Rm.ttf
-
-This file is made available under following Apache 2.0 license.
-licenses/roboto-slab-license.txt
-
-------------------------------------------------------------------------
-
-Source Code Pro Font License
-
-The following files are used within documentation:
-
-    doc/site/public/fonts/sourcecodepro_v23/HI_diYsKILxRpg3hIP6sJ7fM7PqPMcMnZFqUwX28DCuXtMlrSQ.ttf
-    doc/site/public/fonts/sourcecodepro_v23/HI_diYsKILxRpg3hIP6sJ7fM7PqPMcMnZFqUwX28DP6QtMlrSQ.ttf
-
-This file is made available under following Apache 2.0 license.
-licenses/sourcecodepro-license.txt
-
-------------------------------------------------------------------------
-
