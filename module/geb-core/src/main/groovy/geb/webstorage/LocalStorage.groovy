@@ -18,49 +18,50 @@
  */
 package geb.webstorage
 
-import org.openqa.selenium.html5.WebStorage as SeleniumWebStorage
-import org.openqa.selenium.html5.LocalStorage as SeleniumLocalStorage
+import geb.js.JavascriptInterface
 
 class LocalStorage implements WebStorage {
 
-    private final SeleniumWebStorage webStorage
+    private final JavascriptInterface js
 
-    LocalStorage(SeleniumWebStorage webStorage) {
-        this.webStorage = webStorage
+    LocalStorage(JavascriptInterface js) {
+        this.js = js
     }
 
     @Override
     String getAt(String key) {
-        localStorage.getItem(key)
+        js.exec(key, 'return window.localStorage.getItem(arguments[0]);')
     }
 
     @Override
     void putAt(String key, String value) {
-        localStorage.setItem(key, value)
+        js.exec(key, value, 'window.localStorage.setItem(arguments[0], arguments[1]);')
     }
 
     @Override
     void remove(String key) {
-        localStorage.removeItem(key)
+        js.exec(key, 'window.localStorage.removeItem(arguments[0]);')
     }
 
     @Override
     Set<String> keySet() {
-        localStorage.keySet()
+        js.exec('''
+            var out = [];
+            for (var i = 0; i < window.localStorage.length; i++) {
+                out.push(window.localStorage.key(i));
+            }
+            return out;
+        ''') as Set<String>
     }
 
     @Override
     int size() {
-        localStorage.size()
+        (js.exec('return window.localStorage.length;') as Number).intValue()
     }
 
     @Override
     void clear() {
-        localStorage.clear()
-    }
-
-    private SeleniumLocalStorage getLocalStorage() {
-        webStorage.localStorage
+        js.exec('window.localStorage.clear();')
     }
 
 }

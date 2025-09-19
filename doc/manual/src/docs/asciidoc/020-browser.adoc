@@ -480,11 +480,6 @@ include::{rb-snippets-dir}/browser/WebStorageSpec.groovy[tag=write_and_read]
 
 Both `localStorage` and `sessionStorage` properties are of `geb.webstorage.WebStorage` type - please refer to link:api/geb/webstorage/WebStorage.html[its javadoc] for information about other operations that are supported apart from reading and writing values.
 
-[WARNING]
-====
-Not all driver implementations support accessing web storage. When trying to access web storage when using a driver that doesn't support it `geb.error.WebStorageNotSupportedException` will be thrown.
-====
-
 [[quitting-the-browser]]
 == Quitting the browser
 

@@ -23,7 +23,6 @@ import geb.driver.RemoteDriverOperations
 import geb.error.IncorrectDriverTypeException
 import geb.error.NoNewWindowException
 import geb.error.UnexpectedPageException
-import geb.error.WebStorageNotSupportedException
 import geb.js.JavascriptInterface
 import geb.navigator.factory.NavigatorFactory
 import geb.report.ReportState
@@ -35,7 +34,6 @@ import geb.webstorage.WebStorage
 import org.openqa.selenium.NoSuchWindowException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
-import org.openqa.selenium.html5.WebStorage as SeleniumWebStorage
 
 import java.time.Duration
 
@@ -944,7 +942,7 @@ class Browser {
      * @see geb.webstorage.WebStorage
      */
     WebStorage getLocalStorage() {
-        new LocalStorage(seleniumWebStorage)
+        new LocalStorage(js)
     }
 
     /**
@@ -953,7 +951,7 @@ class Browser {
      * @see geb.webstorage.WebStorage
      */
     WebStorage getSessionStorage() {
-        new SessionStorage(seleniumWebStorage)
+        new SessionStorage(js)
     }
 
     void verifyAtImplicitly(Class<? extends Page> targetPage) {
@@ -1083,12 +1081,6 @@ class Browser {
             throw new NoNewWindowException(message)
         }
         newWindows.first()
-    }
-
-    private SeleniumWebStorage getSeleniumWebStorage() {
-        driverAs(SeleniumWebStorage).orElseThrow {
-            new WebStorageNotSupportedException()
-        }
     }
 
     private String toQueryString(Map params) {
