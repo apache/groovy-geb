@@ -18,49 +18,50 @@
  */
 package geb.webstorage
 
-import org.openqa.selenium.html5.SessionStorage as SeleniumSessionStorage
-import org.openqa.selenium.html5.WebStorage as SeleniumWebStorage
+import geb.js.JavascriptInterface
 
 class SessionStorage implements WebStorage {
 
-    private final SeleniumWebStorage webDriver
+    private final JavascriptInterface js
 
-    SessionStorage(SeleniumWebStorage webDriver) {
-        this.webDriver = webDriver
+    SessionStorage(JavascriptInterface js) {
+        this.js = js
     }
 
     @Override
     String getAt(String key) {
-        sessionStorage.getItem(key)
+        js.exec(key, 'return window.sessionStorage.getItem(arguments[0]);')
     }
 
     @Override
     void putAt(String key, String value) {
-        sessionStorage.setItem(key, value)
+        js.exec(key, value, 'window.sessionStorage.setItem(arguments[0], arguments[1]);')
     }
 
     @Override
     void remove(String key) {
-        sessionStorage.removeItem(key)
+        js.exec(key, 'window.sessionStorage.removeItem(arguments[0]);')
     }
 
     @Override
     Set<String> keySet() {
-        sessionStorage.keySet()
+        js.exec('''
+            var out = [];
+            for (var i = 0; i < window.sessionStorage.length; i++) {
+                out.push(window.sessionStorage.key(i));
+            }
+            return out;
+        ''') as Set<String>
     }
 
     @Override
     int size() {
-        sessionStorage.size()
+        (js.exec('return window.sessionStorage.length;') as Number).intValue()
     }
 
     @Override
     void clear() {
-        sessionStorage.clear()
-    }
-
-    private SeleniumSessionStorage getSessionStorage() {
-        webDriver.sessionStorage
+        js.exec('window.sessionStorage.clear();')
     }
 
 }
