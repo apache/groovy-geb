@@ -45,13 +45,7 @@ class LocalStorage implements WebStorage {
 
     @Override
     Set<String> keySet() {
-        js.exec('''
-            var out = [];
-            for (var i = 0; i < window.localStorage.length; i++) {
-                out.push(window.localStorage.key(i));
-            }
-            return out;
-        ''') as Set<String>
+        js.exec('Object.keys(window.localStorage);') as Set<String>
     }
 
     @Override
