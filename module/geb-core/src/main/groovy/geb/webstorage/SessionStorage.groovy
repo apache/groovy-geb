@@ -45,7 +45,7 @@ class SessionStorage implements WebStorage {
 
     @Override
     Set<String> keySet() {
-        js.exec('Object.keys(window.sessionStorage);') as Set<String>
+        js.exec('return Object.keys(window.sessionStorage);') as Set<String>
     }
 
     @Override
