@@ -30,6 +30,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.api.parallel.Execution
@@ -39,6 +40,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import static java.util.concurrent.TimeUnit.SECONDS
 import static org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT
 
+@Disabled("https://github.com/geb/geb/issues/188")
 @Execution(CONCURRENT)
 class ParallelExecutionTest extends ConfigModifyingGebTest {
     public static classExecutionExclusivityLock = new Semaphore(1)
@@ -166,6 +168,7 @@ abstract class AbstractParallelExecutionWithReportingTest extends ConfigModifyin
     }
 }
 
+@Disabled("https://github.com/geb/geb/issues/188")
 class ParallelExecutionWithReportingTest1 extends AbstractParallelExecutionWithReportingTest {
     @RegisterExtension
     public static CallbackServerExtension callbackServerExtension = new CallbackServerExtension(testManager)
@@ -174,6 +177,7 @@ class ParallelExecutionWithReportingTest1 extends AbstractParallelExecutionWithR
     public static File temporaryDir
 }
 
+@Disabled("https://github.com/geb/geb/issues/188")
 class ParallelExecutionWithReportingTest2 extends AbstractParallelExecutionWithReportingTest {
     @RegisterExtension
     public static CallbackServerExtension callbackServerExtension = new CallbackServerExtension(testManager)

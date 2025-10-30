@@ -18,11 +18,13 @@
  */
 package geb.driver
 
+import geb.test.GebSpec
+import org.openqa.selenium.NoSuchSessionException
 import org.openqa.selenium.WebDriver
-import spock.lang.Specification
+import spock.lang.Issue
 import spock.util.concurrent.BlockingVariable
 
-class CachingDriverFactorySpec extends Specification {
+class CachingDriverFactorySpec extends GebSpec {
     def "global driver and per-thread driver factories are independent"() {
         given:
         def stubFactory = Stub(DriverFactory)
@@ -41,5 +43,19 @@ class CachingDriverFactorySpec extends Specification {
         globalDriver1 == globalDriver2.get()
         globalDriver1 != perThreadDriver1
         perThreadDriver1 != perThreadDriver2.get()
+    }
+
+    @Issue("https://github.com/apache/groovy-geb/issues/288")
+    def "first driver should quit after clear cache and quit driver"() {
+        given:
+        def firstDriver = browser.driver
+
+        when:
+        CachingDriverFactory.clearCacheAndQuitDriver()
+        browser.driver = firstDriver
+        go('https://groovy.apache.org/geb/manual/snapshot/')
+
+        then:
+        thrown(NoSuchSessionException)
     }
 }
