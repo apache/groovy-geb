@@ -44,8 +44,9 @@ class CachingDriverFactory implements DriverFactory {
     }
 
     static WebDriver clearCache() {
-        GLOBAL_CACHE.get { null }?.clear()
-        PER_THREAD_CACHE.get { null }?.clear()
+        def globalDriver = GLOBAL_CACHE.get { null }?.clear()
+        def perThreadDriver = PER_THREAD_CACHE.get { null }?.clear()
+        return globalDriver ?: perThreadDriver
     }
 
     static WebDriver clearCacheAndQuitDriver() {
