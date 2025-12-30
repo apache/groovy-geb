@@ -23,9 +23,9 @@ import geb.gradle.lambdatest.LambdaTestAccount
 plugins {
     id 'geb.api-module'
     id 'geb.dockerised-test'
-    id 'org.gebish.browserstack'
-    id 'org.gebish.saucelabs'
-    id 'org.gebish.lambdatest'
+    id 'org.apache.groovy.geb.browserstack'
+    id 'org.apache.groovy.geb.saucelabs'
+    id 'org.apache.groovy.geb.lambdatest'
     id 'geb.all-sources-configuration'
 }
 

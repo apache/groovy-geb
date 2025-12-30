@@ -196,7 +196,7 @@ Kotlin::
 import geb.gradle.saucelabs.SauceAccount
 
 plugins {
-    id("org.gebish.saucelabs") version "{geb-version}" //<1>
+    id("org.apache.groovy.geb.saucelabs") version "{geb-version}" //<1>
 }
 
 dependencies { //<2>
@@ -245,7 +245,7 @@ Groovy::
 import geb.gradle.saucelabs.SauceAccount
 
 plugins {
-    id "org.gebish.saucelabs" version "{geb-version}" //<1>
+    id "org.apache.groovy.geb.saucelabs" version "{geb-version}" //<1>
 }
 
 dependencies { //<2>
@@ -335,7 +335,7 @@ Kotlin::
 import geb.gradle.browserstack.BrowserStackAccount
 
 plugins {
-    id("org.gebish.browserstack") version "{geb-version}" //<1>
+    id("org.apache.groovy.geb.browserstack") version "{geb-version}" //<1>
 }
 
 browserStack {
@@ -380,7 +380,7 @@ Groovy::
 import geb.gradle.browserstack.BrowserStackAccount
 
 plugins {
-    id "org.gebish.browserstack" version "{geb-version}" //<1>
+    id "org.apache.groovy.geb.browserstack" version "{geb-version}" //<1>
 }
 
 browserStack {
@@ -528,7 +528,7 @@ Kotlin::
 import geb.gradle.lambdatest.LambdaTestAccount
 
 plugins {
-    id("org.gebish.lambdatest") version "{geb-version}" //<1>
+    id("org.apache.groovy.geb.lambdatest") version "{geb-version}" //<1>
 }
 
 lambdaTest {
@@ -563,7 +563,7 @@ Groovy::
 import geb.gradle.lambdatest.LambdaTestAccount
 
 plugins {
-    id "org.gebish.lambdatest" version "{geb-version}" //<1>
+    id "org.apache.groovy.geb.lambdatest" version "{geb-version}" //<1>
 }
 
 lambdaTest {
