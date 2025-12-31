@@ -46,6 +46,14 @@ class CachingDriverFactory implements DriverFactory {
         CACHE.get { null }?.clear()
     }
 
+    /**
+     * Note: When using a perThread cache and executing multiple tests in parallel, it is possible to inadvertently
+     * quit a driver in one thread that is being used by another, depending on how your test runner handles parallel
+     * execution. The only known case of this is in JUnit's `@BeforeAll` and `@AfterAll` lifecycle extension methods
+     * on multiple classes annotated with `@Execution(CONCURRENT)`, but there may be others.
+     *
+     * Implicit driver lifecycle management is your friend.
+     */
     static WebDriver clearCacheAndQuitDriver() {
         def driver = clearCache()
         driver?.quit()

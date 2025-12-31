@@ -53,8 +53,6 @@ class ParallelExecutionTest extends ConfigModifyingGebTest {
     static void setupClass() {
         classExecutionExclusivityLock.acquire()
         classOrderLatch.countDown()
-        CachingDriverFactory.clearCacheAndQuitDriver()
-        CachingDriverFactory.clearCacheCache()
         callbackServerExtension.server.html { HttpServletRequest request ->
             body {
                 div "${request.requestURI.toURI().path}"
@@ -64,7 +62,6 @@ class ParallelExecutionTest extends ConfigModifyingGebTest {
 
     @AfterAll
     static void tearDownClass() {
-        CachingDriverFactory.clearCacheCache()
         classExecutionExclusivityLock.release(2)
     }
 
@@ -102,8 +99,6 @@ abstract class AbstractParallelExecutionWithReportingTest extends ConfigModifyin
     static void setupClass() {
         ParallelExecutionTest.classOrderLatch.await()
         ParallelExecutionTest.classExecutionExclusivityLock.acquire()
-        CachingDriverFactory.clearCacheAndQuitDriver()
-        CachingDriverFactory.clearCacheCache()
         clazz.callbackServerExtension.server.html { HttpServletRequest request ->
             body {
                 div "${request.requestURI.toURI().path}"
@@ -121,7 +116,6 @@ abstract class AbstractParallelExecutionWithReportingTest extends ConfigModifyin
         // still used by the other class by synchronizing
         // again using a count down latch
         executionOfTestsCompleteLatch.await()
-        CachingDriverFactory.clearCacheCache()
         assert reportFileTestCounterPrefixes(clazz) == '001'..'004'
     }
 

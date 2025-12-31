@@ -57,6 +57,21 @@ After calling any of these methods, the next request for a default driver will r
 
 This caching behavior is <<driver-caching-configuration,configurable>>.
 
+[WARNING]
+====
+Clearing the webdriver cache in this way is generally safe, though there is a known gotcha for JUnit 5 tests running in parallel.
+If you have multiple test classes running in parallel and call `{clear-browser-cache-api}` or `{clear-browser-cache-and-quit-api}` in methods annotated with link:https://docs.junit.org/5.0.1/api/org/junit/jupiter/api/BeforeAll.html[@BeforeAll] or link:https://docs.junit.org/5.0.1/api/org/junit/jupiter/api/AfterAll.html[@AfterAll] the tests may fail intermittently with errors such as:
+
+* `org.openqa.selenium.NoSuchSessionException: Session is closed`
+* `org.openqa.selenium.WebDriverException: org.openqa.selenium.NoSuchWindowException: Window is closed`
+* `java.util.concurrent.RejectedExecutionException: Task org.openqa.selenium.htmlunit.HtmlUnitDriver$$Lambda$972/0x0000000100572c40@39b402c9 rejected from java.util.concurrent.ThreadPoolExecutor@4fd3fc52[Terminated, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 4]`
+
+This is because the `cacheDriverPerThread` setting keeps the webdriver in a ThreadLocal. Since BeforeAll and AfterAll methods on different test classes annotated with `@Execution(CONCURRENT)` may execute on the same thread, it's possible to inadvertently quit the driver being used by another test currently executing on the same thread, leading to errors like those above.
+
+If you're relying on the implicit driver management to clean up the driver objects for you, you should be fine.
+Likewise, clearing the driver cache in methods annotated with link:https://docs.junit.org/5.0.1/api/org/junit/jupiter/api/BeforeEach.html[`@BeforeEach`] and link:https://docs.junit.org/5.0.1/api/org/junit/jupiter/api/AfterEach.html[`@AfterEach`] should be fine, since parallel test methods (and test-specific lifecycle methods) should be executed in the same thread. It's only in the `@BeforeAll`/`@AfterAll` case that you need to be careful.
+====
+
 == Driver quirks
 
 This section details various quirks or issues that have been encountered with different driver implementations.
