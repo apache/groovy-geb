@@ -28,7 +28,6 @@ import spock.util.EmbeddedSpecRunner
 
 import javax.servlet.http.HttpServletRequest
 
-@Ignore("https://github.com/geb/geb/issues/188")
 class ParallelExecutionSpec extends Specification {
 
     EmbeddedSpecRunner specRunner = new EmbeddedSpecRunner(
@@ -187,8 +186,8 @@ class ParallelExecutionSpec extends Specification {
 
         then:
         !result.failures*.exception
-        reportFileTestCounterPrefixes("SpecRunningIterationsInParallel1") == (["000"] * 2) + (1..4)*.toString()*.padLeft(3, "0")
-        reportFileTestCounterPrefixes("SpecRunningIterationsInParallel2") == (["000"] * 2) + (1..4)*.toString()*.padLeft(3, "0")
+        reportFileTestCounterPrefixes("SpecRunningIterationsInParallel1") == (["000"] * 2) + ('001'..'004')
+        reportFileTestCounterPrefixes("SpecRunningIterationsInParallel2") == (["000"] * 2) + ('001'..'004')
     }
 
     private List<String> reportFileTestCounterPrefixes(String className) {
