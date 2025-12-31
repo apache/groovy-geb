@@ -21,21 +21,21 @@ List<String> pluginTags = ["geb", "testing", "cloud", "browser"]
 gradlePlugin {
     plugins {
         sauceLabsPlugin {
-            id = 'org.gebish.saucelabs'
+            id = 'org.apache.groovy.geb.saucelabs'
             displayName = "Geb Sauce Labs plugin"
             description = "A plugin that simplifies running Geb tests at Sauce Labs"
             implementationClass = 'geb.gradle.saucelabs.SaucePlugin'
             tags = pluginTags
         }
         browserStackPlugin {
-            id = 'org.gebish.browserstack'
+            id = 'org.apache.groovy.geb.browserstack'
             displayName = "Geb BrowserStack plugin"
             description = "A plugin that simplifies running Geb tests at BrowserStack"
             implementationClass = 'geb.gradle.browserstack.BrowserStackPlugin'
             tags = pluginTags
         }
         lambdaTestPlugin {
-            id = 'org.gebish.lambdatest'
+            id = 'org.apache.groovy.geb.lambdatest'
             displayName = "Geb LambdaTest plugin"
             description = "A plugin that simplifies running Geb tests at LambdaTest"
             implementationClass = 'geb.gradle.lambdatest.LambdaTestPlugin'
