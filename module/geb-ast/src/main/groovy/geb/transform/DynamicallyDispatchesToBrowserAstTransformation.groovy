@@ -22,6 +22,7 @@ import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.MethodNode
 import org.codehaus.groovy.ast.Parameter
+import org.codehaus.groovy.ast.stmt.ExpressionStatement
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.control.SourceUnit
@@ -31,6 +32,7 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import static org.codehaus.groovy.ast.ClassHelper.OBJECT_TYPE
 import static org.codehaus.groovy.ast.ClassHelper.STRING_TYPE
 import static groovyjarjarasm.asm.Opcodes.ACC_PUBLIC
+import static org.codehaus.groovy.ast.ClassHelper.VOID_TYPE
 import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
 
@@ -54,28 +56,28 @@ class DynamicallyDispatchesToBrowserAstTransformation extends AbstractASTTransfo
         def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, "args"))
         def code = macro { return getBrowser()."$name"(*args) } as Statement
 
-        addMethod(classNode, "methodMissing", parameters, code)
+        addMethod(classNode, "methodMissing", parameters, code, OBJECT_TYPE)
     }
 
     private void addMissingPropertySetter(ClassNode classNode) {
         def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, "value"))
-        def code = macro { return getBrowser()."$name" = value } as Statement
+        def code = new ExpressionStatement(macro { getBrowser()."$name" = value })
 
-        addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code)
+        addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code, VOID_TYPE)
     }
 
     private void addMissingPropertyGetter(ClassNode classNode) {
         def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME))
         def code = macro { return getBrowser()."$name" } as Statement
 
-        addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code)
+        addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code, OBJECT_TYPE)
     }
 
-    private void addMethod(ClassNode classNode, String methodName, Parameter[] parameters, Statement code) {
+    private void addMethod(ClassNode classNode, String methodName, Parameter[] parameters, Statement code, ClassNode returnType) {
         def methodNode = new MethodNode(
                 methodName,
                 ACC_PUBLIC,
-                OBJECT_TYPE,
+                returnType,
                 parameters,
                 [] as ClassNode[],
                 code
