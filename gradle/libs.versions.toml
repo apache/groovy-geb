@@ -36,6 +36,7 @@ commons-fileupload = 'commons-fileupload:commons-fileupload:1.5'
 gebSpockGroovy25 = 'org.gebish:geb-spock:4.0'
 grolifant = 'org.ysb33r.gradle:grolifant80:4.0.0'
 groovy-bom = { module = 'org.apache.groovy:groovy-bom', version.ref = 'groovy' }
+groovy-lang = { module = 'org.apache.groovy:groovy', version.ref = 'groovy' }
 groovy25 = 'org.codehaus.groovy:groovy-all:2.5.23'
 guava = 'com.google.guava:guava:33.4.0-jre'
 htmlUnitDriver = { module = 'org.seleniumhq.selenium:htmlunit-driver', version.ref = 'htmlUnitDriver' }
@@ -54,6 +55,7 @@ micronaut-http-client = { module = 'io.micronaut:micronaut-http-client' }
 micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
 logback-classic = { module = "ch.qos.logback:logback-classic" }
 
+junit-bom = { module = 'org.junit:junit-bom', version.ref = 'junit5' }
 junit5-jupiter-api = { module = 'org.junit.jupiter:junit-jupiter-api', version.ref = 'junit5' }
 junit5-jupiter-engine = { module = 'org.junit.jupiter:junit-jupiter-engine', version.ref = 'junit5' }
 junit5-jupiter-params = { module = 'org.junit.jupiter:junit-jupiter-params', version.ref = 'junit5' }

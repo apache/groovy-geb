@@ -56,6 +56,8 @@ include "module",
     "doc:manual-snippets:real-browser",
     "doc:site"
 
+includeBuild 'geb-examples'
+
 rootProject.name = 'geb'
 
 def setBuildFile(project) {
