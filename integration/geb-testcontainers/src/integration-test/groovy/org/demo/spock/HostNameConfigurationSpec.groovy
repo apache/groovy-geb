@@ -1,0 +1,48 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *    https://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+package org.demo.spock
+
+import org.demo.spock.pages.HomePage
+import grails.plugin.geb.ContainerGebConfiguration
+import spock.lang.Title
+
+/**
+ * See https://grails.apache.org/docs/latest/guide/testing.html#functionalTesting and https://groovy.apache.org/geb/manual/current/
+ * for more instructions on how to write functional tests with Grails and Geb.
+ */
+@Title("host name configuration test")
+@ContainerGebConfiguration(hostName = 'testing.example.com')
+class HostNameConfigurationSpec extends ContainerGebSpecWithServer {
+
+    def "should show the right server name when visiting home page"() {
+        when: "visiting the hpme page with a configured host name"
+        to(HomePage)
+
+        then: "the page text is correct"
+        $('p').text() == 'This page is served by a local JWebServer.'
+        and: "the emitted hostname is correct"
+        currentUrl == "http://testing.example.com:8090/"
+    }
+
+    def cleanup() {
+        sleep(1000) // give the last video time to copy
+    }
+
+}
