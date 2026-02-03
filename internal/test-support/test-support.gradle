@@ -29,6 +29,10 @@ dependencies {
     api libs.jetty.servlet
     api libs.selenium.grid
 
+    api libs.selenium.chrome.driver
+    api libs.selenium.firefox.driver
+    api libs.selenium.edge.driver
+
     implementation libs.testcontainers.selenium
     implementation libs.jetty.server
     testRuntimeOnly libs.junit.platform.launcher
