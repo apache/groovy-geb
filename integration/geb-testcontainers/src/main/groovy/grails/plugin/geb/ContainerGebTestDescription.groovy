@@ -39,8 +39,8 @@ class ContainerGebTestDescription implements TestDescription {
         testId = [
                 testInfo.feature.spec.displayName,
                 testInfo.feature.displayName,
-                testInfo.displayName != testInfo.feature.displayName ? testInfo.displayName : null,
-                testInfo.displayName != testInfo.feature.displayName ? testInfo.iterationIndex : null
+                testInfo.displayName == testInfo.feature.displayName ? null : testInfo.displayName,
+                testInfo.displayName == testInfo.feature.displayName ? null : testInfo.iterationIndex
         ].findAll(/* Remove nulls */).join(' ')
 
         def safeName = testId.replaceAll('\\W+', '_')

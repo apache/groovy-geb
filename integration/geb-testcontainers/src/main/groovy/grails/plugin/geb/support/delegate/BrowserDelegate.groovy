@@ -386,7 +386,7 @@ trait BrowserDelegate {
      * Delegates to {@link geb.Browser#setNetworkLatency(Duration)}.
      */
     void setNetworkLatency(Duration duration) {
-        browser.setNetworkLatency(duration)
+        browser.networkLatency = duration
     }
 
     /**

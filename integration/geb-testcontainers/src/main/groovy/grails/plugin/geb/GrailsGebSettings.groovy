@@ -89,35 +89,6 @@ class GrailsGebSettings {
         this.startTime = startTime
     }
 
-    private static boolean getBooleanProperty(String propertyName, boolean defaultValue) {
-        Boolean.parseBoolean(System.getProperty(propertyName, defaultValue.toString()))
-    }
-
-    private static int getIntProperty(String propertyName, int defaultValue) {
-        Integer.getInteger(propertyName, defaultValue) ?: defaultValue
-    }
-
-    private static Number getNumberProperty(String propertyName, Number defaultValue) {
-        def propValue = System.getProperty(propertyName)
-        if (propValue) {
-            try {
-                if (propValue.contains('.')) {
-                    return new BigDecimal(propValue)
-                } else {
-                    return Integer.parseInt(propValue)
-                }
-            } catch (NumberFormatException ignored) {
-                log.warn(
-                        'Could not parse property [{}] with value [{}] as a Number. Using default value [{}] instead.',
-                        propertyName,
-                        propValue,
-                        defaultValue
-                )
-            }
-        }
-        return defaultValue
-    }
-
     boolean isRecordingEnabled() {
         recordingMode != VncRecordingMode.SKIP
     }
@@ -136,6 +107,34 @@ class GrailsGebSettings {
             return null
         }
         createDirectory(reportingDirectoryName, 'reporting')
+    }
+
+    private static boolean getBooleanProperty(String propertyName, boolean defaultValue) {
+        Boolean.parseBoolean(System.getProperty(propertyName, defaultValue.toString()))
+    }
+
+    private static int getIntProperty(String propertyName, int defaultValue) {
+        System.getProperty(propertyName)?.toInteger() ?: defaultValue
+    }
+
+    private static Number getNumberProperty(String propertyName, Number defaultValue) {
+        def propValue = System.getProperty(propertyName)
+        if (propValue) {
+            try {
+                if (propValue.contains('.')) {
+                    return new BigDecimal(propValue)
+                }
+                return Integer.parseInt(propValue)
+            } catch (NumberFormatException ignored) {
+                log.warn(
+                        'Could not parse property [{}] with value [{}] as a Number. Using default value [{}] instead.',
+                        propertyName,
+                        propValue,
+                        defaultValue
+                )
+            }
+        }
+        return defaultValue
     }
 
     private File createDirectory(String directoryName, String useCase) {

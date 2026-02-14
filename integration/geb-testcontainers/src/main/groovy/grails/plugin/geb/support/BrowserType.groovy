@@ -19,12 +19,24 @@
 package grails.plugin.geb.support
 
 /**
+ * Represents the supported browser types.
  *
+ * <p>This enum defines the available browser options that can be used.</p>
  */
 enum BrowserType {
 
-    CHROME,
-    FIREFOX,
-    EDGE
+    /**
+     * Google Chrome browser.
+     */
 
+    CHROME,
+    /**
+     * Mozilla Firefox browser.
+     */
+    FIREFOX,
+
+    /**
+     * Microsoft Edge browser.
+     */
+    EDGE
 }
