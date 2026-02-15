@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import grails.plugin.geb.ContainerGebConfiguration
@@ -25,7 +24,7 @@ import org.demo.spock.pages.UploadPage
 import org.openqa.selenium.WebDriverException
 
 /**
- * Altered copy of {@link ContainerFileDetectorDefaultSpec} 
+ * Altered copy of {@link ContainerFileDetectorDefaultSpec}
  * that throws {@link org.openqa.selenium.InvalidArgumentException}
  */
 @ContainerGebConfiguration(fileDetector = UselessContainerFileDetector)

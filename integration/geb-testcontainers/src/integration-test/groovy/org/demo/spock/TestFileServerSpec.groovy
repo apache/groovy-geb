@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import grails.plugin.geb.ContainerGebSpec
@@ -34,7 +33,6 @@ class TestFileServerSpec extends ContainerGebSpec {
         server = new TestFileServer()
     }
 
-
     // the config file should contain a 'hostPort = 8090' setting
     def "should use the hostPort con GebConfig.groovy"() {
         given: "a server listening on port 8090"
@@ -49,14 +47,11 @@ class TestFileServerSpec extends ContainerGebSpec {
 
         and: "the welcome header should be displayed"
         $("h1").text() == "Welcome to the Geb/Spock Test"
-
     }
 
     def cleanup() {
         sleep(1000) // give the last video time to copy
         server.stop(0)
     }
-
-
 
 }

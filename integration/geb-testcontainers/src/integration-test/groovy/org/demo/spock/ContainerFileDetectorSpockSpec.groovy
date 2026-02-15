@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import grails.plugin.geb.ContainerFileDetector
@@ -31,11 +30,11 @@ import spock.lang.PendingFeature
  */
 class ContainerFileDetectorSpockSpec extends ContainerGebSpecWithServer {
 
-    def setupSpec(){
+    def setupSpec() {
         ServiceRegistry.setInstance(ContainerFileDetector, new UselessContainerFileDetector())
     }
 
-    def cleanupSpec(){
+    def cleanupSpec() {
         ServiceRegistry.setInstance(ContainerFileDetector, null)
     }
 

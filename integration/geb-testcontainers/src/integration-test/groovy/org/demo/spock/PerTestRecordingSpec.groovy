@@ -16,18 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import grails.plugin.geb.ContainerGebSpec
-import spock.lang.Shared
 import spock.lang.Stepwise
 
 @Stepwise // execute feature methods in declared order
 class PerTestRecordingSpec extends ContainerGebSpec {
-
-    // @Shared
-    // serverPort = 8080 // TODO: this needs to be a configuration
 
     void '(setup) running a test to create a recording'() {
         when: 'visiting the grails home page'
@@ -83,9 +78,10 @@ class PerTestRecordingSpec extends ContainerGebSpec {
 
         and: 'the recording files should have different content (different sizes)'
         // Sort by last modified time to get the most recent files
-        def sortedFiles = recordingFiles.sort { it.lastModified() }
-        def secondLastFile = sortedFiles[sortedFiles.length - 2]
-        def lastFile = sortedFiles[sortedFiles.length - 1]
+        recordingFiles.sort { it.lastModified() }
+        // recordedFiles in now sorted by modified date
+        def secondLastFile = recordingFiles[recordingFiles.length - 2]
+        def lastFile = recordingFiles.last()
 
         // Files should have different sizes (allowing for small variations due to timing)
         long sizeDifference = Math.abs(lastFile.length() - secondLastFile.length())

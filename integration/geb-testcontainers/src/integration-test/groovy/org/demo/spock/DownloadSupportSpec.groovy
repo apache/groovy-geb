@@ -16,12 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import org.demo.spock.pages.HomePage
 import spock.lang.Title
-
 
 @Title("should be able to use download methods")
 class DownloadSupportSpec extends ContainerGebSpecWithServer {
