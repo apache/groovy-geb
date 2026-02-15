@@ -70,7 +70,7 @@ class GrailsContainerGebExtension implements IGlobalExtension {
 
     @Override
     void visitSpec(SpecInfo spec) {
-        if (isContainerGebSpec(spec) ) {
+        if (isContainerGebSpec(spec)) {
             // Do not allow parallel execution since there's only 1 set of containers in testcontainers
             spec.addExclusiveResource(exclusiveResource)
 
@@ -122,6 +122,13 @@ class GrailsContainerGebExtension implements IGlobalExtension {
         }
     }
 
+    private static void addGebExtensionOnFailureReporter(SpecInfo spec) {
+        List<MethodInfo> methods = spec.allFeatures*.featureMethod + spec.allFixtureMethods.toList()
+        methods.each {
+            it.addInterceptor(new GebOnFailureReporter())
+        }
+    }
+
     @TailRecursive
     private boolean isContainerGebSpec(SpecInfo spec) {
         if (spec) {
@@ -131,15 +138,6 @@ class GrailsContainerGebExtension implements IGlobalExtension {
             return isContainerGebSpec(spec.superSpec)
         }
         return false
-    }
-
-
-
-    private static void addGebExtensionOnFailureReporter(SpecInfo spec) {
-        List<MethodInfo> methods = spec.allFeatures*.featureMethod + spec.allFixtureMethods.toList()
-        methods.each {
-            it.addInterceptor(new GebOnFailureReporter())
-        }
     }
 }
 

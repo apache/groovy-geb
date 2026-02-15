@@ -22,13 +22,7 @@ A library to support using Testcontainers in Apache Geb integration testing.
 
 Currently, this library is a work in progress and is not yet ready for production use.
 
-Work is ongoing to fix a number of codenarc issues and remove some remaining Grails references.
-
-To run the build or run tests, you have to exclude the codenarc tasks. 
-
-```shell
-./gradlew check --rerun-tasks -x codenarcMain -x codenarcTest -x codenarcIntegrationTest
-```
+Work is ongoing to remove some remaining Grails references.
 
 ## Geb Functional Testing using Testcontainers
 

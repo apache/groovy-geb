@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import com.sun.net.httpserver.HttpServer
@@ -29,8 +28,6 @@ import java.nio.file.Paths
 class TestFileServer {
 
     static HttpServer server
-
-    TestFileServer() {}
 
     void start() {
         start(8080)
@@ -54,8 +51,6 @@ class TestFileServer {
     void stop() {
         stop(0)
     }
-
-
 
     void stop(int delay) {
         println "Stopping TestFileServer..."

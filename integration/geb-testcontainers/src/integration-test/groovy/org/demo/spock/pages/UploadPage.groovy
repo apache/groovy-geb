@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock.pages
 
 import geb.Page
@@ -32,7 +31,4 @@ class UploadPage extends Page {
         submitBtn { $('button', type: 'submit') }
     }
 
-    void nop() {
-        // no-op
-    }
 }

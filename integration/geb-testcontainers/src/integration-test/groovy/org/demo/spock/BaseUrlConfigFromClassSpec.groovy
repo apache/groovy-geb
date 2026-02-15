@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import grails.plugin.geb.ContainerGebSpec
@@ -28,11 +27,9 @@ import spock.lang.Narrative
 @Narrative("To verify that class field overrides config file.")
 class BaseUrlConfigFromClassSpec extends ContainerGebSpec {
 
-
     String baseUrl = "http://groovy.apache.org"
 
     def "should use the class field value"() {
-
         when: "go to geb sub-page of groovy"
         go "/geb"
 

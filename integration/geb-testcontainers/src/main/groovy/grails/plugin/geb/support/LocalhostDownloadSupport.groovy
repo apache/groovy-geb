@@ -31,7 +31,7 @@ import java.util.regex.Pattern
 @CompileStatic
 class LocalhostDownloadSupport extends DefaultDownloadSupport {
 
-    private final static Pattern urlPattern = ~/(https?:\/\/)([^\/:]+)(:\d+\/.*)/
+    private final static Pattern URL_PATTERN = ~/(https?:\/\/)([^\/:]+)(:\d+\/.*)/
 
     private final String hostNameFromHost
     private final Browser browser
@@ -48,7 +48,7 @@ class LocalhostDownloadSupport extends DefaultDownloadSupport {
     }
 
     private String resolveBase(Map options) {
-        return options.base ?: browser.driver.currentUrl.replaceAll(urlPattern) { match, proto, host, rest ->
+        return options.base ?: browser.driver.currentUrl.replaceAll(URL_PATTERN) { match, proto, host, rest ->
             "${proto}${hostNameFromHost}${rest}"
         }
     }

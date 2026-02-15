@@ -16,9 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
-
 
 import grails.plugin.geb.ContainerGebSpec
 
@@ -37,7 +35,5 @@ class ContainerGebSpecWithServer extends ContainerGebSpec {
     def cleanupSpec() {
         server.stop(0)
     }
-
-
 
 }

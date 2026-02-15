@@ -18,7 +18,6 @@
  */
 package grails.plugin.geb
 
-
 import org.openqa.selenium.firefox.FirefoxOptions
 
 import java.time.Duration
@@ -76,6 +75,8 @@ class WebDriverContainerHolder {
 
     private static final String DEFAULT_HOSTNAME_FROM_HOST = 'localhost'
     private static final String REMOTE_ADDRESS_PROPERTY = 'webdriver.remote.server'
+    private static final String HOST_PORT_PROPERTY = 'hostPort'
+    private static final String BASE_URL_PROPERTY = 'baseUrl'
     private static final String DEFAULT_BROWSER = 'firefox'
 
     GrailsGebSettings settings
@@ -102,85 +103,13 @@ class WebDriverContainerHolder {
 
     boolean matchesCurrentContainerConfiguration(WebDriverContainerConfiguration specConf) {
         specConf == containerConf &&
-                settings.recordingMode == BrowserWebDriverContainer.VncRecordingMode.SKIP
+            settings.recordingMode == BrowserWebDriverContainer.VncRecordingMode.SKIP
     }
-
-    /**
-     * Returns a host port to use for the container in this order:
-     * Class field 'hostPort' if found in the invocation (Spec).
-     * A 'hostPort' property in the GebConfig configuration.
-     * @param methodInvocation
-     * @return
-     */
-    private static int findServerPort(IMethodInvocation methodInvocation) {
-        // use the test class hostPort if specified
-        try {
-            return (int) methodInvocation.instance.metaClass.getProperty(
-                    methodInvocation.instance,
-                    'hostPort'
-            )
-        } catch (ignored) {
-            // Grails throws an IllegalStateException about their annotation here.  We do not.
-            log.info("no hostPort from methodInvocation")
-        }
-
-        try {
-            // use geb config setting or default 8080
-            Configuration gebConfig = new ConfigurationLoader().conf
-            return (int) gebConfig.rawConfig.getProperty('hostPort')
-        } catch (ignored) {
-            log.info("no hostPort in config")
-        }
-
-        log.info("using default hostPort 8080")
-        return 8080
-    }
-
-    /**
-     * Returns a baseUrl from a setting if found in this order:
-     * A class field 'baseUrl' if found in the invocation (Spec).
-     * A 'baseUrl' property in the GebConfig configuration.
-     * Or an empty String if not found.
-     * @param methodInvocation
-     * @return
-     */
-    private static String findBaseUrl(IMethodInvocation methodInvocation) {
-        // use the test class baseUrl if specified
-        try {
-            String baseUrl =  methodInvocation.instance.metaClass.getProperty(
-                    methodInvocation.instance,
-                    'baseUrl'
-            )
-            if (baseUrl) {
-                log.info("using baseUrl: ${baseUrl} from method invocation.")
-                return baseUrl
-            }
-        } catch (ignored) {
-            log.info("no baseUrl from methodInvocation")
-        }
-
-        try {
-            // use geb config setting or default
-            Configuration gebConfig = new ConfigurationLoader().conf
-            String baseUrl = gebConfig.getProperty('baseUrl') ?: ""
-            if (baseUrl != "") {
-                log.info("using baseUrl: ${baseUrl} from configuration.")
-                return baseUrl
-            }
-        } catch (ignored) {
-            log.info("no baseUrl in config.")
-        }
-
-        log.info("no configured baseUrl found.")
-        return ""
-
-    }
-
 
     @PackageScope
     boolean reinitialize(IMethodInvocation methodInvocation) {
         def specConf = new WebDriverContainerConfiguration(
-                methodInvocation.spec
+            methodInvocation.spec
         )
         if (matchesCurrentContainerConfiguration(specConf)) {
             return false
@@ -200,25 +129,25 @@ class WebDriverContainerHolder {
             validateDriverConf(gebConf)
             if (customBrowser) {
                 log.info(
-                        'A \'containerBrowser\' property was found in GebConfig. ' +
-                                "Using [$customBrowser] container image."
+                    'A \'containerBrowser\' property was found in GebConfig. ' +
+                        "Using [$customBrowser] container image."
                 )
                 // Prepare for creating a container matching
                 // the GebConfig `containerBrowser` property.
                 dockerImageName = createDockerImageName(customBrowser)
             } else {
                 log.info(
-                        'No \'containerBrowser\' property found in GebConfig. ' +
-                                "Using default [$DEFAULT_BROWSER] container image."
+                    'No \'containerBrowser\' property found in GebConfig. ' +
+                        "Using default [$DEFAULT_BROWSER] container image."
                 )
             }
         }
 
         containerConf = specConf
         container = new BrowserWebDriverContainer(dockerImageName).withRecordingMode(
-                settings.recordingMode,
-                settings.recordingDirectory,
-                settings.recordingFormat
+            settings.recordingMode,
+            settings.recordingDirectory,
+            settings.recordingFormat
         )
 
         container.with {
@@ -230,11 +159,10 @@ class WebDriverContainerHolder {
 
         startContainer(container, dockerImageName, customBrowser)
 
-
         if (hostnameChanged) {
             container.execInContainer(
-                    '/bin/sh', '-c',
-                    "echo '$hostIp\t$containerConf.hostName' | sudo tee -a /etc/hosts"
+                '/bin/sh', '-c',
+                "echo '$hostIp\t$containerConf.hostName' | sudo tee -a /etc/hosts"
             )
         }
 
@@ -256,9 +184,9 @@ class WebDriverContainerHolder {
             // the `RemoteWebDriver` will be instantiated using the `webdriver.remote.server`
             // system property. We set that property to inform the driver of the container address.
             gebConf.driverConf = ClosureDecorators.withSystemProperty(
-                    gebConf.driverConf as Closure,
-                    REMOTE_ADDRESS_PROPERTY,
-                    container.seleniumAddress
+                gebConf.driverConf as Closure,
+                REMOTE_ADDRESS_PROPERTY,
+                container.seleniumAddress
             )
         } else {
             // If no driver was set in GebConfig, create a Firefox driver
@@ -282,6 +210,144 @@ class WebDriverContainerHolder {
         testManager = createTestManager()
 
         return true
+    }
+
+    void setupBrowserUrl(IMethodInvocation methodInvocation) {
+        if (!browser) {
+            return
+        }
+
+        // use a configured baseUrl if found, otherwise use localhost and hostPort
+        def baseUrl = findBaseUrl(methodInvocation)
+        if (baseUrl != "") {
+            browser.baseUrl = baseUrl
+        } else {
+            int hostPort = findServerPort(methodInvocation)
+            Testcontainers.exposeHostPorts(hostPort)
+            browser.baseUrl = "$containerConf.protocol://$containerConf.hostName:$hostPort"
+        }
+    }
+
+    /**
+     * Returns the hostname that the server under test is available on from the host.
+     * <p>This is useful when using any of the {@code download*()} methods as they will
+     * connect from the host, and not from within the container.
+     *
+     * <p>Defaults to {@code localhost}. If the value returned by {@code webDriverContainer.getHost()}
+     * is different from the default, this method will return the same value same as
+     * {@code webDriverContainer.getHost()}.
+     *
+     * @return the hostname for accessing the server under test from the host
+     */
+    String getHostNameFromHost() {
+        hostNameChanged ? container.host : DEFAULT_HOSTNAME_FROM_HOST
+    }
+
+    /**
+     * Workaround for https://github.com/testcontainers/testcontainers-java/issues/3998
+     * <p>
+     * Restarts the VNC recording container to enable separate recording files for each
+     * test method. This method uses reflection to access the VNC recording container
+     * field in BrowserWebDriverContainer. Should be called BEFORE each test starts.
+     */
+    void restartVncRecordingContainer() {
+        if (!settings.recordingEnabled || !settings.restartRecordingContainerPerTest || !container) {
+            return
+        }
+        try {
+            // Use reflection to access the VNC recording container field
+            def field = BrowserWebDriverContainer.getDeclaredField('vncRecordingContainer').tap {
+                accessible = true
+            }
+
+            def vncContainer = field.get(container) as VncRecordingContainer
+            if (vncContainer) {
+                // Stop the current VNC recording container
+                vncContainer.stop()
+                // Create and start a new VNC recording container for the next test
+                def newVncContainer = new VncRecordingContainer(container)
+                    .withVncPassword('secret')
+                    .withVncPort(5900)
+                    .withVideoFormat(settings.recordingFormat)
+                field.set(container, newVncContainer)
+                newVncContainer.start()
+
+                log.debug('Successfully restarted VNC recording container')
+            }
+        } catch (Exception e) {
+            log.warn("Failed to restart VNC recording container: $e.message", e)
+            // Don't throw the exception to avoid breaking the test execution
+        }
+    }
+
+    /**
+     * Returns a host port to use for the container in this order:
+     * Class field 'hostPort' if found in the invocation (Spec).
+     * A 'hostPort' property in the GebConfig configuration.
+     * @param methodInvocation The method invocation.
+     * @return int The server port.
+     */
+    private static int findServerPort(IMethodInvocation methodInvocation) {
+        // use the test class hostPort if specified
+        try {
+            return (int) methodInvocation.instance.metaClass.getProperty(
+                    methodInvocation.instance,
+                    HOST_PORT_PROPERTY
+            )
+        } catch (ignored) {
+            // Grails throws an IllegalStateException about their annotation here.  We do not.
+            log.info("no ${HOST_PORT_PROPERTY} from methodInvocation")
+        }
+
+        try {
+            // use geb config setting or default 8080
+            Configuration gebConfig = new ConfigurationLoader().conf
+            return (int) gebConfig.rawConfig.getProperty(HOST_PORT_PROPERTY)
+        } catch (ignored) {
+            log.info("no ${HOST_PORT_PROPERTY} in config")
+        }
+
+        log.info("using default ${HOST_PORT_PROPERTY} 8080")
+        return 8080
+    }
+
+    /**
+     * Returns a baseUrl from a setting if found in this order:
+     * A class field 'baseUrl' if found in the invocation (Spec).
+     * A 'baseUrl' property in the GebConfig configuration.
+     * Or an empty String if not found.
+     * @param methodInvocation The method invocation.
+     * @return String The base URL.
+     */
+    private static String findBaseUrl(IMethodInvocation methodInvocation) {
+        // use the test class baseUrl if specified
+        try {
+            String baseUrl =  methodInvocation.instance.metaClass.getProperty(
+                    methodInvocation.instance,
+                    BASE_URL_PROPERTY
+            )
+            if (baseUrl) {
+                log.info("using ${BASE_URL_PROPERTY}: ${baseUrl} from method invocation.")
+                return baseUrl
+            }
+        } catch (ignored) {
+            log.info("no ${BASE_URL_PROPERTY} from methodInvocation")
+        }
+
+        try {
+            // use geb config setting or default
+            Configuration gebConfig = new ConfigurationLoader().conf
+            String baseUrl = gebConfig.getProperty(BASE_URL_PROPERTY) ?: ""
+            if (baseUrl != "") {
+                log.info("using ${BASE_URL_PROPERTY}: ${baseUrl} from configuration.")
+                return baseUrl
+            }
+        } catch (ignored) {
+            log.info("no ${BASE_URL_PROPERTY} in config.")
+        }
+
+        log.info("no configured ${BASE_URL_PROPERTY} found.")
+        return ""
     }
 
     private static Browser createBrowser(Configuration gebConf) {
@@ -313,18 +379,24 @@ class WebDriverContainerHolder {
     private static void applyTimeouts(Browser browser, GrailsGebSettings settings) {
         // Overwrite `GebConfig` timeouts with values explicitly set in
         // `GrailsGebSettings` (via system properties)
-        if (settings.implicitlyWait != DEFAULT_TIMEOUT_IMPLICITLY_WAIT)
+        if (settings.implicitlyWait != DEFAULT_TIMEOUT_IMPLICITLY_WAIT) {
             browser.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(settings.implicitlyWait))
-        if (settings.pageLoadTimeout != DEFAULT_TIMEOUT_PAGE_LOAD)
+        }
+        if (settings.pageLoadTimeout != DEFAULT_TIMEOUT_PAGE_LOAD) {
             browser.driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(settings.pageLoadTimeout))
-        if (settings.scriptTimeout != DEFAULT_TIMEOUT_SCRIPT)
+        }
+        if (settings.scriptTimeout != DEFAULT_TIMEOUT_SCRIPT) {
             browser.driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(settings.scriptTimeout))
-        if (settings.atCheckWaiting != DEFAULT_AT_CHECK_WAITING)
+        }
+        if (settings.atCheckWaiting != DEFAULT_AT_CHECK_WAITING) {
             browser.config.atCheckWaiting = settings.atCheckWaiting
-        if (settings.timeout != Wait.DEFAULT_TIMEOUT)
+        }
+        if (settings.timeout != Wait.DEFAULT_TIMEOUT) {
             (browser.config.rawConfig.waiting as ConfigObject).timeout = settings.timeout
-        if (settings.retryInterval != Wait.DEFAULT_RETRY_INTERVAL)
+        }
+        if (settings.retryInterval != Wait.DEFAULT_RETRY_INTERVAL) {
             (browser.config.rawConfig.waiting as ConfigObject).retryInterval = settings.retryInterval
+        }
     }
 
     private static void startContainer(BrowserWebDriverContainer container, DockerImageName dockerImageName, String customBrowser) {
@@ -344,19 +416,39 @@ class WebDriverContainerHolder {
         }
     }
 
-    void setupBrowserUrl(IMethodInvocation methodInvocation) {
-        if (!browser) return
-
-        // use a configured baseUrl if found, otherwise use localhost and hostPort
-        def baseUrl = findBaseUrl(methodInvocation)
-        if (baseUrl != "") {
-            browser.baseUrl = baseUrl
-        } else {
-            int hostPort = findServerPort(methodInvocation)
-            Testcontainers.exposeHostPorts(hostPort)
-            browser.baseUrl = "$containerConf.protocol://$containerConf.hostName:$hostPort"
+    private static String getHostIp() {
+        try {
+            PortForwardingContainer.getDeclaredMethod('getNetwork').with {
+                accessible = true
+                (invoke(PortForwardingContainer.INSTANCE) as Optional<ContainerNetwork>)
+                        .get()
+                        .ipAddress
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    'Could not access network from PortForwardingContainer',
+                    e
+            )
         }
+    }
 
+    private static DockerImageName createDockerImageName(Object browserName) {
+        DockerImageName.parse(
+                "selenium/standalone-$browserName:$seleniumVersion"
+        )
+    }
+
+    private static void validateDriverConf(Configuration gebConf) {
+        if (gebConf.driverConf && !(gebConf.driverConf instanceof Closure)) {
+            throw new IllegalStateException(
+                    'The \'driver\' property of GebConfig must be a ' +
+                            'Closure that returns an instance of RemoteWebDriver.'
+            )
+        }
+    }
+
+    private static String getSeleniumVersion() {
+        SeleniumUtils.determineClasspathSeleniumVersion()
     }
 
     private GebTestManager createTestManager() {
@@ -377,58 +469,8 @@ class WebDriverContainerHolder {
         containerConf.hostName != ContainerGebConfiguration.DEFAULT_HOSTNAME_FROM_CONTAINER
     }
 
-    private static String getHostIp() {
-        try {
-            PortForwardingContainer.getDeclaredMethod('getNetwork').with {
-                accessible = true
-                (invoke(PortForwardingContainer.INSTANCE) as Optional<ContainerNetwork>)
-                        .get()
-                        .ipAddress
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    'Could not access network from PortForwardingContainer',
-                    e
-            )
-        }
-    }
-
-    /**
-     * Returns the hostname that the server under test is available on from the host.
-     * <p>This is useful when using any of the {@code download*()} methods as they will
-     * connect from the host, and not from within the container.
-     *
-     * <p>Defaults to {@code localhost}. If the value returned by {@code webDriverContainer.getHost()}
-     * is different from the default, this method will return the same value same as
-     * {@code webDriverContainer.getHost()}.
-     *
-     * @return the hostname for accessing the server under test from the host
-     */
-    String getHostNameFromHost() {
-        hostNameChanged ? container.host : DEFAULT_HOSTNAME_FROM_HOST
-    }
-
     private boolean isHostNameChanged() {
         container.host != ContainerGebConfiguration.DEFAULT_HOSTNAME_FROM_CONTAINER
-    }
-
-    private static DockerImageName createDockerImageName(Object browserName) {
-        DockerImageName.parse(
-                "selenium/standalone-$browserName:$seleniumVersion"
-        )
-    }
-
-    private static void validateDriverConf(Configuration gebConf) {
-        if (gebConf.driverConf && !(gebConf.driverConf instanceof Closure)) {
-            throw new IllegalStateException(
-                    'The \'driver\' property of GebConfig must be a ' +
-                            'Closure that returns an instance of RemoteWebDriver.'
-            )
-        }
-    }
-
-    private static String getSeleniumVersion() {
-        SeleniumUtils.determineClasspathSeleniumVersion()
     }
 
     @CompileStatic
@@ -460,43 +502,6 @@ class WebDriverContainerHolder {
         }
     }
 
-    /**
-     * Workaround for https://github.com/testcontainers/testcontainers-java/issues/3998
-     * <p>
-     * Restarts the VNC recording container to enable separate recording files for each
-     * test method. This method uses reflection to access the VNC recording container
-     * field in BrowserWebDriverContainer. Should be called BEFORE each test starts.
-     */
-    void restartVncRecordingContainer() {
-        if (!settings.recordingEnabled || !settings.restartRecordingContainerPerTest || !container) {
-            return
-        }
-        try {
-            // Use reflection to access the VNC recording container field
-            def field = BrowserWebDriverContainer.getDeclaredField('vncRecordingContainer').tap {
-                accessible = true
-            }
-
-            def vncContainer = field.get(container) as VncRecordingContainer
-            if (vncContainer) {
-                // Stop the current VNC recording container
-                vncContainer.stop()
-                // Create and start a new VNC recording container for the next test
-                def newVncContainer = new VncRecordingContainer(container)
-                        .withVncPassword('secret')
-                        .withVncPort(5900)
-                        .withVideoFormat(settings.recordingFormat)
-                field.set(container, newVncContainer)
-                newVncContainer.start()
-
-                log.debug('Successfully restarted VNC recording container')
-            }
-        } catch (Exception e) {
-            log.warn("Failed to restart VNC recording container: $e.message", e)
-            // Don't throw the exception to avoid breaking the test execution
-        }
-    }
-
     @CompileStatic
     private static class ClosureDecorators {
 
@@ -521,7 +526,7 @@ class WebDriverContainerHolder {
         private static class SysPropScope {
 
             private static final ThreadLocal<Map<String,String>> OVERRIDDEN_SYSTEM_PROPERTIES =
-                    ThreadLocal.withInitial { [:] as Map<String,String> }
+                ThreadLocal.withInitial { [:] } as ThreadLocal<Map<String, String>>
 
             @Lazy // Thread-safe wrapping of system properties
             private static Properties propertiesWrappedOnFirstAccess = {
@@ -538,8 +543,14 @@ class WebDriverContainerHolder {
                 try {
                     return body.call()
                 } finally {
-                    if (prev == null) map.remove(key) else map[key] = prev
-                    if (map.isEmpty()) OVERRIDDEN_SYSTEM_PROPERTIES.remove()
+                    if (prev == null) {
+                        map.remove(key)
+                    } else {
+                        map[key] = prev
+                    }
+                    if (map.isEmpty()) {
+                        OVERRIDDEN_SYSTEM_PROPERTIES.remove()
+                    }
                 }
             }
 
@@ -553,9 +564,5 @@ class WebDriverContainerHolder {
             }
         }
     }
-
-
-
-
 
 }

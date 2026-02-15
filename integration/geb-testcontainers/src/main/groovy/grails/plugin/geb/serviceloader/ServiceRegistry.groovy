@@ -42,8 +42,8 @@ import groovy.transform.CompileStatic
 class ServiceRegistry {
 
     private static final ThreadLocal<HashMap<Class<?>, Object>> INSTANCES = ThreadLocal.withInitial {
-        new HashMap<Class<?>, Object>()
-    }
+        [:]
+    } as ThreadLocal<HashMap<Class<?>, Object>>
 
     /**
      * Returns the service instance of the given service type, loading it using

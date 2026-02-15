@@ -16,13 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import geb.module.FileInput
 import org.demo.spock.pages.UploadSuccessPage
 
-import grails.plugin.geb.ContainerGebSpec
 import org.demo.spock.pages.UploadPage
 import spock.lang.IgnoreIf
 import spock.lang.Requires
@@ -103,13 +101,11 @@ class UploadSpec extends ContainerGebSpecWithServer {
         then:
         $("div.example").$("h3").text() == "File Uploaded!"
         $("div.example").$("div", id: "uploaded-files").text() == "upload-test.txt"
-
     }
 
     def cleanup() {
         sleep(1000) // give the last video time to copy
         container.execInContainer("rm /tmp/upload-test.txt")
     }
-
 
 }

@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import org.demo.spock.pages.HomePage
@@ -29,8 +28,6 @@ import org.openqa.selenium.remote.RemoteWebDriver
 class GebConfigSpec extends ContainerGebSpecWithServer {
 
     def "should use custom RemoteWebDriver from GebConfig.groovy"() {
-        // reportInfo "the config file should use environment blocks with browser names"
-
         expect: 'the driver to be a RemoteWebDriver'
         driver instanceof RemoteWebDriver
 
@@ -62,7 +59,6 @@ class GebConfigSpec extends ContainerGebSpecWithServer {
         and: "the welcome header should be displayed"
         $("h1").text() == "Welcome to the Geb/Spock Test"
     }
-
 
     def cleanup() {
         sleep(1000) // give the last video time to copy

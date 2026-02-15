@@ -16,7 +16,6 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.demo.spock
 
 import org.demo.spock.pages.UploadPage
@@ -24,11 +23,8 @@ import org.demo.spock.pages.UploadPage
 class PageDelegateSpec extends ContainerGebSpecWithServer {
 
     def "should delegate to page object"() {
-        given:
-        to(UploadPage)
-
         when:
-        nop()
+        to(UploadPage)
 
         then:
         title == 'Upload Test'
