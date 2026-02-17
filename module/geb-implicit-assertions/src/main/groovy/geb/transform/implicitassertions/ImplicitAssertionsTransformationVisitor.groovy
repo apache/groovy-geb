@@ -37,7 +37,7 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
         new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("waitFor"),
         new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("refreshWaitFor"),
         new ByNameImplicitlyAssertedMethodCallMatcher("at")
-    ] as List<ImplicitlyAssertedMethodCallMatcher>
+    ]
     private static final String WAIT_CONDITION = "waitCondition"
 
     SourceUnit sourceUnit
@@ -135,7 +135,7 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     def getConstantValueOfType(Expression expression, Class type) {
-        if (expression != null && expression instanceof ConstantExpression) {
+        if (expression instanceof ConstantExpression) {
             Object value = ((ConstantExpression) expression).value
             type.isInstance(value) ? value : null
         } else {
@@ -322,7 +322,7 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     private Expression toArgumentArray(Expression arguments) {
         List<Expression> argumentList
         if (arguments instanceof NamedArgumentListExpression) {
-            argumentList = [arguments] as List<Expression>
+            argumentList = [arguments]
         } else {
             def tuple = arguments as TupleExpression
             argumentList = tuple.expressions

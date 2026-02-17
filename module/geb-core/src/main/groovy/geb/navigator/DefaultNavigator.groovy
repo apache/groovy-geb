@@ -931,7 +931,7 @@ class DefaultNavigator implements Navigator {
         def tag = input.tagName
         def tagLower = tag == null ? '' : tag.toLowerCase(Locale.ROOT)
 
-        if ('select' == tagLower) {
+        if (tagLower == 'select') {
             def select = new SelectFactory().createSelectFor(input) as GroovyObject
             def multiple = (boolean) select.getProperty('multiple')
             if (multiple) {

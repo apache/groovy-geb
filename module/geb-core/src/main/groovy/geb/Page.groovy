@@ -242,11 +242,6 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
         getInitializedBrowser().page(this)
     }
 
-    @CompileDynamic
-    private String dynamicConvertToPath(Object[] args) {
-        convertToPath(*args)
-    }
-
     /**
      * Returns the constant part of the url to this page.
      * <p>
@@ -422,6 +417,11 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
 
     void at(Object... args) {
         throw new MissingMethodException("at", getClass(), args)
+    }
+
+    @CompileDynamic
+    private String dynamicConvertToPath(Object[] args) {
+        convertToPath(*args)
     }
 
     private Browser getInitializedBrowser() {
