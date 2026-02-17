@@ -21,8 +21,10 @@ package geb.js
 import geb.Browser
 import geb.error.GebException
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.JavascriptExecutor
 
+@CompileStatic
 class JavascriptInterface {
 
     final Browser browser
@@ -32,11 +34,12 @@ class JavascriptInterface {
     }
 
     def propertyMissing(String name) {
-        execjs("return $name;")
+        execjs("return $name;", new Object[0])
     }
 
-    def methodMissing(String name, args) {
-        execjs("return ${name}.apply(window, arguments)", *args)
+    def methodMissing(String name, Object args) {
+        Object[] a = (args instanceof Object[]) ? (Object[]) args : new Object[] { args }
+        execjs("return ${name}.apply(window, arguments)", a)
     }
 
     def exec(Object[] args) {
@@ -61,35 +64,33 @@ class JavascriptInterface {
             throw new IllegalArgumentException("The last argument to the js function must be string-like or a Closure returning a string-like")
         }
 
-        execjs(script.toString(), *jsArgs)
+        execjs(script.toString(), jsArgs.toArray())
     }
 
-    private execjs(String script, Object[] args) {
+    private static Object normalizeJsArg(Object arg) {
+        switch (arg) {
+            case GString:
+                return arg.toString()
+            case Navigator:
+                def navigator = (Navigator) arg
+                return navigator.size() == 1 ? navigator.singleElement() : navigator.allElements()
+            default:
+                return arg
+        }
+    }
+
+    private static Object execjs(JavascriptExecutor js, String script, List<Object> args) {
+        js.executeScript(script, args.toArray())
+    }
+
+    private Object execjs(String script, Object[] args) {
         def driver = browser.driver
 
         if (!(driver instanceof JavascriptExecutor)) {
             throw new GebException("driver '$driver' can not execute javascript")
         }
 
-        driver.executeScript(script, *args.collect {
-            switch (it) {
-                case GString:
-                    it as String
-                    break
-
-                case { (it instanceof Navigator) && it.size() == 1 }:
-                    it.singleElement()
-                    break
-
-                case Navigator:
-                    it.allElements()
-                    break
-
-                default:
-                    it
-                    break
-            }
-        })
+        def normalizedArgs = args.collect { normalizeJsArg(it) }
+        execjs((JavascriptExecutor) driver, script, normalizedArgs)
     }
-
 }

@@ -19,6 +19,9 @@
 package geb.download
 
 import geb.Browser
+import groovy.transform.CompileStatic
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.FromString
 import org.openqa.selenium.Cookie
 
 /**
@@ -30,6 +33,7 @@ import org.openqa.selenium.Cookie
  * An instance of this class will be mixed in to all browser, page and module objects making these methods
  * public methods on those objects.
  */
+@CompileStatic
 class DefaultDownloadSupport implements DownloadSupport {
 
     /*
@@ -57,7 +61,7 @@ class DefaultDownloadSupport implements DownloadSupport {
      */
     HttpURLConnection download(Map options = [:]) {
         def url = resolveUrl(options)
-        def connection = url.openConnection()
+        def connection = (HttpURLConnection) url.openConnection()
         applyCookies(connection, browser)
         browser.config.getDownloadConfig()?.call(connection)
         connection
@@ -72,7 +76,10 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    InputStream downloadStream(Map options = [:], Closure connectionConfig = null) {
+    InputStream downloadStream(
+        Map options = [:],
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         wrapInDownloadException(downloadWithConfig(options, connectionConfig)) { it.inputStream }
     }
 
@@ -81,11 +88,16 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    InputStream downloadStream(String uri, Closure connectionConfig = null) {
+    InputStream downloadStream(
+        String uri,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         downloadStream(uri: uri, connectionConfig)
     }
 
-    InputStream downloadStream(Closure connectionConfig) {
+    InputStream downloadStream(
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig
+    ) {
         downloadStream([:], connectionConfig)
     }
 
@@ -94,7 +106,10 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    String downloadText(Map options = [:], Closure connectionConfig = null) {
+    String downloadText(
+        Map options = [:],
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         def connection = downloadWithConfig(options, connectionConfig)
         connection.connect()
         def contentType = connection.contentType
@@ -112,11 +127,16 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    String downloadText(String uri, Closure connectionConfig = null) {
+    String downloadText(
+        String uri,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         downloadText(uri: uri, connectionConfig)
     }
 
-    String downloadText(Closure connectionConfig) {
+    String downloadText(
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig
+    ) {
         downloadText([:], connectionConfig)
     }
 
@@ -125,11 +145,16 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    byte[] downloadBytes(Map options = [:], Closure connectionConfig = null) {
+    byte[] downloadBytes(
+        Map options = [:],
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         downloadStream(options, connectionConfig).bytes
     }
 
-    byte[] downloadBytes(Closure connectionConfig) {
+    byte[] downloadBytes(
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig
+    ) {
         downloadStream(connectionConfig).bytes
     }
 
@@ -138,7 +163,10 @@ class DefaultDownloadSupport implements DownloadSupport {
      * <p>
      * If connectionConfig is given, it is called with the {@link HttpURLConnection} before the request is made.
      */
-    byte[] downloadBytes(String uri, Closure connectionConfig = null) {
+    byte[] downloadBytes(
+        String uri,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         downloadBytes(uri: uri, connectionConfig)
     }
 
@@ -149,7 +177,10 @@ class DefaultDownloadSupport implements DownloadSupport {
      *
      * @see URLConnection#getContent()
      */
-    Object downloadContent(Map options = [:], Closure connectionConfig = null) {
+    Object downloadContent(
+        Map options = [:],
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         wrapInDownloadException(downloadWithConfig(options, connectionConfig)) { it.content }
     }
 
@@ -160,15 +191,23 @@ class DefaultDownloadSupport implements DownloadSupport {
      *
      * @see URLConnection#getContent()
      */
-    Object downloadContent(String uri, Closure connectionConfig = null) {
+    Object downloadContent(
+        String uri,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig = null
+    ) {
         downloadContent(uri: uri, connectionConfig)
     }
 
-    Object downloadContent(Closure connectionConfig) {
+    Object downloadContent(
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure connectionConfig
+    ) {
         downloadContent([:], connectionConfig)
     }
 
-    private HttpURLConnection downloadWithConfig(Map options, Closure config) {
+    private HttpURLConnection downloadWithConfig(
+        Map options,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure config
+    ) {
         def connection = download(options)
         config?.call(connection)
         connection
@@ -181,8 +220,8 @@ class DefaultDownloadSupport implements DownloadSupport {
      * the browser's current page url will be returned.
      */
     private URL resolveUrl(Map options) {
-        def uri = options.uri
-        def base = options.base ?: browser.driver.currentUrl
+        String uri = options.uri
+        String base = options.base ?: browser.driver.currentUrl
         uri ? new URI(base).resolve(uri).toURL() : new URL(base)
     }
 
@@ -205,7 +244,7 @@ class DefaultDownloadSupport implements DownloadSupport {
         contentType?.startsWith("text/")
     }
 
-    private determineCharset(String contentType) {
+    private String determineCharset(String contentType) {
         if (contentType) {
             def parts = contentType.split(";")*.trim()
             def charsetPart = parts.find { it.startsWith("charset=") }
@@ -219,9 +258,12 @@ class DefaultDownloadSupport implements DownloadSupport {
         }
     }
 
-    private wrapInDownloadException(HttpURLConnection connection, Closure operation) {
+    private <T> T wrapInDownloadException(
+        HttpURLConnection connection,
+        @ClosureParams(value = FromString, options = 'java.net.HttpURLConnection') Closure<T> operation
+    ) {
         try {
-            operation(connection)
+            operation(connection) as T
         } catch (Throwable e) {
             throw new DownloadException(connection, "An error occurred during the download operation", e)
         }

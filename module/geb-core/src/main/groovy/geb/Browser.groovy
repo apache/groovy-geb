@@ -28,9 +28,12 @@ import geb.navigator.factory.NavigatorFactory
 import geb.report.ReportState
 import geb.url.UrlFragment
 import geb.waiting.PotentiallyWaitingExecutor
+import geb.waiting.WaitingSupport
 import geb.webstorage.LocalStorage
 import geb.webstorage.SessionStorage
 import geb.webstorage.WebStorage
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 import org.openqa.selenium.NoSuchWindowException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
@@ -48,6 +51,7 @@ import static java.lang.Integer.MAX_VALUE
  * Browser objects dynamically delegate all method calls and property read/writes that it doesn't implement to the current
  * page instance via {@code propertyMissing ( )} and {@code methodMissing ( )}.
  */
+@CompileStatic
 class Browser {
 
     protected final static String HAS_NETWORK_CONDITIONS_CLASS_NAME = "org.openqa.selenium.chromium.HasNetworkConditions"
@@ -94,7 +98,9 @@ class Browser {
      */
     Browser(Map props, Configuration config) {
         this(config)
-        this.metaClass.setProperties(this, props)
+        props.each { k, v ->
+            this.metaClass.setProperty(this, k.toString(), v)
+        }
     }
 
     /**
@@ -124,7 +130,7 @@ class Browser {
      * @return the created browser
      */
     static Browser drive(Map browserProperties, Closure script) {
-        drive(new Browser(browserProperties), script)
+        drive(new Browser(browserProperties, new ConfigurationLoader().conf), script)
     }
 
     /**
@@ -152,7 +158,7 @@ class Browser {
     }
 
     /**
-     * Provides access to the configuration object assoicated with this browser.
+     * Provides access to the configuration object associated with this browser.
      */
     Configuration getConfig() {
         this.config
@@ -230,22 +236,22 @@ class Browser {
     /**
      * Delegates the method call directly to the current page object.
      */
-    def methodMissing(String name, args) {
-        getPage()."$name"(*args)
+    def methodMissing(String name, Object args) {
+        InvokerHelper.invokeMethod(getPage(), name, args)
     }
 
     /**
      * Delegates the property access directly to the current page object.
      */
     def propertyMissing(String name) {
-        getPage()."$name"
+        InvokerHelper.getProperty(getPage(), name)
     }
 
     /**
      * Delegates the property assignment directly to the current page object.
      */
-    def propertyMissing(String name, value) {
-        getPage()."$name" = value
+    def propertyMissing(String name, Object value) {
+        InvokerHelper.setProperty(getPage(), name, value)
     }
 
     /**
@@ -263,7 +269,7 @@ class Browser {
      * @return an initialized page instance set as the current page
      */
     <T extends Page> T page(Class<T> pageClass) {
-        makeCurrentPage(createPage(pageClass))
+        (T) makeCurrentPage(createPage(pageClass))
     }
 
     /**
@@ -642,8 +648,7 @@ class Browser {
     void clearCookiesQuietly() {
         try {
             clearCookies()
-        } catch (WebDriverException e) {
-            // ignore
+        } catch (WebDriverException ignore) {
         }
     }
 
@@ -797,7 +802,11 @@ class Browser {
      * @throws geb.error.NoNewWindowException if the window opening closure doesn't open one or opens more
      * than one new window
      */
-    public <T> T withNewWindow(Map options, Closure windowOpeningBlock, @DelegatesTo(value = Browser, strategy = DELEGATE_FIRST) Closure<T> block) {
+    public <T> T withNewWindow(
+        Map<String, ?> options,
+        Closure windowOpeningBlock,
+        @DelegatesTo(value = Browser, strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         def originalWindow = currentWindow
         def originalPage = getPage()
 
@@ -806,11 +815,15 @@ class Browser {
         try {
             switchToWindow(newWindow)
             if (options.page) {
-                verifyAtImplicitly(options.page)
+                if (options.page instanceof Class) {
+                    verifyAtImplicitly((Class<? extends Page>) options.page)
+                } else {
+                    verifyAtImplicitly((Page) options.page)
+                }
             }
 
-            Closure cloned = block.clone()
-            cloned.delegate = browser
+            def cloned = (Closure) block.clone()
+            cloned.delegate = this
             cloned.resolveStrategy = DELEGATE_FIRST
             cloned.call()
         } finally {
@@ -843,7 +856,7 @@ class Browser {
      */
     public <T extends Page> T createPage(Class<T> pageType) {
         validatePage(pageType)
-        initialisePage(pageType.newInstance())
+        initialisePage(pageType.getDeclaredConstructor().newInstance())
     }
 
     /**
@@ -924,15 +937,15 @@ class Browser {
      * Can be used as an alternative to setting a breakpoint and running the JVM in debug mode for debugging purposes.
      */
     void pause() {
-        js.exec '''
+        js.exec('''
             if (!window.geb) {
                 window.geb = {};
             }
             window.geb.unpause = false;
-        '''
+        ''')
 
-        waitFor(MAX_VALUE) {
-            js.'geb.unpause'
+        (this as WaitingSupport).waitFor(MAX_VALUE) {
+            js.exec('return geb.unpause')
         }
     }
 
@@ -1012,14 +1025,21 @@ class Browser {
         getDriver().switchTo().window(window)
     }
 
-    protected <T> T doWithWindow(Map options, Closure<T> block) {
+    protected <T> T doWithWindow(
+        Map<String, ?> options,
+        @DelegatesTo(value = Browser, strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         try {
             if (options.page) {
-                verifyAtImplicitly(options.page)
+                if (options.page instanceof Class) {
+                    verifyAtImplicitly((Class<? extends Page>) options.page)
+                } else {
+                    verifyAtImplicitly((Page) options.page)
+                }
             }
 
-            Closure cloned = block.clone()
-            cloned.delegate = browser
+            def cloned = (Closure) block.clone()
+            cloned.delegate = this
             cloned.resolveStrategy = DELEGATE_FIRST
             cloned.call()
         } finally {
@@ -1060,8 +1080,10 @@ class Browser {
 
     private Optional<Class<? extends WebDriver>> getOptionalHasNetworkConditionsClass() {
         try {
-            Optional.of(getClass().classLoader.loadClass(HAS_NETWORK_CONDITIONS_CLASS_NAME))
-        } catch (ClassNotFoundException e) {
+            Optional.of(
+                getClass().classLoader.loadClass(HAS_NETWORK_CONDITIONS_CLASS_NAME)
+            ) as Optional<Class<? extends WebDriver>>
+        } catch (ClassNotFoundException ignore) {
             Optional.empty()
         }
     }
@@ -1145,7 +1167,7 @@ class Browser {
 
     private Page verifyPages(List<Page> pages) {
         new PotentiallyWaitingExecutor(config.atCheckWaiting).execute {
-            Map pageVerificationResults = [:]
+            Map<? extends Page, AtVerificationResult> pageVerificationResults = [:]
             def match = pages.find {
                 AtVerificationResult atVerificationResult = it.getAtVerificationResult(false)
                 if (!atVerificationResult) {
@@ -1161,12 +1183,30 @@ class Browser {
         }
     }
 
-    private doCheckIfAtAnUnexpectedPage(def expectedPages) {
+    private doCheckIfAtAnUnexpectedPage(Class<? extends Page>[] expectedPages) {
         config.unexpectedPages.each {
             def pageInstance = createPage(it)
             if (isAt(pageInstance, false)) {
                 pageEventListener.unexpectedPageEncountered(this, pageInstance)
-                throw new UnexpectedPageException(pageInstance, *expectedPages)
+                if (expectedPages.length == 1) {
+                    throw new UnexpectedPageException(pageInstance, expectedPages[0])
+                } else {
+                    throw new UnexpectedPageException(pageInstance, expectedPages)
+                }
+            }
+        }
+    }
+
+    private doCheckIfAtAnUnexpectedPage(Page[] expectedPages) {
+        config.unexpectedPages.each {
+            def pageInstance = createPage(it)
+            if (isAt(pageInstance, false)) {
+                pageEventListener.unexpectedPageEncountered(this, pageInstance)
+                if (expectedPages.length == 1) {
+                    throw new UnexpectedPageException(pageInstance, expectedPages[0])
+                } else {
+                    throw new UnexpectedPageException(pageInstance, expectedPages)
+                }
             }
         }
     }
@@ -1227,8 +1267,11 @@ class Browser {
         }
     }
 
-    private <R> R runAssertionsWithPageDelegate(Page page, Closure<R> assertions) {
-        Closure clone = assertions.clone()
+    private <T extends Page, R> R runAssertionsWithPageDelegate(
+        @DelegatesTo.Target T page,
+        @DelegatesTo(strategy = DELEGATE_FIRST, genericTypeIndex = 0) Closure<R> assertions
+    ) {
+        Closure clone = (Closure) assertions.clone()
         clone.delegate = page
         clone.call()
     }
@@ -1238,8 +1281,8 @@ class Browser {
         try {
             def currentUrl = getDriver().currentUrl
             currentUri = currentUrl ? new URI(currentUrl) : null
-        } catch (NullPointerException npe) {
-        } catch (URISyntaxException use) {
+        } catch (NullPointerException ignore) {
+        } catch (URISyntaxException ignored) {
         } catch (WebDriverException webDriverException) {
             if (!webDriverException.message.contains("Remote browser did not respond to getCurrentUrl")) {
                 throw webDriverException

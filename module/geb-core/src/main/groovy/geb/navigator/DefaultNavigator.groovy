@@ -31,9 +31,11 @@ import geb.navigator.event.NavigatorEventListener
 import geb.navigator.factory.NavigatorFactory
 import geb.waiting.PotentiallyWaitingExecutor
 import geb.waiting.Wait
+import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import groovy.transform.stc.SimpleType
+import org.codehaus.groovy.runtime.InvokerHelper
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -44,16 +46,17 @@ import java.util.function.Supplier
 import static java.util.Collections.EMPTY_LIST
 import static geb.navigator.WebElementPredicates.matches
 
+@CompileStatic
 class DefaultNavigator implements Navigator {
 
-    protected final static BOOLEAN_ATTRIBUTES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete',
+    protected final static List<String> BOOLEAN_ATTRIBUTES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete',
                                                  'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended',
                                                  'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop',
                                                  'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused',
                                                  'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected',
                                                  'spellcheck', 'truespeed', 'willvalidate']
 
-    protected final static ELEMENTS_WITH_MUTABLE_VALUE = ['input', 'select', 'textarea']
+    protected final static List<String> ELEMENTS_WITH_MUTABLE_VALUE = ['input', 'select', 'textarea']
 
     final Browser browser
 
@@ -67,7 +70,7 @@ class DefaultNavigator implements Navigator {
     DefaultNavigator(Browser browser, Iterable<? extends WebElement> contextElements) {
         this.browser = browser
         this.locator = new DefaultLocator(new SearchContextBasedBasicLocator(contextElements, browser.navigatorFactory))
-        this.contextElements = contextElements
+        this.contextElements = (Iterable<WebElement>) contextElements
         this.eventListener = new BrowserConfigurationDelegatingNavigatorEventListener(browser, this)
     }
 
@@ -233,9 +236,9 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator filter(String selector) {
-        navigatorFor contextElements.findAll { element ->
+        navigatorFor(contextElements.findAll { WebElement element ->
             CssSelector.matches(element, selector)
-        }
+        })
     }
 
     @Override
@@ -244,7 +247,7 @@ class DefaultNavigator implements Navigator {
 
         if (!dynamic || predicates.size() != 1) {
             navigatorFor(dynamic) {
-                contextElements.findAll { matches(it, predicates) }
+                contextElements.findAll { WebElement el -> matches(el, predicates) }
             }
         } else {
             this
@@ -253,7 +256,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator not(String selector) {
-        navigatorFor contextElements.findAll { element ->
+        navigatorFor contextElements.findAll { WebElement element ->
             !CssSelector.matches(element, selector)
         }
     }
@@ -261,7 +264,7 @@ class DefaultNavigator implements Navigator {
     @Override
     Navigator not(Map<String, Object> predicates, String selector) {
         navigatorFor(dynamic(predicates)) {
-            contextElements.findAll { element ->
+            contextElements.findAll { WebElement element ->
                 !(CssSelector.matches(element, selector) && matches(element, predicates))
             }
         }
@@ -270,7 +273,7 @@ class DefaultNavigator implements Navigator {
     @Override
     Navigator not(Map<String, Object> predicates) {
         navigatorFor(dynamic(predicates)) {
-            contextElements.findAll { element ->
+            contextElements.findAll { WebElement element ->
                 !matches(element, predicates)
             }
         }
@@ -309,15 +312,20 @@ class DefaultNavigator implements Navigator {
     WebElement getElement(int index) {
         def elements = contextElements.toList()
         if (elements) {
-            contextElements[index]
+            return contextElements[index]
         }
+        return null
     }
 
     List<WebElement> getElements(Range range) {
         def elements = contextElements.toList()
-        if (elements) {
-            elements[range]
+        if (!elements) {
+            return null
         }
+        if (range == null || range.empty) {
+            return []
+        }
+        return elements[range]
     }
 
     List<WebElement> getElements(Collection indexes) {
@@ -362,7 +370,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator nextAll() {
-        navigatorFor collectFollowingSiblings()
+        navigatorFor(collectFollowingSiblings(null))
     }
 
     @Override
@@ -428,7 +436,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator prevAll() {
-        navigatorFor collectPreviousSiblings()
+        navigatorFor(collectPreviousSiblings(null))
     }
 
     @Override
@@ -469,7 +477,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator parent() {
-        navigatorFor collectParents()
+        navigatorFor(collectParents(null))
     }
 
     @Override
@@ -553,7 +561,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator children() {
-        navigatorFor collectChildren()
+        navigatorFor(collectChildren(null))
     }
 
     @Override
@@ -576,7 +584,7 @@ class DefaultNavigator implements Navigator {
 
     @Override
     Navigator siblings() {
-        navigatorFor collectSiblings()
+        navigatorFor(collectSiblings(null))
     }
 
     @Override
@@ -631,9 +639,9 @@ class DefaultNavigator implements Navigator {
             if (attribute == 'false' && name in BOOLEAN_ATTRIBUTES) {
                 attribute = null
             }
-
-            attribute == null ? "" : attribute
+            return attribute == null ? "" : attribute
         }
+        return null
     }
 
     @Override
@@ -661,7 +669,7 @@ class DefaultNavigator implements Navigator {
     Navigator leftShift(value) {
         eventListener.beforeSendKeys(browser, this, value)
         contextElements.each {
-            it.sendKeys value
+            it.sendKeys(value.toString())
         }
         eventListener.afterSendKeys(browser, this, value)
         this
@@ -694,7 +702,7 @@ class DefaultNavigator implements Navigator {
         def throwable = null
         try {
             if (pageInstance.shouldVerifyAtImplicitly) {
-                at = new PotentiallyWaitingExecutor(wait).execute { browser.verifyAt() }
+                at = new PotentiallyWaitingExecutor(wait).execute { browser.page.verifyAt() }
             } else {
                 at = true
             }
@@ -714,8 +722,30 @@ class DefaultNavigator implements Navigator {
     @Override
     Navigator click(List potentialPages, Wait wait = null) {
         click()
-        new PotentiallyWaitingExecutor(wait).execute { browser.page(*potentialPages) }
-        this
+
+        new PotentiallyWaitingExecutor(wait).execute {
+            if (potentialPages == null || potentialPages.isEmpty()) {
+                return browser.page(new Page[0])
+            }
+
+            Object first = potentialPages[0]
+
+            if (first instanceof Class) {
+                def raw = potentialPages.toArray(new Class[0]) as Class[]
+                def pageClasses = (Class<? extends Page>[]) raw
+                return browser.page(pageClasses)
+            }
+
+            if (first instanceof Page) {
+                return browser.page(potentialPages.toArray(new Page[0]) as Page[])
+            }
+
+            throw new IllegalArgumentException(
+                "potentialPages must contain Page classes or Page instances, but was: ${first.getClass().name}"
+            )
+        }
+
+        return this
     }
 
     @Override
@@ -847,8 +877,9 @@ class DefaultNavigator implements Navigator {
     @Override
     boolean equals(Object obj) {
         if (obj instanceof Navigator) {
-            allElements() == obj.allElements()
+            return allElements() == obj.allElements()
         }
+        return false
     }
 
     protected WebElement ensureContainsAtMostSingleElement(String name, Class<?>... parameterTypes) {
@@ -857,8 +888,9 @@ class DefaultNavigator implements Navigator {
             throw new SingleElementNavigatorOnlyMethodException(Navigator.getMethod(name, parameterTypes), elements.size())
         }
         if (elements) {
-            elements.first()
+            return elements.first()
         }
+        return null
     }
 
     protected Navigator navigatorFor(Collection<WebElement> contextElements) {
@@ -872,7 +904,7 @@ class DefaultNavigator implements Navigator {
 
     protected Navigator navigatorForMatching(boolean dynamic, @ClosureParams(value = SimpleType, options = "geb.navigator.Navigator") Closure<?> partialNavigatorPredicate) {
         navigatorFor(dynamic) {
-            contextElements.findAll { element ->
+            contextElements.findAll { WebElement element ->
                 partialNavigatorPredicate.call(navigatorFor(Collections.singleton(element)))
             }
         }
@@ -893,17 +925,22 @@ class DefaultNavigator implements Navigator {
         values.size() < 2 ? values[0] : values
     }
 
-    protected getInputValue(WebElement input) {
+    protected Object getInputValue(WebElement input) {
         def value = null
-        def type = input.getAttribute("type")
-        if (input.tagName.toLowerCase() == "select") {
-            def select = new SelectFactory().createSelectFor(input)
-            if (select.multiple) {
-                value = select.allSelectedOptions.collect { getValue(it) }
+        def type = input.getAttribute('type')
+        def tag = input.tagName
+        def tagLower = tag == null ? '' : tag.toLowerCase(Locale.ROOT)
+
+        if ('select' == tagLower) {
+            def select = new SelectFactory().createSelectFor(input) as GroovyObject
+            def multiple = (boolean) select.getProperty('multiple')
+            if (multiple) {
+                def options = select.getProperty('allSelectedOptions') as List<WebElement>
+                value = options.collect { getValue(it) }
             } else {
-                value = getValue(select.firstSelectedOption)
+                value = getValue((WebElement) select.getProperty('firstSelectedOption'))
             }
-        } else if (type in ["checkbox", "radio"]) {
+        } else if (type == 'checkbox' || type == 'radio') {
             if (input.isSelected()) {
                 value = getValue(input)
             }
@@ -914,11 +951,13 @@ class DefaultNavigator implements Navigator {
     }
 
     protected void setInputValues(Iterable<WebElement> inputs, value) {
-        def inputsToTagNames = inputs.collectEntries { [it, it.tagName.toLowerCase()] }
-        def unsupportedElements = inputsToTagNames.values() - ELEMENTS_WITH_MUTABLE_VALUE
-
+        def inputsToTagNames = inputs.collectEntries { [it, it.tagName.toLowerCase()] } as Map<WebElement, String>
+        def unsupportedElements = inputsToTagNames.values().findAll { !(it in ELEMENTS_WITH_MUTABLE_VALUE) }
         if (unsupportedElements) {
-            throw new UnableToSetElementException(*unsupportedElements)
+            if (unsupportedElements.size() == 1) {
+                throw new UnableToSetElementException(unsupportedElements.first().toString())
+            }
+            throw new UnableToSetElementException(unsupportedElements*.toString() as String[])
         }
 
         inputsToTagNames.inject(false) { boolean valueSet, WebElement input, String tagName ->
@@ -929,21 +968,21 @@ class DefaultNavigator implements Navigator {
     protected boolean setInputValue(WebElement input, String tagName, value, boolean suppressStaleElementException) {
         boolean valueSet = false
         try {
-            def type = input.getAttribute("type")
-            if (tagName == "select") {
+            def type = input.getAttribute('type')
+            if (tagName == 'select') {
                 setSelectValue(input, value)
                 valueSet = true
-            } else if (type == "checkbox") {
+            } else if (type == 'checkbox') {
                 valueSet = setCheckboxValue(input, value)
-            } else if (type == "radio") {
+            } else if (type == 'radio') {
                 if (getValue(input) == value.toString() || labelFor(input) == value.toString()) {
                     input.click()
                     valueSet = true
                 }
-            } else if (type == "file") {
+            } else if (type == 'file') {
                 input.sendKeys value as String
                 valueSet = true
-            } else if (type in ["color", "date", "datetime-local", "time", "range", "month", "week"]) {
+            } else if (type in ['color', 'date', 'datetime-local', 'time', 'range', 'month', 'week']) {
                 browser.js.exec(input, value as String, 'arguments[0].setAttribute("value", arguments[1]);')
                 valueSet = true
             } else {
@@ -961,22 +1000,21 @@ class DefaultNavigator implements Navigator {
     }
 
     protected getValue(WebElement input) {
-        input?.getAttribute("value")
+        input?.getAttribute('value')
     }
 
-    protected setSelectValue(WebElement element, value) {
-        def select = new SelectFactory().createSelectFor(element)
-
-        def multiple = select.multiple
+    protected setSelectValue(WebElement element, Object value) {
+        def select = new SelectFactory().createSelectFor(element) as GroovyObject
+        def multiple = (boolean) select.getProperty('multiple')
         if (multiple) {
-            select.deselectAll()
+            InvokerHelper.invokeMethod(select, 'deselectAll', null)
         }
 
         if (value == null || (value instanceof Collection && value.empty)) {
             if (multiple) {
                 return
             }
-            nonexistentSelectOptionSelected(value.toString(), select)
+            nonexistentSelectOptionSelected(value as String, select)
         }
 
         def valueStrings
@@ -988,35 +1026,38 @@ class DefaultNavigator implements Navigator {
 
         for (valueString in valueStrings) {
             try {
-                select.selectByValue(valueString)
-            } catch (NoSuchElementException e1) {
+                InvokerHelper.invokeMethod(select, 'selectByValue', valueString)
+            } catch (NoSuchElementException ignored) {
                 try {
-                    select.selectByVisibleText(valueString)
-                } catch (NoSuchElementException e2) {
+                    InvokerHelper.invokeMethod(select, 'selectByVisibleText', valueString)
+                } catch (NoSuchElementException ignore) {
                     nonexistentSelectOptionSelected(valueString, select)
                 }
             }
         }
     }
 
-    private void nonexistentSelectOptionSelected(String valueString, select) {
-        def availableValues = select.options*.getAttribute("value")
-        def availableTexts = select.options*.getText()
+    private void nonexistentSelectOptionSelected(String valueString, GroovyObject select) {
+        def options = select.getProperty('options') as List<WebElement>
+        def availableValues = options*.getAttribute('value')
+        def availableTexts = options*.getText()
         throw new IllegalArgumentException("Couldn't select option with text or value: $valueString, available texts: $availableTexts, available values: $availableValues")
     }
 
     protected boolean unselect(WebElement input) {
         if (input.isSelected()) {
             input.click()
-            true
+            return true
         }
+        false
     }
 
     protected boolean select(WebElement input) {
         if (!input.isSelected()) {
             input.click()
-            true
+            return true
         }
+        false
     }
 
     protected boolean setCheckboxValue(WebElement input, value) {
@@ -1035,7 +1076,7 @@ class DefaultNavigator implements Navigator {
     }
 
     protected String labelFor(WebElement input) {
-        def id = input.getAttribute("id")
+        def id = input.getAttribute('id')
         def labels = browser.driver.findElements(By.xpath("//label[@for='$id']")) ?: input.findElements(By.xpath("ancestor::label"))
         labels ? labels[0].text : null
     }
@@ -1047,14 +1088,14 @@ class DefaultNavigator implements Navigator {
                 def value = closure(it)
                 switch (value) {
                     case Collection:
-                        list.addAll value
+                        list.addAll((Collection<WebElement>) value)
                         break
                     default:
                         if (value) {
-                            list << value
+                            list.add(value as WebElement)
                         }
                 }
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchElementException ignored) {
             }
         }
         list
@@ -1062,15 +1103,15 @@ class DefaultNavigator implements Navigator {
 
     protected Collection<WebElement> collectUntil(Collection<WebElement> elements, Closure matcher) {
         int index = elements.findIndexOf matcher
-        index == -1 ? elements : elements[0..<index]
+        index == -1 ? elements : new ArrayList<WebElement>(elements).subList(0, index)
     }
 
     protected Collection<WebElement> collectUntil(Collection<WebElement> elements, Map<String, Object> attributes) {
-        collectUntil(elements) { matches(it, attributes) }
+        collectUntil(elements) { WebElement el -> matches(el, attributes) }
     }
 
     protected Collection<WebElement> collectUntil(Collection<WebElement> elements, Map<String, Object> attributes, String selector) {
-        collectUntil(elements) { CssSelector.matches(it, selector) && matches(it, attributes) }
+        collectUntil(elements) { WebElement el -> CssSelector.matches(el, selector) && matches(el, attributes) }
     }
 
     protected Collection<WebElement> collectRelativeElements(String xpath, @ClosureParams(value = FromString, options = "java.util.List<org.openqa.selenium.WebElement>") Closure filter) {
@@ -1108,7 +1149,7 @@ class DefaultNavigator implements Navigator {
     }
 
     protected List<String> elementClasses(WebElement element) {
-        element?.getAttribute("class")?.tokenize()?.unique()?.sort() ?: EMPTY_LIST
+        element?.getAttribute('class')?.tokenize()?.unique()?.sort() ?: EMPTY_LIST
     }
 
     protected Closure<Boolean> matchingSelectorAndPredicates(String selector, Map<String, Object> predicates) {

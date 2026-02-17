@@ -43,6 +43,8 @@ import geb.waiting.PotentiallyWaitingExecutor
 import geb.waiting.UninitializedWaitingSupport
 import geb.waiting.Wait
 import geb.waiting.WaitingSupport
+import groovy.transform.CompileDynamic
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 
 /**
@@ -64,6 +66,7 @@ import org.openqa.selenium.WebDriver
  * <p>
  * See the chapter in the Geb manual on pages for more information on writing subclasses.
  */
+@CompileStatic
 class Page implements Navigable, PageContentContainer, Initializable, WaitingSupport {
 
     /**
@@ -187,7 +190,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
     boolean verifyAt() {
         def verificationResult = getAtVerificationResult(true)
         if (!verificationResult) {
-            getInitializedBrowser().checkIfAtAnUnexpectedPage(getClass())
+            getInitializedBrowser().checkIfAtAnUnexpectedPage((Class<? extends Page>) getClass())
             verificationResult.rethrowAnyErrors()
         }
         verificationResult
@@ -211,7 +214,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * @see AtVerificationResult
      */
     AtVerificationResult getAtVerificationResult(boolean honourGlobalAtCheckWaiting = true) {
-        Throwable caughtException = null
+        AssertionError caughtException = null
         boolean atResult = false
         try {
             atResult = verifyThisPageAtOnly(honourGlobalAtCheckWaiting)
@@ -231,12 +234,17 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * @see #getPageUrl(java.lang.String)
      */
     void to(Map params, UrlFragment fragment = null, Object[] args) {
-        def path = convertToPath(*args)
+        def path = dynamicConvertToPath(args)
         if (path == null) {
             path = ""
         }
         getInitializedBrowser().go(params, getPageUrl(path), fragment ?: getPageFragment())
         getInitializedBrowser().page(this)
+    }
+
+    @CompileDynamic
+    private String dynamicConvertToPath(Object[] args) {
+        convertToPath(*args)
     }
 
     /**
@@ -245,7 +253,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * This implementation returns the static {@code url} property of the class.
      */
     String getPageUrl() {
-        this.class.url
+        this.getClass()['url']
     }
 
     /**
@@ -256,7 +264,20 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * @see geb.url.UrlFragment
      */
     UrlFragment getPageFragment() {
-        this.class.fragment ? UrlFragment.of(this.class.fragment) : null
+        def frag = getClass()['fragment']
+        switch (frag) {
+             case null:
+                return null
+             case CharSequence:
+                return UrlFragment.of(frag.toString())
+             case Map:
+                return UrlFragment.of((Map<?, ?>) frag)
+             default:
+                throw new IllegalStateException(
+                    "Unsupported fragment type for ${getClass().name}.fragment: " +
+                        "${frag.getClass().name} (value: $frag)"
+                )
+        }
     }
 
     /**
@@ -417,7 +438,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * @throws AssertionError if this page's "at checker" doesn't pass (with implicit assertions enabled)
      */
     private boolean verifyThisPageAtOnly(boolean honourGlobalAtCheckWaiting) {
-        Closure verifier = atChecker?.clone()
+        Closure verifier = (Closure) atChecker?.clone()
         if (verifier) {
             verifier.delegate = this
             verifier.resolveStrategy = Closure.DELEGATE_FIRST
@@ -428,7 +449,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
     }
 
     private Closure getAtChecker() {
-        getClass().at
+        (Closure) getClass()['at']
     }
 
     private Wait getGlobalAtCheckWaiting(boolean honourGlobalAtCheckWaiting) {
@@ -436,7 +457,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
     }
 
     private PotentiallyWaitingExecutor getEffectiveAtCheckWaitingExecutor(boolean honourGlobalAtCheckWaiting) {
-        def wait = getClass().atCheckWaiting != null ?
+        def wait = getClass()['atCheckWaiting'] != null ?
                 pageLevelAtCheckWaiting :
                 getGlobalAtCheckWaiting(honourGlobalAtCheckWaiting)
 
@@ -444,7 +465,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
     }
 
     protected Wait getPageLevelAtCheckWaiting() {
-        def atCheckWaitingValue = getClass().atCheckWaiting
+        def atCheckWaitingValue = getClass()['atCheckWaiting']
         getInitializedBrowser().config.getWaitForParam(atCheckWaitingValue)
     }
 

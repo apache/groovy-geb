@@ -20,7 +20,10 @@ package geb.content
 
 import geb.error.UndefinedPageContentException
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 
+@CompileStatic
 abstract class PageContentSupport {
 
     abstract getContent(String name, Object[] args)
@@ -31,34 +34,37 @@ abstract class PageContentSupport {
 
     abstract Set<String> getContentNames()
 
-    def methodMissing(String name, args) {
+    Object methodMissing(String name, Object args) {
+        Object[] argsArray = (args instanceof Object[]) ? (Object[]) args : new Object[] { args }
         try {
-            getContent(name, *args)
-        } catch (UndefinedPageContentException e1) {
-            getNavigator().methodMissing(name, args)
+            getContent(name, argsArray)
+        } catch (UndefinedPageContentException | MissingMethodException ignored) {
+            InvokerHelper.invokeMethod(navigator, name, argsArray)
         }
     }
 
-    def propertyMissing(String name) {
+    Object propertyMissing(String name) {
         try {
-            getContent(name)
-        } catch (UndefinedPageContentException e1) {
+            return getContent(name, new Object[0])
+        } catch (UndefinedPageContentException ignore) {
             try {
-                getNavigator().propertyMissing(name)
-            } catch (MissingPropertyException e2) {
+                InvokerHelper.getProperty(navigator, name)
+            } catch (MissingPropertyException ignored) {
                 throw new MissingPropertyException("Unable to resolve $name as content for ${owner}, or as a property on its Navigator context. Is $name a class you forgot to import?", name,
                     owner.getClass())
             }
         }
     }
 
-    def propertyMissing(String name, val) {
+    Object propertyMissing(String name, Object val) {
+        Object[] argsArray = (val instanceof Object[]) ? (Object[]) val : new Object[] { val }
         try {
-            getContent(name).value(val)
-        } catch (UndefinedPageContentException e) {
+            def content = getContent(name, new Object[0])
+            return InvokerHelper.invokeMethod(content, 'value', argsArray)
+        } catch (UndefinedPageContentException ignore) {
             try {
-                getNavigator().propertyMissing(name, val)
-            } catch (MissingPropertyException e1) {
+                return InvokerHelper.invokeMethod(navigator, 'propertyMissing', new Object[] { name, val })
+            } catch (MissingPropertyException ignored) {
                 throw new MissingPropertyException(name, owner.getClass())
             }
         }

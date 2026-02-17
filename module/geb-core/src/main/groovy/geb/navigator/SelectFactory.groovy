@@ -18,8 +18,10 @@
  */
 package geb.navigator
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class SelectFactory {
 
     static public final String SELECT_CLASS_NAME = "org.openqa.selenium.support.ui.Select"
@@ -31,7 +33,7 @@ class SelectFactory {
     protected Class loadSelectClass() {
         try {
             classLoaderToUse.loadClass(SELECT_CLASS_NAME)
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignore) {
             throw new ClassNotFoundException(errorMessage)
         }
     }
@@ -40,7 +42,7 @@ class SelectFactory {
         this.class.classLoader
     }
 
-    protected getErrorMessage() {
+    protected String getErrorMessage() {
         "Unable to find class '$SELECT_CLASS_NAME', which is required when interacting with select elements.\n" +
             "\n" +
             "This class is part of the selenium-support jar, which is not part of the WebDriver core that is depended on by each of the drivers. " +

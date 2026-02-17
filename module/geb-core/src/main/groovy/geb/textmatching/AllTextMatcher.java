@@ -18,8 +18,11 @@
  */
 package geb.textmatching;
 
+import groovy.transform.CompileStatic;
+
 import java.util.Arrays;
 
+@CompileStatic
 class AllTextMatcher extends CompositeTextMatcher {
 
     public AllTextMatcher(TextMatcher[] matchers) {

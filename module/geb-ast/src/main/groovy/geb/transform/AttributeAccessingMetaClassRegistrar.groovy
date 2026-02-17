@@ -19,7 +19,9 @@
 package geb.transform
 
 import geb.navigator.AttributeAccessingMetaClass
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class AttributeAccessingMetaClassRegistrar {
     static void registerFor(Class c) {
         def mc = new AttributeAccessingMetaClass(new ExpandoMetaClass(c))

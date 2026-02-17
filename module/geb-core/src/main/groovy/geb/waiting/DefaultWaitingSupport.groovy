@@ -19,12 +19,14 @@
 package geb.waiting
 
 import geb.Configuration
+import groovy.transform.CompileStatic
 
 /**
  * A mixin style class that adds support for waiting for different things.
  *
  * This is mixed into {@link geb.Page} and {@link geb.Module}.
  */
+@CompileStatic
 class DefaultWaitingSupport implements WaitingSupport {
 
     private final Configuration config

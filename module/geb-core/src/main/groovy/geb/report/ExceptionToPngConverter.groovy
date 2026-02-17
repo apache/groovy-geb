@@ -18,6 +18,8 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
+
 import javax.imageio.ImageIO
 import java.awt.*
 import java.awt.font.FontRenderContext
@@ -29,6 +31,7 @@ import static java.awt.Color.WHITE
 import static java.awt.Font.PLAIN
 import static java.awt.image.BufferedImage.TYPE_INT_RGB
 
+@CompileStatic
 class ExceptionToPngConverter {
     private static final String FONT_TYPE = 'Monospaced'
     private static final int FONT_SIZE = 12
@@ -44,14 +47,13 @@ class ExceptionToPngConverter {
     }
 
     private List<String> throwableLines(Throwable t) {
-        def lines = []
-        lines << t.toString()
-        lines += t.stackTrace.collect {
-            "at $it"
-        }
+        def lines = [t.toString()]
+        lines.addAll(t.stackTrace.collect {
+            "at $it".toString()
+        })
         if (t.cause) {
-            lines << 'Caused by:'
-            lines += throwableLines(t.cause)
+            lines.add('Caused by:')
+            lines.addAll(throwableLines(t.cause))
         }
         lines
     }
@@ -72,7 +74,7 @@ class ExceptionToPngConverter {
 
     private BufferedImage createImage(List<String> lines, Font font, FontRenderContext fontRenderContext) {
         def w = lines.collect { font.getStringBounds(it, fontRenderContext).width }.max() as int
-        def h = lines.collect { (font.getStringBounds(it, fontRenderContext).height as int) + LINE_SPACING }.sum()
+        def h = lines.collect { (font.getStringBounds(it, fontRenderContext).height as int) + LINE_SPACING }.sum() as int
 
         new BufferedImage(w, h, TYPE_INT_RGB)
     }

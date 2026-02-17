@@ -19,7 +19,9 @@
 package geb.error
 
 import geb.content.PageContentContainer
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class InvalidPageContent extends GebException {
 
     InvalidPageContent(Object message) {

@@ -20,8 +20,10 @@ package geb.module
 
 import geb.Module
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class RadioButtons extends Module {
 
     private static final String LABEL_TAG = "label"
@@ -36,9 +38,9 @@ class RadioButtons extends Module {
             def label = null
             def id = checked.getAttribute("id")
             if (id) {
-                label = browser.find(LABEL_TAG, "for": id)
+                label = browser.page.find(LABEL_TAG, "for": id)
             }
-            (label ?: browser.$(checkedElement).parent(LABEL_TAG)).text()
+            (label ?: browser.page.$(checkedElement).parent(LABEL_TAG)).text()
         }
     }
 
@@ -49,7 +51,7 @@ class RadioButtons extends Module {
     @Override
     protected void initialized() {
         if (!navigator.empty) {
-            def tags = navigator*.tag()*.toLowerCase().unique().sort()
+            def tags = navigator.collect { it.tag().toLowerCase() }.unique().sort()
             if (tags != ["input"]) {
                 throw new InvalidModuleBaseException("All elements of the base navigator for ${getClass().name} module have to be inputs but found the following elements: $tags")
             }
@@ -65,7 +67,7 @@ class RadioButtons extends Module {
     }
 
     protected List<String> getAttributes(String attributeName) {
-        navigator*.getAttribute(attributeName)*.toLowerCase().unique().sort()
+        navigator.collect { it.getAttribute(attributeName).toLowerCase() }.unique().sort()
     }
 
     protected WebElement getCheckedElement() {

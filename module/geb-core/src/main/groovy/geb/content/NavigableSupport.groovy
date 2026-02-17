@@ -22,10 +22,12 @@ import geb.Module
 import geb.navigator.Locator
 import geb.navigator.Navigator
 import geb.navigator.factory.NavigatorFactory
+import groovy.transform.CompileStatic
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver.TargetLocator
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class NavigableSupport implements Navigable {
 
     private final NavigatorFactory navigatorFactory

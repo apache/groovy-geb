@@ -19,8 +19,10 @@
 package geb.spock
 
 import geb.test.GebTestManagerBuilder
+import groovy.transform.CompileStatic
 import spock.lang.Stepwise
 
+@CompileStatic
 class SpockGebTestManagerBuilder {
 
     @Delegate

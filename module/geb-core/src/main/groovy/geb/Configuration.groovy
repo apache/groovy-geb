@@ -23,13 +23,16 @@ import geb.driver.*
 import geb.error.InvalidGebConfiguration
 import geb.navigator.event.NavigatorEventListener
 import geb.navigator.factory.*
+import geb.navigator.Navigator
 import geb.report.*
 import geb.waiting.Wait
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 
 /**
  * Represents a particular configuration of Geb.
  */
+@CompileStatic
 class Configuration {
 
     private final static PageEventListener NOOP_PAGE_EVENT_LISTENER = new PageEventListenerSupport()
@@ -54,42 +57,40 @@ class Configuration {
      * Updates a {@code waiting.preset} config entry for a given preset name.
      */
     void setWaitPreset(String name, Number presetTimeout, Number presetRetryInterval) {
-        rawConfig.waiting.presets[name].with {
-            timeout = presetTimeout
-            retryInterval = presetRetryInterval
-        }
+        writeValue("waiting.presets.${name}.timeout", presetTimeout)
+        writeValue("waiting.presets.${name}.retryInterval", presetRetryInterval)
     }
 
     Wait getWaitPreset(String name) {
-        def preset = rawConfig.waiting.presets[name]
-        def timeout = readValue(preset, 'timeout', getDefaultWaitTimeout())
-        def retryInterval = readValue(preset, 'retryInterval', getDefaultWaitRetryInterval())
-
-        new Wait(timeout, retryInterval, getIncludeCauseInWaitTimeoutExceptionMessage())
+        new Wait(
+            readValue("waiting.presets.${name}.timeout", defaultWaitTimeout),
+            readValue("waiting.presets.${name}.retryInterval", defaultWaitRetryInterval),
+            includeCauseInWaitTimeoutExceptionMessage
+        )
     }
 
     Wait getDefaultWait() {
-        new Wait(getDefaultWaitTimeout(), getDefaultWaitRetryInterval(), getIncludeCauseInWaitTimeoutExceptionMessage())
+        new Wait(defaultWaitTimeout, defaultWaitRetryInterval, includeCauseInWaitTimeoutExceptionMessage)
     }
 
     Wait getWait(Number timeout) {
-        new Wait(timeout, getDefaultWaitRetryInterval(), getIncludeCauseInWaitTimeoutExceptionMessage())
+        new Wait(timeout, defaultWaitRetryInterval, includeCauseInWaitTimeoutExceptionMessage)
     }
 
-    Wait getWaitForParam(waitingParam) {
+    Wait getWaitForParam(Object waitingParam) {
         if (waitingParam == true) {
             defaultWait
         } else if (waitingParam instanceof CharSequence) {
             getWaitPreset(waitingParam.toString())
-        } else if (waitingParam instanceof Number && waitingParam > 0) {
-            getWait(waitingParam)
+        } else if (waitingParam instanceof Number && ((Number) waitingParam) > 0) {
+            getWait((Number) waitingParam)
         } else if (waitingParam instanceof Collection) {
-            if (waitingParam.size() == 2) {
-                def timeout = waitingParam[0]
-                def retryInterval = waitingParam[1]
-
+            def list = ((Collection<?>) waitingParam).asList()
+            if (list.size() == 2) {
+                def timeout = list[0]
+                def retryInterval = list[1]
                 if (timeout instanceof Number && retryInterval instanceof Number) {
-                    new Wait(timeout, retryInterval, getIncludeCauseInWaitTimeoutExceptionMessage())
+                    new Wait((Number) timeout, (Number) retryInterval, includeCauseInWaitTimeoutExceptionMessage)
                 } else {
                     throw new IllegalArgumentException("'wait' param has illegal value '$waitingParam' (collection elements must be numbers)")
                 }
@@ -107,7 +108,7 @@ class Configuration {
      * @see #getDefaultWaitTimeout()
      */
     void setDefaultWaitTimeout(Number defaultWaitTimeout) {
-        rawConfig.waiting.timeout = defaultWaitTimeout
+        writeValue('waiting.timeout', defaultWaitTimeout)
     }
 
     /**
@@ -116,7 +117,7 @@ class Configuration {
      * Either the value at config path {@code waiting.timeout} or {@link geb.waiting.Wait#DEFAULT_TIMEOUT 5}.
      */
     Number getDefaultWaitTimeout() {
-        readValue(rawConfig.waiting, 'timeout', Wait.DEFAULT_TIMEOUT) as Number
+        readValue('waiting.timeout', Wait.DEFAULT_TIMEOUT)
     }
 
     /**
@@ -125,7 +126,7 @@ class Configuration {
      * Determines if the message of {@link geb.waiting.WaitTimeoutException} should contain a string representation of its cause.
      */
     boolean getIncludeCauseInWaitTimeoutExceptionMessage() {
-        readValue(rawConfig.waiting, 'includeCauseInMessage', false)
+        readValue('waiting.includeCauseInMessage', false)
     }
 
     /**
@@ -134,7 +135,7 @@ class Configuration {
      * @see #getIncludeCauseInWaitTimeoutExceptionMessage()
      */
     void setIncludeCauseInWaitTimeoutExceptionMessage(boolean include) {
-        rawConfig.waiting.includeCauseInMessage = include
+        writeValue('waiting.includeCauseInMessage', include)
     }
 
     /**
@@ -143,47 +144,48 @@ class Configuration {
      * @see #getDefaultWaitRetryInterval()
      */
     void setDefaultWaitRetryInterval(Number defaultWaitRetryInterval) {
-        rawConfig.waiting.retryInterval = defaultWaitRetryInterval
+        writeValue('waiting.retryInterval', defaultWaitRetryInterval)
     }
 
-    /**
-     * The default {@code retryInterval} value to use for waiting (i.e. if unspecified).
-     * <p>
-     * Either the value at config path {@code waiting.retryInterval} or {@link geb.waiting.Wait#DEFAULT_RETRY_INTERVAL 0.1}.
-     */
     Number getDefaultWaitRetryInterval() {
-        readValue(rawConfig.waiting, 'retryInterval', Wait.DEFAULT_RETRY_INTERVAL)
+        readValue('waiting.retryInterval', Wait.DEFAULT_RETRY_INTERVAL)
     }
 
     Wait getAtCheckWaiting() {
-        getWaitForParam(rawConfig.atCheckWaiting)
+        getWaitForParam(lookupConfig('atCheckWaiting'))
     }
 
     void setAtCheckWaiting(Object waitForParam) {
-        rawConfig.atCheckWaiting = waitForParam
+        writeValue('atCheckWaiting', waitForParam)
     }
 
     Wait getBaseNavigatorWaiting() {
-        getWaitForParam(rawConfig.baseNavigatorWaiting)
+        getWaitForParam(lookupConfig('baseNavigatorWaiting'))
     }
 
     void setBaseNavigatorWaiting(Object waitForParam) {
-        rawConfig.baseNavigatorWaiting = waitForParam
+        writeValue('baseNavigatorWaiting', waitForParam)
     }
 
     Collection<Class<? extends Page>> getUnexpectedPages() {
-        def unexpectedPages = rawConfig.unexpectedPages ?: []
-        def isCollectionContainingOnlyPageClasses = unexpectedPages instanceof Collection && unexpectedPages.every { it instanceof Class && Page.isAssignableFrom(it) }
-        if (!isCollectionContainingOnlyPageClasses) {
-            def message = "Unexpected pages configuration has to be a collection of classes that extend ${Page.name} but found \"$unexpectedPages\". " +
-                    "Did you forget to include some imports in your config file?"
-            throw new InvalidGebConfiguration(message)
+        def obj = lookupConfig('unexpectedPages')
+        if (obj == null) {
+            return Collections.<Class<? extends Page>>emptyList()
         }
-        unexpectedPages
+        if (!(obj instanceof Collection)) {
+            throwInvalidUnexpectedPages(obj)
+        }
+        def items = (Collection<?>) obj
+        for (def item : items) {
+            if (!(item instanceof Class && Page.isAssignableFrom(item))) {
+                throwInvalidUnexpectedPages(obj)
+            }
+        }
+        (Collection<Class<? extends Page>>) items
     }
 
     void setUnexpectedPages(Collection<Class<? extends Page>> pages) {
-        rawConfig.unexpectedPages = pages
+        writeValue('unexpectedPages', pages)
     }
 
     /**
@@ -202,7 +204,7 @@ class Configuration {
      * @see #isCacheDriver()
      */
     void setCacheDriver(boolean flag) {
-        rawConfig.cacheDriver = flag
+        writeValue('cacheDriver', flag)
     }
 
     /**
@@ -221,7 +223,7 @@ class Configuration {
      * @see #isCacheDriverPerThread()
      */
     void setCacheDriverPerThread(boolean flag) {
-        rawConfig.cacheDriverPerThread = flag
+        writeValue('cacheDriverPerThread', flag)
     }
 
     /**
@@ -237,11 +239,11 @@ class Configuration {
      * Sets whether or not the cached driver should be quit when the JVM shuts down.
      */
     void setQuitCacheDriverOnShutdown(boolean flag) {
-        rawConfig.quitCachedDriverOnShutdown = flag
+        writeValue('quitCachedDriverOnShutdown', flag)
     }
 
     void setQuitDriverOnBrowserReset(boolean flag) {
-        rawConfig.quitDriverOnBrowserReset = flag
+        writeValue('quitDriverOnBrowserReset', flag)
     }
 
     boolean isQuitDriverOnBrowserReset() {
@@ -256,8 +258,8 @@ class Configuration {
      *
      * @see #createDriver()
      */
-    void setDriverConf(value) {
-        rawConfig.driver = value
+    void setDriverConf(Object value) {
+        writeValue('driver', value)
     }
 
     /**
@@ -268,8 +270,8 @@ class Configuration {
      *
      * @see #createDriver()
      */
-    def getDriverConf() {
-        def value = properties.getProperty("geb.driver") ?: readValue("driver", null)
+    Object getDriverConf() {
+        def value = properties.getProperty('geb.driver') ?: readValue('driver', null)
         if (value instanceof WebDriver) {
             throw new IllegalStateException(
                     "The 'driver' config value is an instance of WebDriver. " +
@@ -283,37 +285,38 @@ class Configuration {
      * Returns the config value {@code baseUrl}, or {@link geb.BuildAdapter#getBaseUrl()}.
      */
     String getBaseUrl() {
-        readValue("baseUrl", buildAdapter.baseUrl)
+        readValue('baseUrl', buildAdapter.baseUrl)
     }
 
-    void setBaseUrl(baseUrl) {
-        rawConfig.baseUrl = baseUrl == null ? null : baseUrl.toString()
+    void setBaseUrl(Object baseUrl) {
+        writeValue('baseUrl', baseUrl?.toString())
     }
 
     /**
      * Returns the config value {@code reportsDir}, or {@link geb.BuildAdapter#getReportsDir()}.
      */
     File getReportsDir() {
-        def reportsDir = readValue("reportsDir", buildAdapter.reportsDir)
-        if (reportsDir == null) {
-            null
-        } else if (reportsDir instanceof File) {
-            reportsDir
-        } else {
-            new File(reportsDir.toString())
+        def reportsDir = lookupConfig('reportsDir')
+        switch (reportsDir) {
+            case null:
+                return buildAdapter.reportsDir
+            case File:
+                return (File) reportsDir
+            default:
+                return new File(reportsDir.toString())
         }
     }
 
-    def setReportOnTestFailureOnly(boolean value) {
-        rawConfig.reportOnTestFailureOnly = value
+    void setReportOnTestFailureOnly(boolean value) {
+        writeValue('reportOnTestFailureOnly', value)
     }
 
     boolean isReportOnTestFailureOnly() {
-        readValue("reportOnTestFailureOnly", true)
+        readValue('reportOnTestFailureOnly', true)
     }
 
     void setReportsDir(File reportsDir) {
-        rawConfig.reportsDir = reportsDir
+        writeValue('reportsDir', reportsDir)
     }
 
     /**
@@ -322,15 +325,17 @@ class Configuration {
      * Returns the config value {@code reporter}, or reporter that records page source and screen shots if not explicitly set.
      */
     Reporter getReporter() {
-        def reporter = readValue("reporter", null)
-        if (reporter == null) {
-            reporter = createDefaultReporter()
-            this.reporter = reporter
-        } else if (!(reporter instanceof Reporter)) {
-            throw new InvalidGebConfiguration("The specified reporter ($reporter) is not an implementation of ${Reporter.name}")
+        def resolved = lookupConfig('reporter')
+        if (!resolved) {
+            resolved = createDefaultReporter()
+            this.reporter = resolved
+        } else if (!(resolved instanceof Reporter)) {
+            throw new InvalidGebConfiguration(
+                "The specified reporter ($resolved) is not an implementation of ${Reporter.name}"
+            )
         }
 
-        def typedReporter = reporter as Reporter
+        def typedReporter = (Reporter) resolved
 
         def reportingListener = getReportingListener()
         if (reportingListener) {
@@ -347,35 +352,36 @@ class Configuration {
      * @see #getReporter()
      */
     void setReporter(Reporter reporter) {
-        rawConfig.reporter = reporter
+        writeValue('reporter', reporter)
     }
 
     void setReportingListener(ReportingListener reportingListener) {
-        rawConfig.reportingListener = reportingListener
+        writeValue('reportingListener', reportingListener)
     }
 
     ReportingListener getReportingListener() {
-        readValue("reportingListener", null)
+        lookupConfig('reportingListener') as ReportingListener
     }
 
     NavigatorEventListener getNavigatorEventListener() {
-        readValue("navigatorEventListener", null)
+        lookupConfig('navigatorEventListener') as NavigatorEventListener
     }
 
     void setNavigatorEventListener(NavigatorEventListener navigatorEventListener) {
-        rawConfig.navigatorEventListener = navigatorEventListener
+        writeValue('navigatorEventListener', navigatorEventListener)
     }
 
     PageEventListener getPageEventListener() {
-        readValue("pageEventListener", NOOP_PAGE_EVENT_LISTENER)
+        def pageEventListener = lookupConfig('pageEventListener')
+        pageEventListener == null ? NOOP_PAGE_EVENT_LISTENER : (pageEventListener as PageEventListener)
     }
 
     void setPageEventListener(PageEventListener pageEventListener) {
-        rawConfig.pageEventListener = pageEventListener
+        writeValue('pageEventListener', pageEventListener)
     }
 
     WebDriver createDriver() {
-        wrapDriverFactoryInCachingIfNeeded(getDriverFactory(getDriverConf())).driver
+        wrapDriverFactoryInCachingIfNeeded(getDriverFactory(driverConf)).driver
     }
 
     /**
@@ -412,7 +418,7 @@ class Configuration {
      * Sets the auto clear cookies flag explicitly, overwriting any value from the config script.
      */
     void setAutoClearCookies(boolean flag) {
-        rawConfig.autoClearCookies = flag
+        writeValue('autoClearCookies', flag)
     }
 
     /**
@@ -430,7 +436,7 @@ class Configuration {
      * Sets the auto clear web storage flag explicitly, overwriting any value from the config script.
      */
     void setAutoClearWebStorage(boolean flag) {
-        rawConfig.autoClearWebStorage = flag
+        writeValue('autoClearWebStorage', flag)
     }
 
     /**
@@ -444,19 +450,23 @@ class Configuration {
      * @param browser The browser to use as the basis of the navigatory factory.
      */
     NavigatorFactory createNavigatorFactory(Browser browser) {
-        def navigatorFactory = readValue("navigatorFactory", null)
+        def navigatorFactory = lookupConfig('navigatorFactory')
         if (navigatorFactory == null) {
             new BrowserBackedNavigatorFactory(browser, getInnerNavigatorFactory())
-        } else {
-            if (navigatorFactory instanceof Closure) {
-                def result = navigatorFactory.call(browser)
-                if (result instanceof NavigatorFactory) {
-                    return result
-                }
-                throw new InvalidGebConfiguration("navigatorFactory returned '${result}', it should be a NavigatorFactory implementation")
-            } else {
-                throw new InvalidGebConfiguration("navigatorFactory is '${navigatorFactory}', it should be a Closure that returns a NavigatorFactory implementation")
+        } else if (navigatorFactory instanceof Closure) {
+            def result = ((Closure<?>) navigatorFactory).call(browser)
+            if (result instanceof NavigatorFactory) {
+                return (NavigatorFactory) result
             }
+            throw new InvalidGebConfiguration(
+                "navigatorFactory returned '$result', " +
+                    'it should be a NavigatorFactory implementation'
+            )
+        } else {
+            throw new InvalidGebConfiguration(
+                "navigatorFactory is '$navigatorFactory', " +
+                    'it should be a Closure that returns a NavigatorFactory implementation'
+            )
         }
     }
 
@@ -474,16 +484,19 @@ class Configuration {
      * @return The inner navigator factory.
      */
     InnerNavigatorFactory getInnerNavigatorFactory() {
-        def innerNavigatorFactory = readValue("innerNavigatorFactory", null)
+        def innerNavigatorFactory = lookupConfig('innerNavigatorFactory')
         switch (innerNavigatorFactory) {
             case null:
                 return new DefaultInnerNavigatorFactory()
             case InnerNavigatorFactory:
-                return innerNavigatorFactory
+                return (InnerNavigatorFactory) innerNavigatorFactory
             case Closure:
-                return new ClosureInnerNavigatorFactory(innerNavigatorFactory)
+                return new ClosureInnerNavigatorFactory((Closure<Navigator>) innerNavigatorFactory)
             default:
-                throw new InvalidGebConfiguration("innerNavigatorFactory is '${innerNavigatorFactory}', it should be a Closure or InnerNavigatorFactory implementation")
+                throw new InvalidGebConfiguration(
+                    "innerNavigatorFactory is '$innerNavigatorFactory', " +
+                        'it should be a Closure or InnerNavigatorFactory implementation'
+                )
         }
     }
 
@@ -493,84 +506,90 @@ class Configuration {
      * Only effectual before the browser calls {@link #createNavigatorFactory(Browser)} initially.
      */
     void setInnerNavigatorFactory(InnerNavigatorFactory innerNavigatorFactory) {
-        this.rawConfig.innerNavigatorFactory = innerNavigatorFactory
+        writeValue('innerNavigatorFactory', innerNavigatorFactory)
     }
 
     /**
      * Returns the default configuration closure to be applied before the user-
      * supplied config closure when using the download support.
      */
-    @SuppressWarnings("ClosureAsLastMethodParameter")
-    Closure getDownloadConfig() {
-        readValue("defaultDownloadConfig", { HttpURLConnection con -> })
+    @SuppressWarnings('ClosureAsLastMethodParameter')
+    Closure<?> getDownloadConfig() {
+        def defaultConfig = { HttpURLConnection con -> }
+        def downloadConfig = lookupConfig('defaultDownloadConfig')
+        downloadConfig == null ? defaultConfig : (downloadConfig as Closure<?>)
     }
 
     void setDownloadConfig(Closure config) {
-        rawConfig.defaultDownloadConfig = config
+        writeValue('defaultDownloadConfig', config)
     }
 
     /**
      * Updates the {@code templateOptions.cache} config entry.
      */
     void setTemplateCacheOption(boolean cache) {
-        rawConfig.templateOptions.cache = cache
+        writeValue('templateOptions.cache', cache)
     }
 
     /**
      * Updates the {@code templateOptions.wait} config entry.
      */
-    void setTemplateWaitOption(wait) {
-        rawConfig.templateOptions.wait = wait
+    void setTemplateWaitOption(Object wait) {
+        writeValue('templateOptions.wait', wait)
     }
 
     /**
      * Updates the {@code templateOptions.toWait} config entry.
      */
-    void setTemplateToWaitOption(toWait) {
-        rawConfig.templateOptions.toWait = toWait
+    void setTemplateToWaitOption(Object toWait) {
+        writeValue('templateOptions.toWait', toWait)
     }
 
     /**
      * Updates the {@code templateOptions.waitCondition} config entry.
      */
     void setTemplateWaitConditionOption(Closure<?> waitCondition) {
-        rawConfig.templateOptions.waitCondition = waitCondition
+        writeValue('templateOptions.waitCondition', waitCondition)
     }
 
     /**
      * Updates the {@code templateOptions.required} config entry.
      */
     void setTemplateRequiredOption(boolean required) {
-        rawConfig.templateOptions.required = required
+        writeValue('templateOptions.required', required)
     }
 
     /**
      * Updates the {@code templateOptions.min} config entry.
      */
     void setTemplateMinOption(int min) {
-        rawConfig.templateOptions.min = min
+        writeValue('templateOptions.min', min)
     }
 
     /**
      * Updates the {@code templateOptions.max} config entry.
      */
     void setTemplateMaxOption(int max) {
-        rawConfig.templateOptions.max = max
+        writeValue('templateOptions.max', max)
     }
 
-    /**
-     * Returns default values used for some of the content DSL template options.
-     */
     TemplateOptionsConfiguration getTemplateOptions() {
-        def raw = rawConfig.templateOptions
+        def cacheValue = lookupConfig('templateOptions.cache')
+        def cache = cacheValue == null ? false : (cacheValue as boolean)
+        def wait = lookupConfig('templateOptions.wait')
+        def toWait = lookupConfig('templateOptions.toWait')
+        def waitCondition = extractWaitCondition(lookupConfig('templateOptions.waitCondition'))
+        def required = optionalBooleanFrom(lookupConfig('templateOptions.required'))
+        def min = optionalNonNegativeIntegerFrom(lookupConfig('templateOptions.min'), 'min template option')
+        def max = optionalNonNegativeIntegerFrom(lookupConfig('templateOptions.max'), 'max template option')
         def configuration = TemplateOptionsConfiguration.builder()
-                .cache(raw.cache as boolean)
-                .wait(readValue(raw, 'wait', null))
-                .toWait(readValue(raw, 'toWait', null))
-                .waitCondition(extractWaitCondition(raw))
-                .required(readOptionalBooleanValue(raw, 'required'))
-                .min(readOptionalNonNegativeIntegerValue(raw, 'min', 'min template option'))
-                .max(readOptionalNonNegativeIntegerValue(raw, 'max', 'max template option'))
+                .cache(cache)
+                .wait(wait)
+                .toWait(toWait)
+                .waitCondition(waitCondition)
+                .required(required)
+                .min(min)
+                .max(max)
                 .build()
         validate(configuration)
         configuration
@@ -580,12 +599,13 @@ class Configuration {
      * Updates the {@code withWindow.close} config entry.
      */
     void setWithWindowCloseOption(boolean close) {
-        rawConfig.withWindow.close = close
+        writeValue('withWindow.close', close)
     }
 
     WithWindowConfiguration getWithWindowConfig() {
+        def close = readValue('withWindow.close', false)
         WithWindowConfiguration.builder()
-                .close(rawConfig.withWindow.close as boolean)
+                .close(close)
                 .build()
     }
 
@@ -593,37 +613,30 @@ class Configuration {
      * Updates the {@code withNewWindow.close} config entry.
      */
     void setWithNewWindowCloseOption(boolean close) {
-        rawConfig.withNewWindow.close = close
+        writeValue('withNewWindow.close', close)
     }
 
-    /**
-     * Updates the {@code withWindow.wait} config entry.
-     */
-    void setWithNewWindowWaitOption(wait) {
-        rawConfig.withNewWindow.wait = wait
+    void setWithNewWindowWaitOption(Object wait) {
+        writeValue('withNewWindow.wait', wait)
     }
 
     /**
      * Sets the {@code requirePageAtCheckers} flag explicitly, overwriting any value from the config script.
      */
     void setRequirePageAtCheckers(boolean requirePageAtCheckers) {
-        rawConfig.requirePageAtCheckers = requirePageAtCheckers
+        writeValue('requirePageAtCheckers', requirePageAtCheckers)
     }
 
-    /**
-     * Whether or not to throw an exception when implicit "at checks" are being performed and the checked page does not define an "at check".
-     *
-     * @return the config value for {@code requirePageAtCheckers}, defaulting to {@code false} if not set.
-     */
     boolean getRequirePageAtCheckers() {
-        rawConfig.requirePageAtCheckers
+        readValue('requirePageAtCheckers', false)
     }
 
     WithNewWindowConfiguration getWithNewWindowConfig() {
-        def raw = rawConfig.withNewWindow
+        def close = optionalBooleanFrom(lookupConfig('withNewWindow.close'))
+        def wait = lookupConfig('withNewWindow.wait')
         WithNewWindowConfiguration.builder()
-                .close(readOptionalBooleanValue(raw, 'close'))
-                .wait(raw.wait)
+                .close(close)
+                .wait(wait)
                 .build()
     }
 
@@ -634,15 +647,17 @@ class Configuration {
         if (required.present) {
             if (min.present) {
                 if ((required.get() && min.get() == 0) || (!required.get() && min.get() != 0)) {
-                    boundsAndRequiredConflicting()
+                    throwBoundsAndRequiredConflicting()
                 }
             }
             if (max.present && required.get() && max.get() == 0) {
-                boundsAndRequiredConflicting()
+                throwBoundsAndRequiredConflicting()
             }
         }
         if (max.present && min.present && max.get() < min.get()) {
-            throw new InvalidGebConfiguration("Configuration contains 'max' template option that is lower than the 'min' template option")
+            throw new InvalidGebConfiguration(
+                'Configuration contains \'max\' template option that is lower than the \'min\' template option'
+            )
         }
     }
 
@@ -651,82 +666,164 @@ class Configuration {
         this
     }
 
-    protected readValue(String name, defaultValue) {
-        readValue(rawConfig, name, defaultValue)
+    protected <T> T readValue(String path, T defaultValue) {
+        readValue(rawConfig, path, defaultValue)
     }
 
-    protected readValue(ConfigObject config, String name, defaultValue) {
-        if (config.containsKey(name)) {
-            config[name]
-        } else {
-            defaultValue
-        }
-    }
-
-    protected Optional<Boolean> readOptionalBooleanValue(ConfigObject config, String name) {
-        if (config.containsKey(name)) {
-            Optional.of(config[name] as boolean)
-        } else {
-            Optional.empty()
-        }
-    }
-
-    protected Optional<Integer> readOptionalNonNegativeIntegerValue(ConfigObject config, String name, String errorName) {
-        if (config.containsKey(name)) {
-            def value = config[name]
-            if (value instanceof Integer && value >= 0) {
-                Optional.of(value)
-            } else {
-                throw new InvalidGebConfiguration("Configuration for $errorName should be a non-negative integer but found \"$value\"")
-            }
-        } else {
-            Optional.empty()
-        }
+    protected <T> T readValue(ConfigObject config, String name, T defaultValue) {
+        def value = lookupConfig(config, name)
+        value == null ? defaultValue : (T) value
     }
 
     protected Reporter createDefaultReporter() {
         new CompositeReporter(new PageSourceReporter(), new ScreenshotReporter())
     }
 
-    private static toConfigObject(Map rawConfig) {
-        def configObject = new ConfigObject()
-        configObject.putAll(rawConfig)
-        configObject
-    }
-
-    private Closure<?> extractWaitCondition(ConfigObject config) {
-        def waitCondition = config.waitCondition
-        if (waitCondition) {
-            if (waitCondition instanceof Closure) {
-                waitCondition
-            } else {
-                throw new InvalidGebConfiguration("Configuration for waitCondition template option should be a closure but found \"$waitCondition\"")
-            }
-        }
-    }
-
-    private void boundsAndRequiredConflicting() {
-        throw new InvalidGebConfiguration("Configuration for bounds and 'required' template options is conflicting")
-    }
-
-    protected DriverFactory getDriverFactory(driverValue) {
+    protected DriverFactory getDriverFactory(Object driverValue) {
         switch (driverValue) {
+            case null:
+                return new DefaultDriverFactory(classLoader)
             case CharSequence:
                 return new NameBasedDriverFactory(classLoader, driverValue.toString())
             case Closure:
-                return new CallbackDriverFactory(driverValue)
-            case null:
-                return new DefaultDriverFactory(classLoader)
+                return new CallbackDriverFactory((Closure<?>) driverValue)
             default:
-                throw new DriverCreationException("Unable to determine factory for 'driver' config value '$driverValue'")
+                throw new DriverCreationException(
+                    "Unable to determine factory for 'driver' config value '$driverValue'"
+                )
         }
     }
 
     protected DriverFactory wrapDriverFactoryInCachingIfNeeded(DriverFactory factory) {
         if (isCacheDriver()) {
-            isCacheDriverPerThread() ? CachingDriverFactory.perThread(factory, isQuitCachedDriverOnShutdown()) : CachingDriverFactory.global(factory, isQuitCachedDriverOnShutdown())
+            isCacheDriverPerThread() ?
+                CachingDriverFactory.perThread(factory, isQuitCachedDriverOnShutdown()) :
+                CachingDriverFactory.global(factory, isQuitCachedDriverOnShutdown())
         } else {
             factory
         }
     }
+
+    private static ConfigObject toConfigObject(Map<?, ?> rawConfig) {
+        def config = new ConfigObject()
+        config.putAll(rawConfig)
+        config
+    }
+
+    private void writeValue(String path, Object value) {
+        if (path == null) {
+            throw new InvalidGebConfiguration('Configuration path cannot be null')
+        }
+        def separatorIndex = path.lastIndexOf('.')
+        if (separatorIndex == -1) {
+            rawConfig[path] = value
+        } else {
+            def parentPath = path.substring(0, separatorIndex)
+            def key = path.substring(separatorIndex + 1)
+            resolveConfig(parentPath)[key] = value
+        }
+    }
+
+    private Closure<?> extractWaitCondition(Object waitCondition) {
+        if (waitCondition == null) {
+            return null
+        }
+        if (waitCondition instanceof Closure) {
+            return (Closure<?>) waitCondition
+        }
+        throw new InvalidGebConfiguration(
+            "Configuration for waitCondition template option should be a closure but found \"$waitCondition\""
+        )
+    }
+
+    private Optional<Boolean> optionalBooleanFrom(Object value) {
+        if (value == null) {
+            Optional.empty()
+        } else {
+            Optional.of(value as Boolean)
+        }
+    }
+
+    private Optional<Integer> optionalNonNegativeIntegerFrom(Object value, String errorName) {
+        if (value == null) {
+            Optional.empty()
+        } else if (value instanceof Integer && ((Integer) value) >= 0) {
+            Optional.of((Integer) value)
+        } else {
+            throw new InvalidGebConfiguration(
+                "Configuration for $errorName should be a non-negative integer but found \"$value\""
+            )
+        }
+    }
+
+    private ConfigObject resolveConfig(String path) {
+        resolveConfig(rawConfig, path)
+    }
+
+    private ConfigObject resolveConfig(ConfigObject root, String path) {
+        if (root == null || path == null) {
+            throw new InvalidGebConfiguration('Configuration path cannot be null')
+        }
+        def current = root
+        def parts = path.tokenize('.')
+        for (def part : parts) {
+            def next = current.get(part)
+            switch (next) {
+                case ConfigObject:
+                    current = (ConfigObject) next
+                    break
+                case Map:
+                    def created = new ConfigObject()
+                    created.putAll((Map<?, ?>) next)
+                    current[part] = created
+                    current = created
+                    break
+                case null:
+                    def created = new ConfigObject()
+                    current[part] = created
+                    current = created
+                    break
+                default:
+                    throw new InvalidGebConfiguration("Configuration for '$part' should be a map but found \"$next\"")
+            }
+        }
+        current
+    }
+
+    private Object lookupConfig(String path) {
+        lookupConfig(rawConfig, path)
+    }
+
+    private Object lookupConfig(ConfigObject root, String path) {
+        if (root == null || path == null) {
+            return null
+        }
+        def current = (Object) root
+        def parts = path.tokenize('.')
+        for (def part : parts) {
+            if (!(current instanceof ConfigObject)) {
+                return null
+            }
+            def currentConfig = (ConfigObject) current
+            if (!currentConfig.containsKey(part)) {
+                return null
+            }
+            current = currentConfig.get(part)
+        }
+        current
+    }
+
+    private void throwBoundsAndRequiredConflicting() {
+        throw new InvalidGebConfiguration(
+            'Configuration for bounds and \'required\' template options is conflicting'
+        )
+    }
+
+    private void throwInvalidUnexpectedPages(Object value) {
+        throw new InvalidGebConfiguration(
+            "Unexpected pages configuration has to be a collection of classes that extend ${Page.name} but found \"$value\". " +
+                'Did you forget to include some imports in your config file?'
+        )
+    }
+
 }

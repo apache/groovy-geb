@@ -19,11 +19,16 @@
 package geb.driver
 
 import geb.error.IncorrectDriverTypeException
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.remote.Augmenter
+import org.openqa.selenium.remote.Command
+import org.openqa.selenium.remote.RemoteWebDriver
 
 /**
  * Wraps the operations on remote drivers to avoid a hard dependency on selenium-remote-client.
  */
+@CompileStatic
 class RemoteDriverOperations {
 
     final ClassLoader classLoader
@@ -39,7 +44,10 @@ class RemoteDriverOperations {
      */
     WebDriver getAugmentedDriver(WebDriver driver) {
         asRemoteWebDriver(driver).map { remoteWebDriverClass ->
-            softLoadRemoteDriverClass("Augmenter").getConstructor().newInstance().augment(driver) as WebDriver
+            (softLoadRemoteDriverClass("Augmenter")
+                .getConstructor()
+                .newInstance() as Augmenter
+            ).augment(driver) as WebDriver
         }.orElse(driver)
     }
 
@@ -68,10 +76,11 @@ class RemoteDriverOperations {
             throw new IncorrectDriverTypeException(
                 "This operation is only possible on instances of RemoteWebDriver but ${driver} was passed"
             )
-        }
+        } as RemoteWebDriver
 
         def executor = remoteWebDriver.getCommandExecutor()
-        def command = softLoadRemoteDriverClass("Command").newInstance(driver.getSessionId(), commandName, parameters)
+        def command = softLoadRemoteDriverClass("Command")
+            .newInstance(remoteWebDriver.getSessionId(), commandName, parameters) as Command
         executor.execute(command).value
     }
 }

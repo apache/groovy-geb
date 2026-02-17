@@ -20,9 +20,11 @@ package geb.navigator.event
 
 import geb.Browser
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 
 import java.util.function.Supplier
 
+@CompileStatic
 class DelegatingNavigatorEventListener implements NavigatorEventListener {
 
     private final Supplier<NavigatorEventListener> delegateSupplier

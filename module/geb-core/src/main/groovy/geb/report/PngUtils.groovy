@@ -18,12 +18,15 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class PngUtils {
 
     static boolean isPng(byte[] bytes) {
         try {
             new DataInputStream(new ByteArrayInputStream(bytes)).readLong() == 0x89504e470d0a1a0aL
-        } catch (IOException e) {
+        } catch (IOException ignore) {
             // not going to happen
             false
         }

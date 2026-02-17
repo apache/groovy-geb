@@ -21,6 +21,7 @@ package geb.navigator.factory
 import geb.Browser
 import geb.navigator.Navigator
 import geb.navigator.DefaultNavigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 
 /**
@@ -28,6 +29,7 @@ import org.openqa.selenium.WebElement
  *
  * Returns an instance of {@link DefaultNavigator}.
  */
+@CompileStatic
 class DefaultInnerNavigatorFactory implements InnerNavigatorFactory {
 
     Navigator createNavigator(Browser browser, Iterable<WebElement> elements) {

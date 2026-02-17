@@ -19,24 +19,65 @@
 package geb.navigator
 
 import geb.textmatching.TextMatcher
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 
 import java.util.regex.Pattern
 
 import static geb.navigator.BasicLocator.DYNAMIC_ATTRIBUTE_NAME
 
+@CompileStatic
 class WebElementPredicates {
 
     static boolean matches(WebElement element, Map<String, Object> predicates) {
-        predicates.findAll { it.key != DYNAMIC_ATTRIBUTE_NAME }.every { name, requiredValue ->
-            def actualValue
-            switch (name) {
-                case "text": actualValue = element.text; break
-                case "class": actualValue = element.getAttribute("class")?.tokenize(); break
-                case "displayed": actualValue = element.displayed; break
-                default: actualValue = element.getAttribute(name)
+        predicates
+            .findAll { entry -> entry.key != DYNAMIC_ATTRIBUTE_NAME }
+            .every { entry ->
+                def name = entry.key
+                def requiredValue = entry.value
+                switch (name) {
+                    case 'text': return matchesStringValue(element.text, requiredValue)
+                    case 'class': return matchesCollectionValue(element.getAttribute('class')?.tokenize(), requiredValue)
+                    case 'displayed': return matches(element.displayed, requiredValue)
+                    default: return matchesStringValue(element.getAttribute(name), requiredValue)
+                }
             }
-            matches(actualValue, requiredValue)
+    }
+
+    private static boolean matchesStringValue(String actualValue, Object requiredValue) {
+        if (actualValue == null) {
+            return requiredValue == null
+        }
+        matchesRequiredValue(requiredValue,
+            { Pattern value -> matches(actualValue, value) },
+            { TextMatcher value -> matches(actualValue, value) },
+            { String value -> matches(actualValue, value) }
+        )
+    }
+
+    private static boolean matchesCollectionValue(Collection<String> actualValue, Object requiredValue) {
+        if (actualValue == null) {
+            return requiredValue == null
+        }
+        matchesRequiredValue(requiredValue,
+            { Pattern value -> matches(actualValue, value) },
+            { TextMatcher value -> matches(actualValue, value) },
+            { String value -> matches(actualValue, value) }
+        )
+    }
+
+    private static boolean matchesRequiredValue(
+        Object requiredValue,
+        Closure<Boolean> whenPattern,
+        Closure<Boolean> whenTextMatcher,
+        Closure<Boolean> whenString
+    ) {
+        switch (requiredValue) {
+            case null: return false
+            case Pattern: return whenPattern.call((Pattern) requiredValue)
+            case TextMatcher: return whenTextMatcher.call((TextMatcher) requiredValue)
+            case String: return whenString.call((String) requiredValue)
+            default: return false
         }
     }
 
@@ -65,6 +106,6 @@ class WebElementPredicates {
     }
 
     protected static boolean matches(boolean actualValue, Object requiredValue) {
-        actualValue == requiredValue.asBoolean()
+        actualValue == requiredValue as Boolean
     }
 }

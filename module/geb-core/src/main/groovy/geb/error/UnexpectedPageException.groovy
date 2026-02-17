@@ -21,9 +21,11 @@ package geb.error
 import geb.AtVerificationResult
 import geb.Page
 import geb.UnexpectedPage
+import groovy.transform.CompileStatic
 
 import static java.lang.System.lineSeparator
 
+@CompileStatic
 class UnexpectedPageException extends GebException {
 
     UnexpectedPageException(Page page) {

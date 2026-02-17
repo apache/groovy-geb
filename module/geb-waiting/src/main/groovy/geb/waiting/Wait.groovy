@@ -18,6 +18,8 @@
  */
 package geb.waiting
 
+import groovy.transform.CompileStatic
+
 import static java.util.concurrent.TimeUnit.MILLISECONDS
 
 /**
@@ -25,6 +27,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS
  * <p>
  * Generally not used by user code, but used internally by {@link geb.Configuration} and {@link geb.waiting.WaitingSupport}.
  */
+@CompileStatic
 class Wait {
 
     /**
@@ -67,13 +70,15 @@ class Wait {
         "Wait[timeout: $timeout, retryInterval: $retryInterval]"
     }
 
-    boolean equals(other) {
+    boolean equals(Object other) {
         if (this.is(other)) {
             true
         } else if (!(other instanceof Wait)) {
             false
         } else {
-            this.timeout == other.timeout && this.retryInterval == other.retryInterval && this.includeCauseInExceptionMessage == other.includeCauseInExceptionMessage
+            def thisWait = (Wait) this
+            def otherWait = (Wait) other
+            thisWait.timeout == otherWait.timeout && thisWait.retryInterval == otherWait.retryInterval && thisWait.includeCauseInExceptionMessage == otherWait.includeCauseInExceptionMessage
         }
     }
 

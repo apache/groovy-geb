@@ -18,6 +18,7 @@
  */
 package geb.transform
 
+import groovy.transform.CompileStatic
 import org.codehaus.groovy.transform.ASTTransformation
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.control.SourceUnit
@@ -30,6 +31,7 @@ import org.codehaus.groovy.control.CompilePhase
 import org.codehaus.groovy.ast.expr.ClassExpression
 import org.codehaus.groovy.ast.expr.StaticMethodCallExpression
 
+@CompileStatic
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
 class AttributeAccessingMetaClassRegisteringTransformation implements ASTTransformation {
     @Override
@@ -50,7 +52,7 @@ class AttributeAccessingMetaClassRegisteringTransformation implements ASTTransfo
             )
         )
 
-        classNode.addStaticInitializerStatements([metaClassRegisterStatement], false)
+        classNode.addStaticInitializerStatements(new ArrayList<Statement>([metaClassRegisterStatement]), false)
     }
 
     boolean isAttributeAccessEnabledClass(ClassNode classNode) {

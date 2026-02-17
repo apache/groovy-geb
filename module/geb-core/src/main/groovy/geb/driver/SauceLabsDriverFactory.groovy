@@ -18,9 +18,11 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
+@CompileStatic
 class SauceLabsDriverFactory extends CloudDriverFactory {
 
     private final String host

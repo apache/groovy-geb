@@ -127,6 +127,9 @@ ruleset {
         }
     }
     ruleset('rulesets/groovyism.xml') {
+        ClosureAsLastMethodParameter {
+            doNotApplyToClassNames = 'WebElementPredicates'
+        }
         ExplicitHashSetInstantiation {
             enabled = false
         }

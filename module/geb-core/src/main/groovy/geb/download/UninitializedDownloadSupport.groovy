@@ -19,7 +19,9 @@
 package geb.download
 
 import geb.Initializable
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class UninitializedDownloadSupport implements DownloadSupport {
 
     private final Initializable initializable

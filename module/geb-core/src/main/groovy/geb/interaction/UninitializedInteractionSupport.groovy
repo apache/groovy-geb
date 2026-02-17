@@ -19,9 +19,11 @@
 package geb.interaction
 
 import geb.Initializable
+import groovy.transform.CompileStatic
 
 import static groovy.lang.Closure.DELEGATE_FIRST
 
+@CompileStatic
 class UninitializedInteractionSupport implements InteractionsSupport {
 
     private final Initializable initializable
