@@ -62,15 +62,6 @@ class AutoClearWebStorageSpec extends Specification {
 @Category(DoNotRunFromGradle)
 class WebStorageModifyingTest extends GebTest {
 
-    private final static GebTestManager TEST_MANAGER = new GebTestManagerBuilder()
-        .withBrowserCreator { new Browser() }
-        .build()
-
-    @Delegate(includes = ["getBrowser"])
-    static GebTestManager getTestManager() {
-        TEST_MANAGER
-    }
-
     def server = new CallbackHttpServer(browser.config)
 
     @Before
