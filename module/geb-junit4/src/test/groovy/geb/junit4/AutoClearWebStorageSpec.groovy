@@ -20,8 +20,6 @@ package geb.junit4
 
 import geb.Browser
 import geb.test.CallbackHttpServer
-import geb.test.GebTestManager
-import geb.test.GebTestManagerBuilder
 import geb.test.browsers.Chrome
 import geb.test.browsers.RequiresRealBrowser
 import org.junit.After
