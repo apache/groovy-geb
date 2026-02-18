@@ -43,8 +43,8 @@ import geb.waiting.PotentiallyWaitingExecutor
 import geb.waiting.UninitializedWaitingSupport
 import geb.waiting.Wait
 import geb.waiting.WaitingSupport
-import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 import org.openqa.selenium.WebDriver
 
 /**
@@ -234,7 +234,7 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
      * @see #getPageUrl(java.lang.String)
      */
     void to(Map params, UrlFragment fragment = null, Object[] args) {
-        def path = dynamicConvertToPath(args)
+        def path = InvokerHelper.invokeMethod(this, 'convertToPath', args) as String
         if (path == null) {
             path = ""
         }
@@ -417,11 +417,6 @@ class Page implements Navigable, PageContentContainer, Initializable, WaitingSup
 
     void at(Object... args) {
         throw new MissingMethodException("at", getClass(), args)
-    }
-
-    @CompileDynamic
-    private String dynamicConvertToPath(Object[] args) {
-        convertToPath(*args)
     }
 
     private Browser getInitializedBrowser() {
