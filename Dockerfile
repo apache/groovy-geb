@@ -71,4 +71,4 @@ ENV TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
 COPY --chmod=755 docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["bash"]

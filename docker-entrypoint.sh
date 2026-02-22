@@ -42,5 +42,9 @@ fi
 # Start Xvfb for headless browser testing
 Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
 
+# Fix docker socket permissions
+chown root:docker /var/run/docker.sock
+chmod 660 /var/run/docker.sock
+
 # Execute the command as the circleci user
 exec gosu circleci "$@"

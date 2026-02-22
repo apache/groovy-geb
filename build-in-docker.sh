@@ -22,9 +22,14 @@ export WORKING_DIRECTORY=`pwd`
 export HOME_DIRECTORY=`echo ~`
 export IMAGE="geb-build:latest"
 
+# Remove existing container if it exists
+docker rm -f geb-build-container 2>/dev/null || true
+
 docker run --privileged \
+           -it \
+           --name geb-build-container \
            -v ${WORKING_DIRECTORY}:${WORKING_DIRECTORY} \
            -v ${HOME_DIRECTORY}/.gradle:/gradle-home \
            -w ${WORKING_DIRECTORY} \
            ${IMAGE} \
-           ./gradlew --no-daemon --max-workers 4 --parallel "$@"
+           "$@"
