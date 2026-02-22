@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # ----------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -18,13 +18,29 @@
 # under the License.
 # ----------------------------------------------------------------------------
 
-export WORKING_DIRECTORY=`pwd`
-export HOME_DIRECTORY=`echo ~`
-export IMAGE="geb-build:latest"
+# Start Docker daemon in the background (as root)
+dockerd > /tmp/dockerd.log 2>&1 &
 
-docker run --privileged \
-           -v ${WORKING_DIRECTORY}:${WORKING_DIRECTORY} \
-           -v ${HOME_DIRECTORY}/.gradle:/gradle-home \
-           -w ${WORKING_DIRECTORY} \
-           ${IMAGE} \
-           ./gradlew --no-daemon --max-workers 4 --parallel "$@"
+# Wait for Docker to be ready
+echo "Waiting for Docker daemon to start..."
+timeout=30
+while [ $timeout -gt 0 ]; do
+    if docker info > /dev/null 2>&1; then
+        echo "Docker daemon is ready"
+        break
+    fi
+    sleep 1
+    timeout=$((timeout-1))
+done
+
+if [ $timeout -eq 0 ]; then
+    echo "Docker daemon failed to start within 30 seconds"
+    cat /tmp/dockerd.log
+    exit 1
+fi
+
+# Start Xvfb for headless browser testing
+Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
+
+# Execute the command as the circleci user
+exec gosu circleci "$@"
