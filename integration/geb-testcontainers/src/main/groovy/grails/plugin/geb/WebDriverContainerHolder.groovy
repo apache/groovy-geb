@@ -424,6 +424,25 @@ class WebDriverContainerHolder {
     }
 
     private static String getHostIp() {
+        // In CI environments (container-in-container),
+        // withAccessToHost is disabled and PortForwardingContainer is not used.
+        // Get the actual IP address of this container so other containers can reach it.
+        if (System.getenv('CI')) {
+            try {
+                // Execute hostname -I to get the container's IP address
+                def process = 'hostname -I'.execute()
+                process.waitFor()
+                def ip = process.text.trim().split(/\s+/)[0]
+                if (ip && ip != '127.0.0.1') {
+                    return ip
+                }
+            } catch (Exception e) {
+                log.warn('Failed to get container IP via hostname -I', e)
+            }
+            // Fallback to localhost
+            return '127.0.0.1'
+        }
+
         try {
             PortForwardingContainer.getDeclaredMethod('getNetwork').with {
                 accessible = true
