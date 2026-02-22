@@ -39,19 +39,10 @@ RUN apt-get update && \
     chromium \
     chromium-driver \
     ca-certificates \
-    curl \
-    gnupg \
-    lsb-release \
     gosu && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin && \
     apt-get clean
 
-RUN useradd -u 1001 -m circleci && \
-    usermod -aG docker circleci
+RUN useradd -u 1001 -m circleci
 
 WORKDIR /home/circleci
 
@@ -66,6 +57,7 @@ ENV DOCKER_HOST=unix:///var/run/docker.sock
 ENV TESTCONTAINERS_RYUK_DISABLED=true
 ENV TESTCONTAINERS_CHECKS_DISABLE=true
 ENV TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+ENV CI=true
 
 # Create an entrypoint script
 COPY --chmod=755 docker-entrypoint.sh /docker-entrypoint.sh

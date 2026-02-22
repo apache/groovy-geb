@@ -152,7 +152,14 @@ class WebDriverContainerHolder {
 
         container.with {
             withEnv('SE_ENABLE_TRACING', settings.tracingEnabled.toString())
-            withAccessToHost(true)
+            // Disable withAccessToHost when running in a container (CI environment)
+            // as SSH port forwarding doesn't work well in container-in-container setups
+            if (!System.getenv('CI')) {
+                withAccessToHost(true)
+            } else {
+                // Increase startup timeout for CI environments (container-in-container is slower)
+                withStartupTimeout(Duration.of(2, ChronoUnit.MINUTES))
+            }
             withImagePullPolicy(PullPolicy.ageBased(Duration.of(1, ChronoUnit.DAYS)))
             // start()  // without Capabilities this is starting chrome
         }

@@ -25,9 +25,15 @@ export IMAGE="geb-build:latest"
 # Remove existing container if it exists
 docker rm -f geb-build-container 2>/dev/null || true
 
-docker run --privileged \
-           -it \
+# For podman on macOS, we need to use --privileged and --security-opt to access the host's podman socket
+# The socket will be available via podman's automatic socket forwarding
+# Use --network=host so testcontainers can access other containers via localhost
+docker run -it \
            --name geb-build-container \
+           --privileged \
+           --network=host \
+           --security-opt label=disable \
+           -v /var/run/docker.sock:/var/run/docker.sock:Z \
            -v ${WORKING_DIRECTORY}:${WORKING_DIRECTORY} \
            -v ${HOME_DIRECTORY}/.gradle:/gradle-home \
            -w ${WORKING_DIRECTORY} \

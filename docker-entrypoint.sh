@@ -18,33 +18,20 @@
 # under the License.
 # ----------------------------------------------------------------------------
 
-# Start Docker daemon in the background (as root)
-dockerd > /tmp/dockerd.log 2>&1 &
-
-# Wait for Docker to be ready
-echo "Waiting for Docker daemon to start..."
-timeout=30
-while [ $timeout -gt 0 ]; do
-    if docker info > /dev/null 2>&1; then
-        echo "Docker daemon is ready"
-        break
-    fi
-    sleep 1
-    timeout=$((timeout-1))
-done
-
-if [ $timeout -eq 0 ]; then
-    echo "Docker daemon failed to start within 30 seconds"
-    cat /tmp/dockerd.log
+# Check if Docker/Podman is available via the mounted socket
+if [ -S /var/run/docker.sock ]; then
+    echo "Docker socket found at /var/run/docker.sock"
+else
+    echo "ERROR: Docker socket not found at /var/run/docker.sock"
+    echo "Make sure the host Docker/Podman socket is mounted"
     exit 1
 fi
+
+# Fix socket permissions to allow circleci user access
+chmod 666 /var/run/docker.sock 2>/dev/null || true
 
 # Start Xvfb for headless browser testing
 Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 &
 
-# Fix docker socket permissions
-chown root:docker /var/run/docker.sock
-chmod 660 /var/run/docker.sock
-
-# Execute the command as the circleci user
+# Drop to circleci user
 exec gosu circleci "$@"
