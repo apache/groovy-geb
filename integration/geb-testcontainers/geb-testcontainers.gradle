@@ -18,7 +18,6 @@
  */
 plugins {
     id 'geb.test-framework-integration-module'
-    id 'geb.dockerised-test'
 }
 
 // tests require java 18+ for SimpleFileServer
