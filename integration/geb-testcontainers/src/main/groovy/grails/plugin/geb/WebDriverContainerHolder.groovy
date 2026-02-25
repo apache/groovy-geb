@@ -78,6 +78,8 @@ class WebDriverContainerHolder {
     private static final String HOST_PORT_PROPERTY = 'hostPort'
     private static final String BASE_URL_PROPERTY = 'baseUrl'
     private static final String DEFAULT_BROWSER = 'firefox'
+    private static final String CI_PROPERTY = 'CI'
+    private static final String LOCALHOST_IP = '127.0.0.1'
 
     GrailsGebSettings settings
     GebTestManager testManager
@@ -154,7 +156,7 @@ class WebDriverContainerHolder {
             withEnv('SE_ENABLE_TRACING', settings.tracingEnabled.toString())
             // Disable withAccessToHost when running in a container (CI environment)
             // as SSH port forwarding doesn't work well in container-in-container setups
-            if (!System.getenv('CI')) {
+            if (!System.getenv(CI_PROPERTY)) {
                 withAccessToHost(true)
             } else {
                 // Increase startup timeout for CI environments (container-in-container is slower)
@@ -427,20 +429,20 @@ class WebDriverContainerHolder {
         // In CI environments (container-in-container),
         // withAccessToHost is disabled and PortForwardingContainer is not used.
         // Get the actual IP address of this container so other containers can reach it.
-        if (System.getenv('CI')) {
+        if (System.getenv(CI_PROPERTY)) {
             try {
                 // Execute hostname -I to get the container's IP address
                 def process = 'hostname -I'.execute()
                 process.waitFor()
                 def ip = process.text.trim().split(/\s+/)[0]
-                if (ip && ip != '127.0.0.1') {
+                if (ip && ip != LOCALHOST_IP) {
                     return ip
                 }
             } catch (Exception e) {
                 log.warn('Failed to get container IP via hostname -I', e)
             }
             // Fallback to localhost
-            return '127.0.0.1'
+            return LOCALHOST_IP
         }
 
         try {
