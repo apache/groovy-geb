@@ -52,10 +52,10 @@ import org.testcontainers.utility.DockerImageName
 
 import grails.plugin.geb.serviceloader.ServiceRegistry
 
-import static GrailsGebSettings.DEFAULT_AT_CHECK_WAITING
-import static GrailsGebSettings.DEFAULT_TIMEOUT_IMPLICITLY_WAIT
-import static GrailsGebSettings.DEFAULT_TIMEOUT_PAGE_LOAD
-import static GrailsGebSettings.DEFAULT_TIMEOUT_SCRIPT
+import static GebContainerSettings.DEFAULT_AT_CHECK_WAITING
+import static GebContainerSettings.DEFAULT_TIMEOUT_IMPLICITLY_WAIT
+import static GebContainerSettings.DEFAULT_TIMEOUT_PAGE_LOAD
+import static GebContainerSettings.DEFAULT_TIMEOUT_SCRIPT
 
 /**
  * Responsible for initializing a {@link org.testcontainers.containers.BrowserWebDriverContainer}
@@ -81,13 +81,13 @@ class WebDriverContainerHolder {
     private static final String CI_PROPERTY = 'CI'
     private static final String LOCALHOST_IP = '127.0.0.1'
 
-    GrailsGebSettings settings
+    GebContainerSettings settings
     GebTestManager testManager
     Browser browser
     BrowserWebDriverContainer container
     WebDriverContainerConfiguration containerConf
 
-    WebDriverContainerHolder(GrailsGebSettings settings) {
+    WebDriverContainerHolder(GebContainerSettings settings) {
         this.settings = settings
     }
 
@@ -385,9 +385,9 @@ class WebDriverContainerHolder {
         )
     }
 
-    private static void applyTimeouts(Browser browser, GrailsGebSettings settings) {
+    private static void applyTimeouts(Browser browser, GebContainerSettings settings) {
         // Overwrite `GebConfig` timeouts with values explicitly set in
-        // `GrailsGebSettings` (via system properties)
+        // `GebContainerSettings` (via system properties)
         if (settings.implicitlyWait != DEFAULT_TIMEOUT_IMPLICITLY_WAIT) {
             browser.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(settings.implicitlyWait))
         }

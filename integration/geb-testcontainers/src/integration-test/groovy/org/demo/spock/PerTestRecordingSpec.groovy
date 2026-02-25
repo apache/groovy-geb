@@ -42,7 +42,7 @@ class PerTestRecordingSpec extends ContainerGebSpec {
 
     void 'the recordings of the previous two tests are different'() {
         when: 'getting the configured base recording directory'
-        // Logic from GrailsGebSettings
+        // Logic from GebContainerSettings
         def recordingDirectoryName = System.getProperty(
                 'grails.geb.recording.directory',
                 'build/gebContainer/recordings'

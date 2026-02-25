@@ -32,14 +32,14 @@ import static org.testcontainers.containers.VncRecordingContainer.VncRecordingFo
 
 /**
  * Handles parsing various recording configuration
- * used by {@link GrailsContainerGebExtension}.
+ * used by {@link ContainerGebExtension}.
  *
  * @author James Daugherty
  * @since 4.1
  */
 @Slf4j
 @CompileStatic
-class GrailsGebSettings {
+class GebContainerSettings {
 
     public static final boolean DEFAULT_AT_CHECK_WAITING = false
     private static final VncRecordingMode DEFAULT_RECORDING_MODE = VncRecordingMode.SKIP
@@ -64,7 +64,7 @@ class GrailsGebSettings {
     Number timeout
     Number retryInterval
 
-    GrailsGebSettings(LocalDateTime startTime) {
+    GebContainerSettings(LocalDateTime startTime) {
         tracingEnabled = getBooleanProperty('grails.geb.tracing.enabled', false)
         recordingDirectoryName = System.getProperty('grails.geb.recording.directory', 'build/gebContainer/recordings')
         reportingDirectoryName = System.getProperty('grails.geb.reporting.directory', 'build/gebContainer/reports')

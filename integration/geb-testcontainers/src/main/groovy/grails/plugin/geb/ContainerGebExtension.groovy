@@ -44,7 +44,7 @@ import java.time.LocalDateTime
  */
 @Slf4j
 @CompileStatic
-class GrailsContainerGebExtension implements IGlobalExtension {
+class ContainerGebExtension implements IGlobalExtension {
 
     ExclusiveResource exclusiveResource
     WebDriverContainerHolder holder
@@ -56,7 +56,7 @@ class GrailsContainerGebExtension implements IGlobalExtension {
                 ResourceAccessMode.READ_WRITE
         )
         holder = new WebDriverContainerHolder(
-                new GrailsGebSettings(LocalDateTime.now())
+                new GebContainerSettings(LocalDateTime.now())
         )
         addShutdownHook {
             holder.stop()
