@@ -52,11 +52,6 @@ ENV LC_ALL=C.UTF-8
 # Set up Xvfb to start automatically
 ENV DISPLAY=:99
 
-# Configure Testcontainers to use the Docker daemon
-ENV DOCKER_HOST=unix:///var/run/docker.sock
-ENV TESTCONTAINERS_RYUK_DISABLED=true
-ENV TESTCONTAINERS_CHECKS_DISABLE=true
-ENV TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
 ENV CI=true
 
 # Create an entrypoint script
