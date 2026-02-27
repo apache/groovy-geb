@@ -85,7 +85,7 @@ tasks.named('test') {
         events 'passed', 'skipped', 'failed'
     }
 
-    systemProperty('grails.geb.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
+    systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
 }
 
 tasks.register('integrationTest', Test) {
@@ -101,8 +101,8 @@ tasks.register('integrationTest', Test) {
     }
 
     systemProperty('geb.env', System.getProperty('geb.env'))
-    systemProperty('grails.geb.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
-    // systemProperty('grails.geb.recording.restartPerTest', 'false') // makes all recording the same
+    systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
+    // systemProperty('geb.container.recording.restartPerTest', 'false') // makes all recording the same
 
     dependsOn drivers.collect { tasks["${it}Test"] }
     enabled = false
@@ -119,13 +119,13 @@ drivers.eachWithIndex { driver, index ->
             events 'passed', 'skipped', 'failed'
         }
 
-        systemProperty('grails.geb.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
+        systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
         systemProperty "geb.build.reportsDir", reporting.file("geb/$name")
         systemProperty "geb.env", driver
 
         // Make Geb tests more resilient in slow CI environments
         if (project.hasProperty('gebAtCheckWaiting')) {
-            systemProperty('grails.geb.atCheckWaiting.enabled', 'true')
+            systemProperty('geb.container.atCheckWaiting.enabled', 'true')
         }
 
         if (index > 0) {

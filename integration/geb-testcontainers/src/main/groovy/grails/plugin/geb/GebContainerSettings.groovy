@@ -65,27 +65,27 @@ class GebContainerSettings {
     Number retryInterval
 
     GebContainerSettings(LocalDateTime startTime) {
-        tracingEnabled = getBooleanProperty('grails.geb.tracing.enabled', false)
-        recordingDirectoryName = System.getProperty('grails.geb.recording.directory', 'build/gebContainer/recordings')
-        reportingDirectoryName = System.getProperty('grails.geb.reporting.directory', 'build/gebContainer/reports')
-        // browserType = System.getProperty('grails.geb.browser.type', DEFAULT_BROWSER_TYPE)
+        tracingEnabled = getBooleanProperty('geb.container.tracing.enabled', false)
+        recordingDirectoryName = System.getProperty('geb.container.recording.directory', 'build/gebContainer/recordings')
+        reportingDirectoryName = System.getProperty('geb.container.reporting.directory', 'build/gebContainer/reports')
+        // browserType = System.getProperty('geb.container.browser.type', DEFAULT_BROWSER_TYPE)
         // browserType = System.getProperty('geb.env', DEFAULT_BROWSER_TYPE)
         recordingMode = VncRecordingMode.valueOf(
-                System.getProperty('grails.geb.recording.mode', DEFAULT_RECORDING_MODE.name())
+                System.getProperty('geb.container.recording.mode', DEFAULT_RECORDING_MODE.name())
         )
         recordingFormat = VncRecordingFormat.valueOf(
-                System.getProperty('grails.geb.recording.format', DEFAULT_RECORDING_FORMAT.name())
+                System.getProperty('geb.container.recording.format', DEFAULT_RECORDING_FORMAT.name())
         )
         restartRecordingContainerPerTest = getBooleanProperty(
-                'grails.geb.recording.restartRecordingContainerPerTest',
+                'geb.container.recording.restartRecordingContainerPerTest',
                 true
         )
-        implicitlyWait = getIntProperty('grails.geb.timeouts.implicitlyWait', DEFAULT_TIMEOUT_IMPLICITLY_WAIT)
-        pageLoadTimeout = getIntProperty('grails.geb.timeouts.pageLoad', DEFAULT_TIMEOUT_PAGE_LOAD)
-        scriptTimeout = getIntProperty('grails.geb.timeouts.script', DEFAULT_TIMEOUT_SCRIPT)
-        atCheckWaiting = getBooleanProperty('grails.geb.atCheckWaiting.enabled', DEFAULT_AT_CHECK_WAITING)
-        timeout = getNumberProperty('grails.geb.timeouts.timeout', Wait.DEFAULT_TIMEOUT)
-        retryInterval = getNumberProperty('grails.geb.timeouts.retryInterval', Wait.DEFAULT_RETRY_INTERVAL)
+        implicitlyWait = getIntProperty('geb.container.timeouts.implicitlyWait', DEFAULT_TIMEOUT_IMPLICITLY_WAIT)
+        pageLoadTimeout = getIntProperty('geb.container.timeouts.pageLoad', DEFAULT_TIMEOUT_PAGE_LOAD)
+        scriptTimeout = getIntProperty('geb.container.timeouts.script', DEFAULT_TIMEOUT_SCRIPT)
+        atCheckWaiting = getBooleanProperty('geb.container.atCheckWaiting.enabled', DEFAULT_AT_CHECK_WAITING)
+        timeout = getNumberProperty('geb.container.timeouts.timeout', Wait.DEFAULT_TIMEOUT)
+        retryInterval = getNumberProperty('geb.container.timeouts.retryInterval', Wait.DEFAULT_RETRY_INTERVAL)
         this.startTime = startTime
     }
 

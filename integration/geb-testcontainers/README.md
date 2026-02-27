@@ -18,12 +18,6 @@ limitations under the License.
 
 A library to support using Testcontainers in Apache Geb integration testing.
 
-## Work in Progress (Temporary Section)
-
-Currently, this library is a work in progress and is not yet ready for production use.
-
-Work is ongoing to remove some remaining Grails references.
-
 ## Geb Functional Testing using Testcontainers
 
 This library integrates [Geb](https://groovy.apache.org/geb/) with [Testcontainers](https://testcontainers.com/) to make it easy to write functional tests for your applications and utilize browsers running in testcontainers and optionally record the browser using a VNC testcontainer and/or capture reporting screenshots and HTML.
@@ -95,7 +89,7 @@ The interface `IContainerGebConfiguration` exists as an inheritable version of t
 
 To configure reporting, enable it using the `recording` property on the annotation `ContainerGebConfiguration`.  The following system properties exist for reporting configuration:
 
-* `grails.geb.reporting.directory`
+* `geb.container.reporting.directory`
   * purpose: if the test enables reporting, the directory to save the reports relative to the project directory
   * defaults to `build/gebContainer/reports`
 
@@ -106,22 +100,22 @@ By default, no test recording will be performed.  Various system properties exis
 ```groovy
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
-    systemProperty('grails.geb.recording.mode', 'RECORD_ALL')
+    systemProperty('geb.container.recording.mode', 'RECORD_ALL')
 }
 ```
 
-* `grails.geb.recording.mode`
+* `geb.container.recording.mode`
   * purpose: which tests to record
   * possible values: `SKIP`, `RECORD_ALL`, or `RECORD_FAILING`
   * defaults to `SKIP`
 
 
-* `grails.geb.recording.directory`
+* `geb.container.recording.directory`
     * purpose: the directory to save the recordings relative to the project directory
     * defaults to `build/gebContainer/recordings`
 
 
-* `grails.geb.recording.format`
+* `geb.container.recording.format`
     * purpose: sets the format of the recording
     * possible values are `FLV` or `MP4`
     * defaults to `MP4`
@@ -150,30 +144,30 @@ An Example of this can be seen in [ContainerSupport#createFileInputSource utilit
 
 The following system properties exist to configure timeouts:
 
-* `grails.geb.atCheckWaiting.enabled`
+* `geb.container.atCheckWaiting.enabled`
     * purpose: if `at` checks should wait for the page to be in the expected state (uses configured waiting timeout values)
     * type: boolean
     * defaults to `false`
-* `grails.geb.timeouts.retryInterval`
+* `geb.container.timeouts.retryInterval`
     * purpose: how often to retry waiting operations
     * type: Number
     * defaults to `0.1` seconds
-* `grails.geb.timeouts.waiting`
+* `geb.container.timeouts.waiting`
     * purpose: amount of time to wait for waiting operations
     * type: Number
     * defaults to `5.0` seconds
-* `grails.geb.timeouts.implicitlyWait`
+* `geb.container.timeouts.implicitlyWait`
   * purpose: amount of time the driver should wait when searching for an element if it is not immediately present.
   * type: int
   * defaults to `0` seconds, which means that if an element is not found, it will immediately return an error.
   * Warning: Do not mix implicit and explicit waits. Doing so can cause unpredictable wait times.
     Consult the [Geb](https://groovy.apache.org/geb/manual/current/#implicit-assertions-waiting) 
     and/or [Selenium](https://www.selenium.dev/documentation/webdriver/waits/) documentation for details.
-* `grails.geb.timeouts.pageLoad`
+* `geb.container.timeouts.pageLoad`
   * purpose: amount of time to wait for a page load to complete before throwing an error.
   * type: int
   * defaults to `300` seconds
-* `grails.geb.timeouts.script`
+* `geb.container.timeouts.script`
   * purpose: amount of time to wait for an asynchronous script to finish execution before throwing an error.
   * type: int
   * defaults to `30` seconds
@@ -184,7 +178,7 @@ Selenium integrates with [OpenTelemetry](https://opentelemetry.io) to support ob
 This plugin, however, **disables tracing by default** since most setups lack an OpenTelemetry collector to process the traces.
 
 To enable tracing, set the following system property:
-* `grails.geb.tracing.enabled`
+* `geb.container.tracing.enabled`
   * possible values are `true` or `false`
   * defaults to `false`
   
