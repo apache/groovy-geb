@@ -41,7 +41,7 @@ For further reference please see the [Geb documentation](https://groovy.apache.o
 To use the library, add the following dependencies to your `build.gradle` file (adjust for the source set you're using it in, e.g., testImplementation or integrationTestImplementation.):
 ```groovy
 dependencies {
-    implementation "net.codebuilders:geb-container:<latest release>"
+    implementation "org.apache.groovy.geb:geb-testcontainers:<latest release>"
 }
 ```
 

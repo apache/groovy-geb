@@ -24,6 +24,14 @@ To become a committer, you need to sign the [Apache Individual Contributor Agree
 
 ## Build Environment
 
+Running the build requires a Java 11+ environment and the tests require a [compatible container runtime](https://java.testcontainers.org/supported_docker_environment/) to be installed, such as:
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [OrbStack](https://orbstack.dev/) - macOS only
+- [Rancher Desktop](https://rancherdesktop.io/)
+- [podman desktop](https://podman-desktop.io/)
+- [Colima](https://github.com/abiosoft/colima) - macOS and Linux
+
 Geb builds with [Gradle](http://www.gradle.org/). 
 You do not need to have Gradle installed to work with the Geb build as Gradle
 provides an executable wrapper that you use to drive the build.
@@ -45,6 +53,21 @@ checks for the entire project you would run:
 To publish Geb artifacts to your local Maven cache you would run:
 
     ./gradlew publishToMavenLocal
+
+### Building in a Docker Container (Optional)
+
+A Dockerfile is provided to build the Geb Build image.
+
+    docker build -t geb-build:latest .
+
+You can build Geb in a Docker container using the provided `build-in-docker.sh` script.
+
+From the root of the Geb project, run:
+
+    ./build-in-docker.sh
+
+This will create an interactive shell in a Docker container.  
+Run the build with the full gradle wrapper commands.  Just `exit` to leave the container.
 
 ## Bootstrapping the build environment from a source distribution
 
