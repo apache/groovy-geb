@@ -12,3 +12,4 @@ out
 *.hprof
 .pnpm-store/
 **/tags
+etc/bin/results
