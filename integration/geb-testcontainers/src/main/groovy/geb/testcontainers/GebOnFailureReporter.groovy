@@ -36,7 +36,7 @@ class GebOnFailureReporter implements IMethodInterceptor {
             throw notACauseForReporting
         } catch (Throwable throwable) {
             def spec = invocation.instance as ContainerGebSpec
-            if (spec.testManager.reportingEnabled) {
+            if (spec.testManager?.reportingEnabled) {
                 try {
                     spec.testManager.reportFailure()
                 } catch (ignored) {}

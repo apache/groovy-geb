@@ -25,14 +25,14 @@ import groovy.util.logging.Slf4j
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import geb.waiting.Wait
-
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode
 import static org.testcontainers.containers.VncRecordingContainer.VncRecordingFormat
 
 /**
- * Handles parsing various recording configuration
- * used by {@link ContainerGebExtension}.
+ * Container-specific settings parsed from system properties.
+ * <p>
+ * Timeout and waiting configuration should be set in {@code GebConfig.groovy}
+ * using standard Geb mechanisms.
  *
  * @author James Daugherty
  * @since 4.1
@@ -41,51 +41,36 @@ import static org.testcontainers.containers.VncRecordingContainer.VncRecordingFo
 @CompileStatic
 class GebContainerSettings {
 
-    public static final boolean DEFAULT_AT_CHECK_WAITING = false
     private static final VncRecordingMode DEFAULT_RECORDING_MODE = VncRecordingMode.SKIP
     private static final VncRecordingFormat DEFAULT_RECORDING_FORMAT = VncRecordingFormat.MP4
-    public static final int DEFAULT_TIMEOUT_IMPLICITLY_WAIT = 0
-    public static final int DEFAULT_TIMEOUT_PAGE_LOAD = 300
-    public static final int DEFAULT_TIMEOUT_SCRIPT = 30
 
     boolean tracingEnabled
     String recordingDirectoryName
     String reportingDirectoryName
-    String browserType
     boolean restartRecordingContainerPerTest
     VncRecordingMode recordingMode
     VncRecordingFormat recordingFormat
     LocalDateTime startTime
-    int implicitlyWait
-    int pageLoadTimeout
-    int scriptTimeout
-
-    boolean atCheckWaiting
-    Number timeout
-    Number retryInterval
 
     GebContainerSettings(LocalDateTime startTime) {
-        tracingEnabled = getBooleanProperty('geb.container.tracing.enabled', false)
-        recordingDirectoryName = System.getProperty('geb.container.recording.directory', 'build/gebContainer/recordings')
-        reportingDirectoryName = System.getProperty('geb.container.reporting.directory', 'build/gebContainer/reports')
-        // browserType = System.getProperty('geb.container.browser.type', DEFAULT_BROWSER_TYPE)
-        // browserType = System.getProperty('geb.env', DEFAULT_BROWSER_TYPE)
+        tracingEnabled = Boolean.parseBoolean(
+            System.getProperty('geb.container.tracing.enabled', 'false')
+        )
+        recordingDirectoryName = System.getProperty(
+            'geb.container.recording.directory', 'build/gebContainer/recordings'
+        )
+        reportingDirectoryName = System.getProperty(
+            'geb.container.reporting.directory', 'build/gebContainer/reports'
+        )
         recordingMode = VncRecordingMode.valueOf(
-                System.getProperty('geb.container.recording.mode', DEFAULT_RECORDING_MODE.name())
+            System.getProperty('geb.container.recording.mode', DEFAULT_RECORDING_MODE.name())
         )
         recordingFormat = VncRecordingFormat.valueOf(
-                System.getProperty('geb.container.recording.format', DEFAULT_RECORDING_FORMAT.name())
+            System.getProperty('geb.container.recording.format', DEFAULT_RECORDING_FORMAT.name())
         )
-        restartRecordingContainerPerTest = getBooleanProperty(
-                'geb.container.recording.restartRecordingContainerPerTest',
-                true
+        restartRecordingContainerPerTest = Boolean.parseBoolean(
+            System.getProperty('geb.container.recording.restartRecordingContainerPerTest', 'true')
         )
-        implicitlyWait = getIntProperty('geb.container.timeouts.implicitlyWait', DEFAULT_TIMEOUT_IMPLICITLY_WAIT)
-        pageLoadTimeout = getIntProperty('geb.container.timeouts.pageLoad', DEFAULT_TIMEOUT_PAGE_LOAD)
-        scriptTimeout = getIntProperty('geb.container.timeouts.script', DEFAULT_TIMEOUT_SCRIPT)
-        atCheckWaiting = getBooleanProperty('geb.container.atCheckWaiting.enabled', DEFAULT_AT_CHECK_WAITING)
-        timeout = getNumberProperty('geb.container.timeouts.timeout', Wait.DEFAULT_TIMEOUT)
-        retryInterval = getNumberProperty('geb.container.timeouts.retryInterval', Wait.DEFAULT_RETRY_INTERVAL)
         this.startTime = startTime
     }
 
@@ -109,34 +94,6 @@ class GebContainerSettings {
         createDirectory(reportingDirectoryName, 'reporting')
     }
 
-    private static boolean getBooleanProperty(String propertyName, boolean defaultValue) {
-        Boolean.parseBoolean(System.getProperty(propertyName, defaultValue.toString()))
-    }
-
-    private static int getIntProperty(String propertyName, int defaultValue) {
-        System.getProperty(propertyName)?.toInteger() ?: defaultValue
-    }
-
-    private static Number getNumberProperty(String propertyName, Number defaultValue) {
-        def propValue = System.getProperty(propertyName)
-        if (propValue) {
-            try {
-                if (propValue.contains('.')) {
-                    return new BigDecimal(propValue)
-                }
-                return Integer.parseInt(propValue)
-            } catch (NumberFormatException ignored) {
-                log.warn(
-                        'Could not parse property [{}] with value [{}] as a Number. Using default value [{}] instead.',
-                        propertyName,
-                        propValue,
-                        defaultValue
-                )
-            }
-        }
-        return defaultValue
-    }
-
     private File createDirectory(String directoryName, String useCase) {
         def dir = new File(
                 "$directoryName$File.separator${DateTimeFormatter.ofPattern('yyyyMMdd_HHmmss').format(startTime)}"
@@ -151,7 +108,6 @@ class GebContainerSettings {
                     "Configured $useCase directory [$dir] is expected to be a directory, but found file instead."
             )
         }
-
         return dir
     }
 }

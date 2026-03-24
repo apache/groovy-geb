@@ -22,12 +22,16 @@ import geb.testcontainers.pages.HomePage
 import spock.lang.Title
 
 /**
- * See https://grails.apache.org/docs/latest/guide/testing.html#functionalTesting and https://groovy.apache.org/geb/manual/current/
- * for more instructions on how to write functional tests with Grails and Geb.
+ * See https://groovy.apache.org/geb/manual/current/
+ * for more instructions on how to write functional tests with Geb.
  */
 @Title("host name configuration test")
-@ContainerGebConfiguration(hostName = 'testing.example.com')
 class HostNameConfigurationSpec extends ContainerGebSpecWithServer {
+
+    @Override
+    String hostName() {
+        'testing.example.com'
+    }
 
     def "should show the right server name when visiting home page"() {
         when: "visiting the hpme page with a configured host name"

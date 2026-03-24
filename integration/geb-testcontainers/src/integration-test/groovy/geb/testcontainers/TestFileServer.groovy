@@ -45,7 +45,7 @@ class TestFileServer {
         // Use JDK's built-in SimpleFileServer to serve the static content
         server = SimpleFileServer.createFileServer(addr, staticDirPath, OutputLevel.INFO)
         server.start()
-        println "TestFileServer started on port 8080"
+        println "TestFileServer started on port $port"
     }
 
     void stop() {

@@ -18,20 +18,21 @@
  */
 package geb.testcontainers
 
-import geb.Page
+import geb.download.DownloadSupport
+import geb.report.CompositeReporter
+import geb.report.PageSourceReporter
+import geb.report.Reporter
+import geb.report.ScreenshotReporter
 import geb.test.GebTestManager
-import geb.testcontainers.support.ContainerSupport
-import geb.testcontainers.support.ReportingSupport
-import geb.testcontainers.support.delegate.BrowserDelegate
-import geb.testcontainers.support.delegate.DownloadSupportDelegate
-import geb.testcontainers.support.delegate.DriverDelegate
-import geb.testcontainers.support.delegate.PageDelegate
-import groovy.transform.CompileStatic
+import geb.transform.DynamicallyDispatchesToBrowser
+import geb.testcontainers.support.ContainerGebFileInputSource
+import org.testcontainers.containers.BrowserWebDriverContainer
+import org.testcontainers.images.builder.Transferable
 import spock.lang.Shared
 import spock.lang.Specification
 
 /**
- * A {@link geb.spock.GebSpec GebSpec} that leverages Testcontainers
+ * A {@link geb.spock.GebSpec GebSpec} equivalent that leverages Testcontainers
  * to run the browser inside a container.
  *
  * <p>Prerequisites:
@@ -49,19 +50,57 @@ import spock.lang.Specification
  * @author James Daugherty
  * @since 4.1
  */
-@CompileStatic
-abstract class ContainerGebSpec extends Specification implements ContainerSupport, ReportingSupport, BrowserDelegate, PageDelegate, DriverDelegate, DownloadSupportDelegate {
+@DynamicallyDispatchesToBrowser
+abstract class ContainerGebSpec extends Specification implements ContainerGebConfiguration {
 
     @Shared
-    static GebTestManager testManager
+    WebDriverContainerHolder holder
 
-    static void setTestManager(GebTestManager testManager) {
-        this.testManager = testManager
+    @Delegate(includes = ['getBrowser'])
+    GebTestManager getTestManager() {
+        holder?.testManager
     }
 
-    @Override
-    Page getPage() {
-        // Be explicit which trait to use (PageDelegate vs BrowserDelegate)
-        PageDelegate.super.page
+    /**
+     * Access the container running the web-driver, for convenience to execInContainer, copyFileToContainer etc.
+     */
+    BrowserWebDriverContainer getContainer() {
+        holder?.container
+    }
+
+    /**
+     * Returns the download support configured for localhost-aware downloads from containers.
+     */
+    @Delegate(interfaces = false)
+    DownloadSupport getDownloadSupport() {
+        holder?.downloadSupport
+    }
+
+    /**
+     * Reports the current state of the browser under the given label.
+     */
+    void report(String message = '') {
+        testManager?.report(message)
+    }
+
+    /**
+     * The reporter that Geb should use when reporting is enabled.
+     */
+    Reporter createReporter() {
+        new CompositeReporter(new PageSourceReporter(), new ScreenshotReporter())
+    }
+
+    /**
+     * Copies a file from the host to the container for assignment to a Geb FileInput module.
+     * This method is useful when you need to upload a file to a form in a Geb test and will work cross-platform.
+     *
+     * @param hostPath relative path to the file on the host
+     * @param containerPath absolute path to where to put the file in the container
+     * @return the file object to assign to the FileInput module
+     * @since 4.2
+     */
+    File createFileInputSource(String hostPath, String containerPath) {
+        container.copyFileToContainer(Transferable.of(new File(hostPath).bytes), containerPath)
+        new ContainerGebFileInputSource(containerPath)
     }
 }

@@ -129,7 +129,7 @@ For this reason, this plugin will setup a Local File Detector by default.
 To customize the default, either:
 
 1. Create a class that implements [`ContainerFileDetector`](./src/testFixtures/groovy/grails/plugin/geb/ContainerFileDetector.groovy)
-   and specify its fully qualified class name in a `META-INF/services/grails.plugin.geb.ContainerFileDetector` file
+   and specify its fully qualified class name in a `META-INF/services/geb.testcontainers.ContainerFileDetector` file
    on the classpath (e.g., `src/integration-test/resources`).
 2. Use the `ContainerGebConfiguration` annotation and set its `fileDetector` property to your `ContainerFileDetector` implementation class.
 

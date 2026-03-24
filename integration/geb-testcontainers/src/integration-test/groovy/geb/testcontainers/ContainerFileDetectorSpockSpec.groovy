@@ -18,26 +18,21 @@
  */
 package geb.testcontainers
 
-import geb.testcontainers.serviceloader.ServiceRegistry
 import geb.testcontainers.pages.UploadPage
 import org.openqa.selenium.WebDriverException
-import spock.lang.PendingFeature
 
 /**
  * Altered copy of {@link ContainerFileDetectorAnnotationSpec}
+ * that configures the file detector via the interface.
  */
 class ContainerFileDetectorSpockSpec extends ContainerGebSpecWithServer {
 
-    def setupSpec() {
-        ServiceRegistry.setInstance(ContainerFileDetector, new UselessContainerFileDetector())
+    @Override
+    Class<? extends ContainerFileDetector> fileDetector() {
+        UselessContainerFileDetector
     }
 
-    def cleanupSpec() {
-        ServiceRegistry.setInstance(ContainerFileDetector, null)
-    }
-
-    @PendingFeature(reason = 'https://github.com/apache/grails-geb/pull/146#issuecomment-2691433277')
-    def "should fail to find file with fileDetector changed to UselessContainerFileDetector in setupSpec"() {
+    def "should fail to find file with fileDetector changed to UselessContainerFileDetector via interface"() {
         given:
         def uploadPage = to(UploadPage)
 

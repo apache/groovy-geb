@@ -36,11 +36,3 @@ class DefaultContainerFileDetector extends LocalFileDetector implements Containe
  */
 class UselessContainerFileDetector extends UselessFileDetector implements ContainerFileDetector {
 }
-
-/**
- * Used by {@link ContainerGebConfiguration#fileDetector()} interface to represent a null value.
- *
- * @since 4.2
- */
-class NullContainerFileDetector extends DefaultContainerFileDetector {
-}

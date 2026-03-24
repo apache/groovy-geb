@@ -25,10 +25,14 @@ import org.openqa.selenium.WebDriverException
  * Altered copy of {@link ContainerFileDetectorDefaultSpec}
  * that throws {@link org.openqa.selenium.InvalidArgumentException}
  */
-@ContainerGebConfiguration(fileDetector = UselessContainerFileDetector)
 class ContainerFileDetectorAnnotationSpec extends ContainerGebSpecWithServer {
 
-    def "should fail to find file with fileDetector changed to UselessContainerFileDetector via annotation"() {
+    @Override
+    Class<? extends ContainerFileDetector> fileDetector() {
+        UselessContainerFileDetector
+    }
+
+    def "should fail to find file with fileDetector changed to UselessContainerFileDetector via interface"() {
         given:
         def uploadPage = to UploadPage
 

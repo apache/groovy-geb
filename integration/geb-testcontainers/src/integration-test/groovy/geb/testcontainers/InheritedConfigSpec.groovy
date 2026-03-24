@@ -23,15 +23,19 @@ import geb.testcontainers.pages.HomePage
 /**
  * Adaptation of {@link HostNameConfigurationSpec}
  */
-class SuperSpec extends ContainerGebSpecWithServer implements IContainerGebConfiguration {
+class SuperSpec extends ContainerGebSpecWithServer {
     @Override
     String hostName() {
         'super.example.com'
     }
 }
 
-@ContainerGebConfiguration(hostName = 'not.example.com')
-class NotSuperSpec extends ContainerGebSpecWithServer {}
+class NotSuperSpec extends ContainerGebSpecWithServer {
+    @Override
+    String hostName() {
+        'not.example.com'
+    }
+}
 
 class InheritedConfigSpec extends SuperSpec {
     void 'should show the right server name when visiting /serverName'() {
@@ -39,7 +43,6 @@ class InheritedConfigSpec extends SuperSpec {
         to(HomePage)
 
         then: 'the emitted hostname is correct'
-        // pageSource.contains('Server name: super.example.com')
         currentUrl == "http://super.example.com:8090/"
     }
 
@@ -54,9 +57,8 @@ class NotInheritedConfigSpec extends NotSuperSpec {
         when: 'visiting the server name controller'
         to(HomePage)
 
-        then: 'the emitted hostname is correct'
-        // !pageSource.contains('Server name: not.example.com')
-        currentUrl != "http://not.example.com:8090/"
+        then: 'the emitted hostname is inherited via interface'
+        currentUrl == "http://not.example.com:8090/"
     }
 
     def cleanup() {
@@ -75,7 +77,6 @@ class ChildPreferenceInheritedConfigSpec extends SuperSpec {
         to(HomePage)
 
         then: 'the emitted hostname is correct'
-        // pageSource.contains('Server name: child.example.com')
         currentUrl == "http://child.example.com:8090/"
 
         when:
@@ -106,7 +107,6 @@ class MultipleInheritanceSpec extends SuperSuperInheritedConfigSpec {
         to(HomePage)
 
         then: 'the emitted hostname is correct'
-        // pageSource.contains('Server name: super.example.com')
         currentUrl == "http://super.example.com:8090/"
         report('multi inheritance report')
     }

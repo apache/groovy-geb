@@ -20,76 +20,62 @@ package geb.testcontainers
 
 import org.testcontainers.containers.GenericContainer
 
-import java.lang.annotation.ElementType
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
-import java.lang.annotation.Target
-
 /**
- * Can be used to configure the protocol and hostname that the container's browser will use.
+ * Implement this interface on a {@link ContainerGebSpec} subclass to configure the
+ * protocol, hostname, reporting, and file detector for container-based browser tests.
+ *
+ * <p>Configuration is inherited by subclasses, and can be overridden by re-implementing
+ * the desired methods.
+ *
+ * <p>Example:
+ * <pre><code>
+ * class MySpec extends ContainerGebSpec {
+ *     &#64;Override
+ *     String hostName() { 'testing.example.com' }
+ *
+ *     &#64;Override
+ *     boolean reporting() { true }
+ * }
+ * </code></pre>
  *
  * @author James Daugherty
  * @since 4.1
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@interface ContainerGebConfiguration {
-
-    static final String DEFAULT_HOSTNAME_FROM_CONTAINER = GenericContainer.INTERNAL_HOST_HOSTNAME
-    static final String DEFAULT_PROTOCOL = 'http'
-    static final Class<? extends ContainerFileDetector> DEFAULT_FILE_DETECTOR = DefaultContainerFileDetector
+interface ContainerGebConfiguration {
 
     /**
      * The protocol that the container's browser will use to access the server under test.
      * <p>Defaults to {@code http}.
      */
-    String protocol() default DEFAULT_PROTOCOL
+    default String protocol() {
+        'http'
+    }
 
     /**
      * The hostname that the container's browser will use to access the server under test.
      * <p>Defaults to {@code host.testcontainers.internal}.
      * <p>This is useful when the server under test needs to be accessed with a certain hostname.
      */
-    String hostName() default DEFAULT_HOSTNAME_FROM_CONTAINER
+    default String hostName() {
+        GenericContainer.INTERNAL_HOST_HOSTNAME
+    }
 
     /**
      * Whether reporting should be enabled for this test.
-     * Add a `GebConfig.groovy` to customize the reporter configuration.
+     * Add a {@code GebConfig.groovy} to customize the reporter configuration.
      */
-    boolean reporting() default false
-
-    /**
-     * The {@link org.openqa.selenium.remote.FileDetector} implementation to use for this class.
-     * <p> {@link NullContainerFileDetector} results in the
-     *     {@link geb.testcontainers.serviceloader.ServiceRegistry last set} instance being used.
-     *
-     * @since 4.2
-     * @see DefaultContainerFileDetector DefaultContainerFileDetector
-     * @see UselessContainerFileDetector UselessContainerFileDetector
-     */
-    Class<? extends ContainerFileDetector> fileDetector() default DefaultContainerFileDetector
-}
-
-/**
- * Inheritable version of {@link ContainerGebConfiguration}.
- *
- * @since 4.2
- */
-interface IContainerGebConfiguration {
-
-    default String protocol() {
-        ContainerGebConfiguration.DEFAULT_PROTOCOL
-    }
-
-    default String hostName() {
-        ContainerGebConfiguration.DEFAULT_HOSTNAME_FROM_CONTAINER
-    }
-
     default boolean reporting() {
         false
     }
 
+    /**
+     * The {@link ContainerFileDetector} implementation to use for this class.
+     *
+     * @since 4.2
+     * @see DefaultContainerFileDetector
+     * @see UselessContainerFileDetector
+     */
     default Class<? extends ContainerFileDetector> fileDetector() {
-        ContainerGebConfiguration.DEFAULT_FILE_DETECTOR
+        DefaultContainerFileDetector
     }
 }

@@ -18,7 +18,6 @@
  */
 package geb.testcontainers
 
-import geb.testcontainers.support.LocalhostDownloadSupport
 import groovy.transform.CompileStatic
 import groovy.transform.TailRecursive
 import groovy.util.logging.Slf4j
@@ -35,8 +34,8 @@ import java.time.LocalDateTime
  * lifecycle for a {@link ContainerGebSpec}.
  *
  * <p> ContainerGebSpec cannot be a
- * {@link geb.test.ManagedGebTest ManagedGebTest} because it would cause the test
- * manager to be initialized out of sequence of the container management.
+ * {@link geb.test.ManagedGebTest ManagedGebTest} with a static test manager because
+ * the test manager needs to be rebuilt when the container is (re)initialized.
  * Instead, we initialize the same interceptors as the {@link geb.spock.GebExtension GebExtension} does.
  *
  * @author James Daugherty
@@ -70,59 +69,54 @@ class ContainerGebExtension implements IGlobalExtension {
 
     @Override
     void visitSpec(SpecInfo spec) {
-        if (isContainerGebSpec(spec)) {
-            // Do not allow parallel execution since there's only 1 set of containers in testcontainers
-            spec.addExclusiveResource(exclusiveResource)
-
-            // Always initialize the container requirements first so the GebTestManager can properly configure the browser
-            spec.addSharedInitializerInterceptor { invocation ->
-                holder.reinitialize(invocation)
-
-                ContainerGebSpec gebSpec = invocation.sharedInstance as ContainerGebSpec
-                gebSpec.container = holder.container
-                gebSpec.testManager = holder.testManager
-                gebSpec.downloadSupport = new LocalhostDownloadSupport(
-                        holder.browser,
-                        holder.hostNameFromHost
-                )
-
-                // code below here is from the geb.spock.GebExtension since there can only be 1 shared initializer per extension
-                holder.testManager.beforeTestClass(invocation.spec.reflection)
-                invocation.proceed()
-            }
-
-            spec.addSetupInterceptor { invocation ->
-                // Grails will be initialized by this point, so setup the browser url correctly
-                holder.setupBrowserUrl(invocation)
-                invocation.proceed()
-            }
-
-            spec.addInterceptor { invocation ->
-                try {
-                    invocation.proceed()
-                } finally {
-                    holder.testManager.afterTestClass()
-                }
-            }
-
-            spec.allFeatures*.addIterationInterceptor { invocation ->
-                holder.restartVncRecordingContainer()
-
-                holder.testManager.beforeTest(invocation.instance.getClass(), invocation.iteration.displayName)
-                try {
-                    invocation.proceed()
-                } finally {
-                    holder.testManager.afterTest()
-                }
-            }
-
-            addGebExtensionOnFailureReporter(spec)
-
-            spec.addListener(new GebRecordingTestListener(holder))
+        if (!isContainerGebSpec(spec)) {
+            return
         }
+
+        // Do not allow parallel execution since there's only 1 set of containers in testcontainers
+        spec.addExclusiveResource(exclusiveResource)
+
+        // Always initialize the container requirements first so the GebTestManager can properly configure the browser
+        spec.addSharedInitializerInterceptor { invocation ->
+            holder.reinitialize(invocation)
+
+            ContainerGebSpec gebSpec = invocation.sharedInstance as ContainerGebSpec
+            gebSpec.holder = holder
+
+            // Code below here is from the geb.spock.GebExtension since there can only be 1 shared initializer per extension
+            holder.testManager.beforeTestClass(invocation.spec.reflection)
+            invocation.proceed()
+        }
+
+        spec.addSetupInterceptor { invocation ->
+            // By this point, any server under test should be running, so setup the browser url correctly
+            holder.setupBrowserUrl(invocation)
+            invocation.proceed()
+        }
+
+        spec.addInterceptor { invocation ->
+            try {
+                invocation.proceed()
+            } finally {
+                holder.testManager.afterTestClass()
+            }
+        }
+
+        spec.allFeatures*.addIterationInterceptor { invocation ->
+            holder.restartVncRecordingContainer()
+            holder.testManager.beforeTest(invocation.instance.getClass(), invocation.iteration.displayName)
+            try {
+                invocation.proceed()
+            } finally {
+                holder.testManager.afterTest()
+            }
+        }
+
+        addOnFailureReporter(spec)
+        spec.addListener(new GebRecordingTestListener(holder))
     }
 
-    private static void addGebExtensionOnFailureReporter(SpecInfo spec) {
+    private static void addOnFailureReporter(SpecInfo spec) {
         List<MethodInfo> methods = spec.allFeatures*.featureMethod + spec.allFixtureMethods.toList()
         methods.each {
             it.addInterceptor(new GebOnFailureReporter())
@@ -140,4 +134,3 @@ class ContainerGebExtension implements IGlobalExtension {
         return false
     }
 }
-
