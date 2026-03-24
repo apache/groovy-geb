@@ -103,9 +103,6 @@ tasks.register('integrationTest', Test) {
     systemProperty('geb.env', System.getProperty('geb.env'))
     systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
     // systemProperty('geb.container.recording.restartPerTest', 'false') // makes all recording the same
-
-    dependsOn drivers.collect { tasks["${it}Test"] }
-    enabled = false
 }
 
 drivers.eachWithIndex { driver, index ->
