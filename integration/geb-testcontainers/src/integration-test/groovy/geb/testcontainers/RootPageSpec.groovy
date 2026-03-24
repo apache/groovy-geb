@@ -27,12 +27,8 @@ import geb.testcontainers.pages.HomePage
  * See https://groovy.apache.org/geb/manual/current/
  * for more instructions on how to write functional tests with Geb.
  */
+@ContainerGebConfiguration(reporting = true)
 class RootPageSpec extends ContainerGebSpecWithServer {
-
-    @Override
-    boolean reporting() {
-        true
-    }
 
     @Override
     Reporter createReporter() {

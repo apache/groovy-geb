@@ -26,12 +26,8 @@ import spock.lang.Title
  * for more instructions on how to write functional tests with Geb.
  */
 @Title("host name configuration test")
+@ContainerGebConfiguration(hostName = 'testing.example.com')
 class HostNameConfigurationSpec extends ContainerGebSpecWithServer {
-
-    @Override
-    String hostName() {
-        'testing.example.com'
-    }
 
     def "should show the right server name when visiting home page"() {
         when: "visiting the hpme page with a configured host name"

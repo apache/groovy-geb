@@ -27,6 +27,7 @@ import geb.test.GebTestManager
 import geb.transform.DynamicallyDispatchesToBrowser
 import geb.testcontainers.support.ContainerGebFileInputSource
 import org.testcontainers.containers.BrowserWebDriverContainer
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.images.builder.Transferable
 import spock.lang.Shared
 import spock.lang.Specification
@@ -43,7 +44,14 @@ import spock.lang.Specification
  *   </li>
  * </ul>
  *
- * @see ContainerGebConfiguration for how to customize the container's connection information
+ * <p>Configuration can be customized in two ways:
+ * <ul>
+ *   <li>Apply {@link ContainerGebConfiguration @ContainerGebConfiguration} to set values declaratively.</li>
+ *   <li>Override methods ({@link #protocol()}, {@link #hostName()}, {@link #reporting()},
+ *       {@link #fileDetector()}) for dynamic or inheritable configuration.</li>
+ * </ul>
+ *
+ * @see ContainerGebConfiguration
  *
  * @author Søren Berg Glasius
  * @author Mattias Reichel
@@ -51,7 +59,7 @@ import spock.lang.Specification
  * @since 4.1
  */
 @DynamicallyDispatchesToBrowser
-abstract class ContainerGebSpec extends Specification implements ContainerGebConfiguration {
+abstract class ContainerGebSpec extends Specification {
 
     @Shared
     WebDriverContainerHolder holder
@@ -92,7 +100,6 @@ abstract class ContainerGebSpec extends Specification implements ContainerGebCon
 
     /**
      * Copies a file from the host to the container for assignment to a Geb FileInput module.
-     * This method is useful when you need to upload a file to a form in a Geb test and will work cross-platform.
      *
      * @param hostPath relative path to the file on the host
      * @param containerPath absolute path to where to put the file in the container
@@ -102,5 +109,42 @@ abstract class ContainerGebSpec extends Specification implements ContainerGebCon
     File createFileInputSource(String hostPath, String containerPath) {
         container.copyFileToContainer(Transferable.of(new File(hostPath).bytes), containerPath)
         new ContainerGebFileInputSource(containerPath)
+    }
+
+    // --- Configuration defaults (overridable by subclasses or @ContainerGebConfiguration) ---
+
+    /**
+     * The protocol that the container's browser will use to access the server under test.
+     * <p>Defaults to {@code http}. Can also be set via {@link ContainerGebConfiguration#protocol()}.
+     */
+    String protocol() {
+        ContainerGebConfiguration.DEFAULT_PROTOCOL
+    }
+
+    /**
+     * The hostname that the container's browser will use to access the server under test.
+     * <p>Defaults to {@code host.testcontainers.internal}.
+     * Can also be set via {@link ContainerGebConfiguration#hostName()}.
+     */
+    String hostName() {
+        ContainerGebConfiguration.DEFAULT_HOSTNAME_FROM_CONTAINER
+    }
+
+    /**
+     * Whether reporting should be enabled for this test.
+     * Can also be set via {@link ContainerGebConfiguration#reporting()}.
+     */
+    boolean reporting() {
+        false
+    }
+
+    /**
+     * The {@link ContainerFileDetector} implementation to use for this class.
+     * Can also be set via {@link ContainerGebConfiguration#fileDetector()}.
+     *
+     * @since 4.2
+     */
+    Class<? extends ContainerFileDetector> fileDetector() {
+        DefaultContainerFileDetector
     }
 }

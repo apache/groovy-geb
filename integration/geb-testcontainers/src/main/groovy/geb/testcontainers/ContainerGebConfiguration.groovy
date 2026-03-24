@@ -20,53 +20,58 @@ package geb.testcontainers
 
 import org.testcontainers.containers.GenericContainer
 
+import java.lang.annotation.ElementType
+import java.lang.annotation.Inherited
+import java.lang.annotation.Retention
+import java.lang.annotation.RetentionPolicy
+import java.lang.annotation.Target
+
 /**
- * Implement this interface on a {@link ContainerGebSpec} subclass to configure the
- * protocol, hostname, reporting, and file detector for container-based browser tests.
+ * Annotation to configure the protocol, hostname, reporting, and file detector
+ * for container-based browser tests. Apply to a {@link ContainerGebSpec} subclass.
  *
- * <p>Configuration is inherited by subclasses, and can be overridden by re-implementing
- * the desired methods.
+ * <p>Values set here override the defaults from {@link ContainerGebSpec}.
+ * This annotation is {@link Inherited}, so subclasses inherit their parent's configuration.
+ * Subclasses can re-apply the annotation to override specific values.
+ *
+ * <p>For configuration that requires dynamic values or complex logic, override
+ * the corresponding methods on {@link ContainerGebSpec} directly instead.
  *
  * <p>Example:
  * <pre><code>
+ * &#64;ContainerGebConfiguration(hostName = 'testing.example.com', reporting = true)
  * class MySpec extends ContainerGebSpec {
- *     &#64;Override
- *     String hostName() { 'testing.example.com' }
- *
- *     &#64;Override
- *     boolean reporting() { true }
+ *     // ...
  * }
  * </code></pre>
  *
  * @author James Daugherty
  * @since 4.1
  */
-interface ContainerGebConfiguration {
+@Inherited
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@interface ContainerGebConfiguration {
+
+    static final String DEFAULT_HOSTNAME_FROM_CONTAINER = GenericContainer.INTERNAL_HOST_HOSTNAME
+    static final String DEFAULT_PROTOCOL = 'http'
 
     /**
      * The protocol that the container's browser will use to access the server under test.
      * <p>Defaults to {@code http}.
      */
-    default String protocol() {
-        'http'
-    }
+    String protocol() default DEFAULT_PROTOCOL
 
     /**
      * The hostname that the container's browser will use to access the server under test.
      * <p>Defaults to {@code host.testcontainers.internal}.
-     * <p>This is useful when the server under test needs to be accessed with a certain hostname.
      */
-    default String hostName() {
-        GenericContainer.INTERNAL_HOST_HOSTNAME
-    }
+    String hostName() default DEFAULT_HOSTNAME_FROM_CONTAINER
 
     /**
      * Whether reporting should be enabled for this test.
-     * Add a {@code GebConfig.groovy} to customize the reporter configuration.
      */
-    default boolean reporting() {
-        false
-    }
+    boolean reporting() default false
 
     /**
      * The {@link ContainerFileDetector} implementation to use for this class.
@@ -75,7 +80,5 @@ interface ContainerGebConfiguration {
      * @see DefaultContainerFileDetector
      * @see UselessContainerFileDetector
      */
-    default Class<? extends ContainerFileDetector> fileDetector() {
-        DefaultContainerFileDetector
-    }
+    Class<? extends ContainerFileDetector> fileDetector() default DefaultContainerFileDetector
 }

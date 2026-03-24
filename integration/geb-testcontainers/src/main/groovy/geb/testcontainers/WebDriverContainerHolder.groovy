@@ -431,16 +431,23 @@ class WebDriverContainerHolder {
         Class<? extends ContainerFileDetector> fileDetector
 
         SpecContainerConfiguration(SpecInfo spec) {
-            ContainerGebConfiguration conf = null
+            // Check for @ContainerGebConfiguration annotation first (including inherited)
+            def annotation = spec.reflection.getAnnotation(ContainerGebConfiguration)
 
-            if (ContainerGebConfiguration.isAssignableFrom(spec.reflection)) {
-                conf = spec.reflection.getConstructor().newInstance() as ContainerGebConfiguration
+            if (annotation) {
+                // Annotation values take priority
+                protocol = annotation.protocol()
+                hostName = annotation.hostName()
+                reporting = annotation.reporting()
+                fileDetector = annotation.fileDetector()
+            } else {
+                // Fall back to instance methods on the spec (overridable defaults from ContainerGebSpec)
+                def instance = spec.reflection.getConstructor().newInstance() as ContainerGebSpec
+                protocol = instance.protocol()
+                hostName = instance.hostName()
+                reporting = instance.reporting()
+                fileDetector = instance.fileDetector()
             }
-
-            protocol = conf?.protocol() ?: DEFAULT_PROTOCOL
-            hostName = conf?.hostName() ?: DEFAULT_HOSTNAME
-            reporting = conf?.reporting() ?: false
-            fileDetector = conf?.fileDetector() ?: DEFAULT_FILE_DETECTOR
         }
     }
 }
