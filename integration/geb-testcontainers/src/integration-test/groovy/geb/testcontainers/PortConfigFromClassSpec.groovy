@@ -30,16 +30,14 @@ class PortConfigFromClassSpec extends ContainerGebSpec {
 
     static TestFileServer server
 
-    int hostPort = 8000
+    static int hostPort = 8000
 
     def setupSpec() {
         server = new TestFileServer()
+        server.start(hostPort)
     }
 
     def "should use the class field value"() {
-        given: "a server listening on port 8000"
-        server.start(8000)
-
         when: "go to localhost"
         go "/" // browser is going to 8080
 
