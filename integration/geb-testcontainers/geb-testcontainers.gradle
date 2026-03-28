@@ -100,7 +100,7 @@ tasks.register('integrationTest', Test) {
         events 'passed', 'skipped', 'failed'
     }
 
-    systemProperty('geb.env', System.getProperty('geb.env'))
+    systemProperty('geb.env', System.getProperty('geb.env') ?: 'firefox')
     systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
     // systemProperty('geb.container.recording.restartPerTest', 'false') // makes all recording the same
 }
