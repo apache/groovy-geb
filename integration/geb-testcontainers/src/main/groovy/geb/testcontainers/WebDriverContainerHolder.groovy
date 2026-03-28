@@ -175,11 +175,9 @@ class WebDriverContainerHolder {
         // (enforced by ExclusiveResource) so this is safe.
         System.setProperty(REMOTE_ADDRESS_PROPERTY, container.seleniumAddress.toString())
 
-        if (!gebConf.driverConf) {
-            gebConf.driverConf = { ->
-                log.info('Using default Firefox RemoteWebDriver for {}', container.seleniumAddress)
-                new RemoteWebDriver(container.seleniumAddress, new FirefoxOptions())
-            }
+        gebConf.driverConf = gebConf.driverConf ?: { ->
+            log.info('Using default Firefox RemoteWebDriver for {}', container.seleniumAddress)
+            new RemoteWebDriver(container.seleniumAddress, new FirefoxOptions())
         }
 
         browser = createBrowser(gebConf)

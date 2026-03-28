@@ -27,7 +27,6 @@ import geb.test.GebTestManager
 import geb.transform.DynamicallyDispatchesToBrowser
 import geb.testcontainers.support.ContainerGebFileInputSource
 import org.testcontainers.containers.BrowserWebDriverContainer
-import org.testcontainers.containers.GenericContainer
 import org.testcontainers.images.builder.Transferable
 import spock.lang.Shared
 import spock.lang.Specification
