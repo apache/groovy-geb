@@ -35,7 +35,7 @@ class GebConfigSpec extends ContainerGebSpecWithServer {
         def capabilities = ((RemoteWebDriver) driver).capabilities
 
         then: 'our custom capability set in GebConfig is available'
-        capabilities.getCapability('grails:gebConfigUsed') == true
+        capabilities.getCapability('geb:gebConfigUsed') == true
 
         and: 'the driver should use the browser from GebConfig.groovy'
         capabilities.browserName == System.getProperty('geb.env')

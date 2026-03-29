@@ -39,7 +39,7 @@ environments {
             def firefoxOptions = new FirefoxOptions()
 
             // Add a custom capability that we can test for to verify our configuration is being used
-            firefoxOptions.setCapability('grails:gebConfigUsed', true)
+            firefoxOptions.setCapability('geb:gebConfigUsed', true)
 
             // The remote address will be set by WebDriverContainerHolder via system property
             // webdriver.remote.server before this closure is called
@@ -66,7 +66,7 @@ environments {
             chromeOptions.setExperimentalOption('prefs', prefs)
 
             // Add a custom capability that we can test for to verify our configuration is being used
-            chromeOptions.setCapability('grails:gebConfigUsed', true)
+            chromeOptions.setCapability('geb:gebConfigUsed', true)
 
             // The remote address will be set by WebDriverContainerHolder via system property
             // webdriver.remote.server before this closure is called
@@ -82,7 +82,7 @@ environments {
             def edgeOptions = new EdgeOptions()
 
             // Add a custom capability that we can test for to verify our configuration is being used
-            edgeOptions.setCapability('grails:gebConfigUsed', true)
+            edgeOptions.setCapability('geb:gebConfigUsed', true)
 
             // The remote address will be set by WebDriverContainerHolder via system property
             // webdriver.remote.server before this closure is called
