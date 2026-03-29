@@ -29,14 +29,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-ext {
-    // The drivers we want to use in containers
-    // see https://github.com/SeleniumHQ/docker-selenium
-    // for browsers per platform
-    // drivers = ["firefox", "chrome", "edge"] // no safari container
-    drivers = ["firefox"]
-}
-
 // add integration tests
 sourceSets {
     integrationTest {
@@ -103,31 +95,10 @@ tasks.register('integrationTest', Test) {
     systemProperty('geb.env', System.getProperty('geb.env') ?: 'firefox')
     systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
     // systemProperty('geb.container.recording.restartPerTest', 'false') // makes all recording the same
-}
 
-drivers.eachWithIndex { driver, index ->
-    tasks.register("${driver}Test", Test) {
-        group JavaBasePlugin.VERIFICATION_GROUP
-
-        testClassesDirs = sourceSets.integrationTest.output.classesDirs
-        classpath = sourceSets.integrationTest.runtimeClasspath
-
-        testLogging {
-            events 'passed', 'skipped', 'failed'
-        }
-
-        systemProperty('geb.container.recording.mode', 'RECORD_ALL') // also RECORD_FAILING
-        systemProperty "geb.build.reportsDir", reporting.file("geb/$name")
-        systemProperty "geb.env", driver
-
-        // Make Geb tests more resilient in slow CI environments
-        if (project.hasProperty('gebAtCheckWaiting')) {
-            systemProperty('geb.container.atCheckWaiting.enabled', 'true')
-        }
-
-        if (index > 0) {
-            mustRunAfter("${drivers[index-1]}Test")
-        }
+    // Make Geb tests more resilient in slow CI environments
+    if (project.hasProperty('gebAtCheckWaiting')) {
+        systemProperty('geb.container.atCheckWaiting.enabled', 'true')
     }
 }
 
