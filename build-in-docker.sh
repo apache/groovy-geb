@@ -20,22 +20,16 @@
 
 export WORKING_DIRECTORY=`pwd`
 export HOME_DIRECTORY=`echo ~`
-export IMAGE="geb-build:latest"
+export IMAGE_REPOSITORY="gebish/ci"
+export IMAGE_TAG="v13"
 
-# Remove existing container if it exists
-docker rm -f geb-build-container 2>/dev/null || true
+while getopts v: flag
+do
+    case "${flag}" in
+        v) VERSION=${OPTARG};;
+    esac
+done
 
-# For podman on macOS, we need to use --privileged and --security-opt to access the host's podman socket
-# The socket will be available via podman's automatic socket forwarding
-# Use --network=host so testcontainers can access other containers via localhost
-docker run -it \
-           --name geb-build-container \
-           --privileged \
-           --network=host \
-           --security-opt label=disable \
-           -v /var/run/docker.sock:/var/run/docker.sock:Z \
-           -v ${WORKING_DIRECTORY}:${WORKING_DIRECTORY} \
-           -v ${HOME_DIRECTORY}/.gradle:/gradle-home \
-           -w ${WORKING_DIRECTORY} \
-           ${IMAGE} \
-           "$@"
+export IMAGE="${IMAGE_REPOSITORY}:${IMAGE_TAG}"
+
+docker run -v ${WORKING_DIRECTORY}:${WORKING_DIRECTORY} -v ${HOME_DIRECTORY}/.gradle:/gradle-home -w ${WORKING_DIRECTORY} ${IMAGE} /bin/bash -c "Xvfb :99 -screen 1 1280x1024x16 -nolisten tcp > /dev/null 2>&1 & export DISPLAY=:99 ; ./gradlew --no-daemon --max-workers 4 --parallel $*"
