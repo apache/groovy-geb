@@ -102,8 +102,6 @@ tasks.named('rat') {
         'logo.svg', // Logo svg
         'out/**', '*.ipr', '**/*.iml', '*.iws', '.idea/**', // Intellij files
         'bootstrap/settings.gradle', // empty file
-        'integration/**/integration-test/resources/assets/*.txt', // exclude test artifacts
-        'integration/**/integration-test/resources/static/*.html', // exclude test artifacts
         '**/resources/META-INF/**/*' // exclude Spock extension file
     ]
 }
