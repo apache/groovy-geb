@@ -78,7 +78,7 @@ class UploadSpec extends ContainerGebSpecWithServer {
         File fileFromContainer = new File(tempDir.toString(), "upload-test.txt")
 
         then:
-        fileFromContainer.bytes.length == 26
+        fileFromContainer.bytes.length == 842
 
         when:
         uploadPage.fileInput.file = fileInContainer

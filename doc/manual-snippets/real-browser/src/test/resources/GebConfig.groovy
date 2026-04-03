@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-import org.openqa.selenium.firefox.FirefoxOptions
+import org.openqa.selenium.chrome.ChromeOptions
 import org.testcontainers.Testcontainers
 import org.testcontainers.containers.BrowserWebDriverContainer
 import org.testcontainers.utility.ResourceReaper
@@ -27,7 +27,7 @@ Testcontainers.exposeHostPorts(8080)
 
 driver = {
     def container = new BrowserWebDriverContainer<>()
-            .withCapabilities(new FirefoxOptions())
+            .withCapabilities(new ChromeOptions())
             .withRecordingMode(BrowserWebDriverContainer.VncRecordingMode.SKIP, null)
 
     container.start()

@@ -37,7 +37,7 @@ class DownloadSupportSpec extends ContainerGebSpecWithServer {
         to(HomePage)
 
         then:
-        downloadBytes().length == 247
+        downloadBytes().length == 1074
     }
 
     def cleanup() {

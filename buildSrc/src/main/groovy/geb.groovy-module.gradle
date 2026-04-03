@@ -80,7 +80,5 @@ tasks.named('rat') {
         '**/MANIFEST.MF', // TODO: can we remove this?
         '**/META-INF/services/**', // TODO: can we remove this?
         '**/META-INF/groovy/**', // TODO: can we remove this?
-        '**/integration-test/resources/assets/*.txt', // exclude test artifacts
-        '**/integration-test/resources/static/*.html', // exclude test artifacts
     ]
 }
