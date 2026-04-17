@@ -36,7 +36,7 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
           check-latest: true
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e
       - name: Check firefox version
         run: /usr/bin/firefox --version
       - name: Build and run tests
