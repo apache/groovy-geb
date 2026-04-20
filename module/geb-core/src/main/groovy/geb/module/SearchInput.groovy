@@ -18,6 +18,9 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class SearchInput extends TextLikeInput {
 
     final String inputType = 'search'

@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class UndefinedPageContentException extends GebException {
 
     UndefinedPageContentException(Object container, Object name) {

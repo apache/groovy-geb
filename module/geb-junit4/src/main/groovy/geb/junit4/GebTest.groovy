@@ -21,9 +21,11 @@ package geb.junit4
 import geb.test.GebTestManager
 import geb.test.GebTestManagerBuilder
 import geb.transform.DynamicallyDispatchesToBrowser
+import groovy.transform.CompileStatic
 import org.junit.ClassRule
 import org.junit.Rule
 
+@CompileStatic
 @DynamicallyDispatchesToBrowser
 class GebTest {
 

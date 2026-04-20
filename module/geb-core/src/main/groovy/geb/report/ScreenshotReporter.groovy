@@ -18,6 +18,7 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.WebDriverException
@@ -26,6 +27,7 @@ import org.openqa.selenium.WebDriverException
  * Writes the source of the browser's current page as html and takes a PNG screenshot
  * if the underlying driver implementation supports it.
  */
+@CompileStatic
 class ScreenshotReporter extends ReporterSupport {
 
     void writeReport(ReportState reportState) {

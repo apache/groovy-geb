@@ -18,7 +18,7 @@
  */
 package geb.module
 
-import groovy.util.logging.Slf4j
+import groovy.transform.CompileStatic
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatterBuilder
 
 import static java.time.temporal.ChronoField.*
 
-@Slf4j
+@CompileStatic
 class DateTimeLocalInput extends AbstractInput {
 
     // codenarc-disable DuplicateNumberLiteral

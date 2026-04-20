@@ -18,9 +18,12 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
+
 /**
  * Common support for reporter implemenations.
  */
+@CompileStatic
 abstract class ReporterSupport implements Reporter {
 
     private final List<ReportingListener> listeners = []
@@ -39,14 +42,14 @@ abstract class ReporterSupport implements Reporter {
     /**
      * Gets a file reference for the object with the given name and extension within the dir.
      */
-    protected getFile(File dir, String name, String extension) {
+    protected File getFile(File dir, String name, String extension) {
         new File(dir, "${escapeFileName(name)}.${escapeFileName(extension)}")
     }
 
     /**
      * Replaces all non word chars with underscores to avoid using reserved characters in file paths
      */
-    protected escapeFileName(String name) {
+    protected String escapeFileName(String name) {
         name.replaceAll("(?U)[^\\w\\s-]", "_")
     }
 

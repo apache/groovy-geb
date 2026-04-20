@@ -19,6 +19,7 @@
 package geb.navigator
 
 import geb.navigator.factory.NavigatorFactory
+import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FromString
 import org.openqa.selenium.By
@@ -28,12 +29,12 @@ import org.openqa.selenium.WebElement
 import java.util.function.Supplier
 
 import static geb.navigator.Locator.MATCH_ALL_SELECTOR
-import static geb.navigator.BasicLocator.DYNAMIC_ATTRIBUTE_NAME
 import static geb.navigator.WebElementPredicates.matches
 
+@CompileStatic
 class SearchContextBasedBasicLocator implements BasicLocator {
 
-    private static final Map<String, Closure> BY_SELECTING_ATTRIBUTES = [
+    private static final Map<String, Closure<By>> BY_SELECTING_ATTRIBUTES = [
             id   : By.&id,
             class: By.&className,
             name : By.&name
@@ -118,7 +119,7 @@ class SearchContextBasedBasicLocator implements BasicLocator {
             String selector = MATCH_ALL_SELECTOR,
             @ClosureParams(value = FromString, options = "Boolean,org.openqa.selenium.By,Map<String, Object>") Closure<Navigator> navigatorFromBy
     ) {
-        def attributesCopy = attributes.clone()
+        def attributesCopy = new LinkedHashMap<String, Object>(attributes)
         def selectedUsingBy = findUsingByIfPossible(attributesCopy, selector, navigatorFromBy)
         if (selectedUsingBy != null) {
             return selectedUsingBy

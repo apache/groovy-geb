@@ -24,8 +24,10 @@ import geb.navigator.Locator
 import geb.navigator.Navigator
 import geb.navigator.SearchContextBasedBasicLocator
 import geb.waiting.PotentiallyWaitingExecutor
+import groovy.transform.CompileStatic
 import org.openqa.selenium.By
 
+@CompileStatic
 class BrowserBackedNavigatorFactory extends AbstractNavigatorFactory {
 
     final Locator locator

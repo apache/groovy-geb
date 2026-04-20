@@ -18,6 +18,7 @@
  */
 package geb.transform.implicitassertions
 
+import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ClassCodeVisitorSupport
 import org.codehaus.groovy.ast.ClassHelper
 import org.codehaus.groovy.ast.ClassNode
@@ -29,12 +30,13 @@ import static org.codehaus.groovy.syntax.Types.ASSIGNMENT_OPERATOR
 import static org.codehaus.groovy.syntax.Types.ofType
 import static geb.transform.implicitassertions.ImplicitAssertionsTransformationUtil.*
 
+@CompileStatic
 class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
 
     private static final List<ImplicitlyAssertedMethodCallMatcher> IMPLICITLY_ASSERTED_METHOD_CALL_MATCHERS = [
-            new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("waitFor"),
-            new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("refreshWaitFor"),
-            new ByNameImplicitlyAssertedMethodCallMatcher("at")
+        new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("waitFor"),
+        new ConfigurableByNameImplicitlyAssertedMethodCallMatcher("refreshWaitFor"),
+        new ByNameImplicitlyAssertedMethodCallMatcher("at")
     ]
     private static final String WAIT_CONDITION = "waitCondition"
 
@@ -46,13 +48,13 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
 
     @Override
     void visitField(FieldNode node) {
-        if (node.static && node.initialExpression in ClosureExpression) {
+        if (node.static && node.initialExpression instanceof ClosureExpression) {
             switch (node.name) {
                 case 'at':
-                    transformEachStatement(node.initialExpression, true)
+                    transformEachStatement((ClosureExpression) node.initialExpression, true)
                     break
                 case 'content':
-                    visitContentDsl(node.initialExpression)
+                    visitContentDsl((ClosureExpression) node.initialExpression)
                     break
             }
         }
@@ -60,21 +62,21 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
 
     @Override
     void visitExpressionStatement(ExpressionStatement statement) {
-        if (statement.expression in MethodCallExpression) {
-            MethodCallExpression expression = statement.expression
+        if (statement.expression instanceof MethodCallExpression) {
+            def expression = (MethodCallExpression) statement.expression
             if (isSpockVerifyMethodConditionCall(expression)) {
                 compensateForSpock(expression)
-            } else if (expression.arguments in ArgumentListExpression) {
-                ArgumentListExpression arguments = expression.arguments
+            } else if (expression.arguments instanceof ArgumentListExpression) {
+                def arguments = (ArgumentListExpression) expression.arguments
                 potentiallyTransform(expression.methodAsString, arguments.expressions)
             }
         }
     }
 
     void compensateForSpock(MethodCallExpression expression) {
-        if (expression.arguments in ArgumentListExpression) {
-            ArgumentListExpression arguments = expression.arguments as ArgumentListExpression
-            List<Expression> argumentExpressions = arguments.expressions
+        if (expression.arguments instanceof ArgumentListExpression) {
+            def arguments = (ArgumentListExpression) expression.arguments
+            def argumentExpressions = arguments.expressions
 
             if (argumentExpressions.size() == 12) {
                 visitVerifyMethodConditionCall(argumentExpressions, 7)
@@ -83,9 +85,9 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     boolean isSpockVerifyMethodConditionCall(MethodCallExpression expression) {
-        if (expression.objectExpression in ClassExpression && expression.method in ConstantExpression) {
-            ClassExpression classExpression = expression.objectExpression as ClassExpression
-            ConstantExpression method = expression.method as ConstantExpression
+        if (expression.objectExpression instanceof ClassExpression && expression.method instanceof ConstantExpression) {
+            def classExpression = (ClassExpression) expression.objectExpression
+            def method = (ConstantExpression) expression.method
 
             classExpression.type.name == "org.spockframework.runtime.SpockRuntime" && method.value == "verifyMethodCondition"
         }
@@ -106,8 +108,8 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
 
         if (methodName) {
             Expression verifyMethodConditionArgsArgument = argumentExpressions.get(methodNameIndex + 1)
-            if (verifyMethodConditionArgsArgument in ArrayExpression) {
-                List<Expression> values = (verifyMethodConditionArgsArgument as ArrayExpression).expressions.collect { Expression argumentExpression ->
+            if (verifyMethodConditionArgsArgument instanceof ArrayExpression) {
+                def values = ((ArrayExpression) verifyMethodConditionArgsArgument).expressions.collect { argumentExpression ->
                     extractRecordedValueExpression(argumentExpression)
                 }
 
@@ -117,11 +119,11 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     Expression extractRecordedValueExpression(Expression valueRecordExpression) {
-        if (valueRecordExpression in MethodCallExpression) {
-            MethodCallExpression methodCallExpression = valueRecordExpression as MethodCallExpression
+        if (valueRecordExpression instanceof MethodCallExpression) {
+            def methodCallExpression = (MethodCallExpression) valueRecordExpression
 
-            if (methodCallExpression.arguments in ArgumentListExpression) {
-                ArgumentListExpression arguments = methodCallExpression.arguments as ArgumentListExpression
+            if (methodCallExpression.arguments instanceof ArgumentListExpression) {
+                def arguments = (ArgumentListExpression) methodCallExpression.arguments
 
                 if (arguments.expressions.size() >= 2) {
                     return arguments.expressions.get(1)
@@ -133,7 +135,7 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     def getConstantValueOfType(Expression expression, Class type) {
-        if (expression != null && expression in ConstantExpression) {
+        if (expression instanceof ConstantExpression) {
             Object value = ((ConstantExpression) expression).value
             type.isInstance(value) ? value : null
         } else {
@@ -142,8 +144,8 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     boolean isTransformable(ExpressionStatement statement) {
-        if (statement.expression in BinaryExpression) {
-            BinaryExpression binaryExpression = statement.expression
+        if (statement.expression instanceof BinaryExpression) {
+            def binaryExpression = (BinaryExpression) statement.expression
             if (ofType(binaryExpression.operation.type, ASSIGNMENT_OPERATOR)) {
                 reportError(statement, "Expected a condition, but found an assignment. Did you intend to write '==' ?", sourceUnit)
                 false
@@ -162,39 +164,39 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     private boolean lastArgumentIsClosureExpression(List<Expression> arguments) {
-        arguments && arguments.last() in ClosureExpression
+        arguments && arguments.last() instanceof ClosureExpression
     }
 
     private boolean requiredOptionSpecifiedAsFalse(ArgumentListExpression arguments) {
-        MapExpression paramMap = arguments.expressions.find { it in MapExpression }
-        paramMap?.mapEntryExpressions.any {
-            if (it.keyExpression in ConstantExpression && it.valueExpression in ConstantExpression) {
-                ConstantExpression key = it.keyExpression
-                ConstantExpression value = it.valueExpression
+        def paramMap = arguments.expressions.find { it instanceof MapExpression } as MapExpression
+        paramMap?.mapEntryExpressions?.any {
+            if (it.keyExpression instanceof ConstantExpression && it.valueExpression instanceof ConstantExpression) {
+                def key = (ConstantExpression) it.keyExpression
+                def value = (ConstantExpression) it.valueExpression
                 key.value == 'required' && value.value == false
             }
         }
     }
 
     private Expression option(ArgumentListExpression arguments, String optionName) {
-        MapExpression paramMap = arguments.expressions.find { it in MapExpression }
+        def paramMap = arguments.expressions.find { it instanceof MapExpression } as MapExpression
         paramMap?.mapEntryExpressions?.find {
-            if (it.keyExpression in ConstantExpression) {
-                ConstantExpression key = it.keyExpression
+            if (it.keyExpression instanceof ConstantExpression) {
+                def key = (ConstantExpression) it.keyExpression
                 key.value == optionName
             }
         }?.valueExpression
     }
 
     private void visitContentDsl(ClosureExpression closureExpression) {
-        BlockStatement blockStatement = closureExpression.code
-        blockStatement.statements.each { Statement statement ->
-            if (statement in ExpressionStatement) {
-                ExpressionStatement expressionStatement = statement
-                if (expressionStatement.expression in MethodCallExpression) {
-                    MethodCallExpression methodCall = expressionStatement.expression
-                    if (methodCall.arguments in ArgumentListExpression) {
-                        ArgumentListExpression arguments = methodCall.arguments
+        def blockStatement = closureExpression.code as BlockStatement
+        blockStatement.statements.each { statement ->
+            if (statement instanceof ExpressionStatement) {
+                def expressionStatement = (ExpressionStatement) statement
+                if (expressionStatement.expression instanceof MethodCallExpression) {
+                    def methodCall = (MethodCallExpression) expressionStatement.expression
+                    if (methodCall.arguments instanceof ArgumentListExpression) {
+                        def arguments = (ArgumentListExpression) methodCall.arguments
                         if (lastArgumentIsClosureExpression(arguments)) {
                             handleWaitingContent(arguments)
                             handleWaitConditionContent(arguments)
@@ -207,20 +209,20 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
 
     private void handleWaitConditionContent(ArgumentListExpression arguments) {
         def waitCondition = option(arguments, WAIT_CONDITION)
-        if (waitCondition in ClosureExpression) {
+        if (waitCondition instanceof ClosureExpression) {
             transformEachStatement(waitCondition, false)
         }
     }
 
     private void handleWaitingContent(ArgumentListExpression arguments) {
         if ((option(arguments, "wait") || option(arguments, WAIT_CONDITION)) && !requiredOptionSpecifiedAsFalse(arguments)) {
-            transformEachStatement(arguments.expressions.last(), true)
+            transformEachStatement(arguments.expressions.last() as ClosureExpression, true)
         }
     }
 
     private void transformEachStatement(ClosureExpression closureExpression, boolean appendTrueToNonAssertedStatements) {
-        BlockStatement blockStatement = closureExpression.code
-        ListIterator iterator = blockStatement.statements.listIterator()
+        def blockStatement = closureExpression.code as BlockStatement
+        def iterator = blockStatement.statements.listIterator()
         while (iterator.hasNext()) {
             iterator.set(maybeTransform(iterator.next(), appendTrueToNonAssertedStatements))
         }
@@ -236,9 +238,9 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
     }
 
     private Expression getTransformableExpression(Statement statement) {
-        if (statement in ExpressionStatement) {
-            ExpressionStatement expressionStatement = statement
-            if (!(expressionStatement.expression in DeclarationExpression)
+        if (statement instanceof ExpressionStatement) {
+            def expressionStatement = (ExpressionStatement) statement
+            if (!(expressionStatement.expression instanceof DeclarationExpression)
                     && isTransformable(expressionStatement)) {
                 return expressionStatement.expression
             }
@@ -261,8 +263,8 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
         assertAndRetrieveRecordedValue.addStatement(withAssertion)
         assertAndRetrieveRecordedValue.addStatement(retrieveRecordedValueStatement)
 
-        if (expression in MethodCallExpression) {
-            MethodCallExpression methodCall = expression
+        if (expression instanceof MethodCallExpression) {
+            def methodCall = (MethodCallExpression) expression
 
             replacement = wrapInVoidMethodCheck(
                     expression,
@@ -272,8 +274,8 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
                     methodCall.arguments,
                     appendTrueToNonAssertedStatements
             )
-        } else if (expression in StaticMethodCallExpression) {
-            StaticMethodCallExpression methodCall = expression
+        } else if (expression instanceof StaticMethodCallExpression) {
+            def methodCall = (StaticMethodCallExpression) expression
 
             replacement = wrapInVoidMethodCheck(
                     expression,
@@ -322,10 +324,10 @@ class ImplicitAssertionsTransformationVisitor extends ClassCodeVisitorSupport {
         if (arguments instanceof NamedArgumentListExpression) {
             argumentList = [arguments]
         } else {
-            TupleExpression tuple = arguments
+            def tuple = arguments as TupleExpression
             argumentList = tuple.expressions
         }
-        List<SpreadExpression> spreadExpressions = argumentList.findAll { it in SpreadExpression }
+        def spreadExpressions = argumentList.findAll { it instanceof SpreadExpression } as List<SpreadExpression>
         if (spreadExpressions) {
             spreadExpressions.each { reportError(it, 'Spread expressions are not allowed here', sourceUnit) }
             null

@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class NoBaseUrlDefinedException extends GebException {
 
     NoBaseUrlDefinedException() {

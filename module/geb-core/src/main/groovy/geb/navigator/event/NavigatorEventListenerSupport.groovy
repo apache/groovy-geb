@@ -20,11 +20,13 @@ package geb.navigator.event
 
 import geb.Browser
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 
 /**
  * A No-op implementation of {@link NavigatorEventListener}.
  * Useful as a base class for listener implementations which only want to be notified of a subset of navigator events.
  */
+@CompileStatic
 class NavigatorEventListenerSupport implements NavigatorEventListener {
     @Override
     void beforeClick(Browser browser, Navigator navigator) {

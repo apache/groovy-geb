@@ -18,6 +18,9 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class TextInput extends TextLikeInput {
 
     final String inputType = "text"

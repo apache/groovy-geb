@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class InvalidCssSelectorException extends GebException {
     InvalidCssSelectorException(String selector, Throwable cause) {
         super("$selector is not a valid CSS selector", cause)

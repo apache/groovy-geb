@@ -18,6 +18,7 @@
  */
 package geb.transform
 
+import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.ASTNode
 import org.codehaus.groovy.ast.ClassNode
 import org.codehaus.groovy.ast.MethodNode
@@ -31,15 +32,29 @@ import org.codehaus.groovy.transform.GroovyASTTransformation
 import static org.codehaus.groovy.ast.ClassHelper.OBJECT_TYPE
 import static org.codehaus.groovy.ast.ClassHelper.STRING_TYPE
 import static groovyjarjarasm.asm.Opcodes.ACC_PUBLIC
+import static org.codehaus.groovy.ast.tools.GeneralUtils.args
+import static org.codehaus.groovy.ast.tools.GeneralUtils.assignX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX
 import static org.codehaus.groovy.ast.tools.GeneralUtils.param
 import static org.codehaus.groovy.ast.tools.GeneralUtils.params
+import static org.codehaus.groovy.ast.tools.GeneralUtils.propX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.returnS
+import static org.codehaus.groovy.ast.tools.GeneralUtils.spreadX
+import static org.codehaus.groovy.ast.tools.GeneralUtils.varX
 
-@SuppressWarnings("SpaceAfterComma")
+@CompileStatic
+@SuppressWarnings("unused")
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
 class DynamicallyDispatchesToBrowserAstTransformation extends AbstractASTTransformation {
 
     public static final String NAME_PARAM_NAME = "name"
     public static final String PROPERTY_MISSING_METHOD_NAME = "propertyMissing"
+
+    private static final String ARGS = 'args'
+    private static final String GET_BROWSER = 'getBrowser'
+    private static final String METHOD_MISSING = 'methodMissing'
+    private static final String THIS = 'this'
+    private static final String VALUE = 'value'
 
     @Override
     void visit(ASTNode[] nodes, SourceUnit source) {
@@ -51,22 +66,27 @@ class DynamicallyDispatchesToBrowserAstTransformation extends AbstractASTTransfo
     }
 
     private void addMethodMissingNode(ClassNode classNode) {
-        def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, "args"))
-        def code = macro { return getBrowser()."$name"(*args) } as Statement
+        def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, ARGS))
+        def browserCall = callX(varX(THIS), GET_BROWSER)
+        def methodCall = callX(browserCall, varX(NAME_PARAM_NAME), args(spreadX(varX(ARGS))))
+        def code = returnS(methodCall)
 
-        addMethod(classNode, "methodMissing", parameters, code)
+        addMethod(classNode, METHOD_MISSING, parameters, code)
     }
 
     private void addMissingPropertySetter(ClassNode classNode) {
-        def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, "value"))
-        def code = macro { return getBrowser()."$name" = value } as Statement
+        def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME), param(OBJECT_TYPE, VALUE))
+        def browserCall = callX(varX(THIS), GET_BROWSER)
+        def assignment = assignX(propX(browserCall, varX(NAME_PARAM_NAME)), varX(VALUE))
+        def code = returnS(assignment)
 
         addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code)
     }
 
     private void addMissingPropertyGetter(ClassNode classNode) {
         def parameters = params(param(STRING_TYPE, NAME_PARAM_NAME))
-        def code = macro { return getBrowser()."$name" } as Statement
+        def browserCall = callX(varX(THIS), GET_BROWSER)
+        def code = returnS(propX(browserCall, varX(NAME_PARAM_NAME)))
 
         addMethod(classNode, PROPERTY_MISSING_METHOD_NAME, parameters, code)
     }

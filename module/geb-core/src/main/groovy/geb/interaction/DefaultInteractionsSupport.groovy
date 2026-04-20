@@ -19,9 +19,11 @@
 package geb.interaction
 
 import geb.Browser
+import groovy.transform.CompileStatic
 
 import static groovy.lang.Closure.DELEGATE_FIRST
 
+@CompileStatic
 class DefaultInteractionsSupport implements InteractionsSupport {
 
     Browser browser

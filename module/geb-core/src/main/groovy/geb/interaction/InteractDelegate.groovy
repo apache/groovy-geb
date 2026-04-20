@@ -19,12 +19,14 @@
 package geb.interaction
 
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.interactions.Actions
 
 import java.time.Duration
 
+@CompileStatic
 class InteractDelegate {
 
     Actions actions

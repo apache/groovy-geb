@@ -18,6 +18,9 @@
  */
 package geb
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class CompositePageEventListener implements PageEventListener {
 
     private final List<PageEventListener> pageEventListeners

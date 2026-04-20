@@ -18,8 +18,10 @@
  */
 package geb
 
+import groovy.transform.CompileStatic
 import groovy.transform.builder.Builder
 
+@CompileStatic
 class WithWindowConfiguration {
 
     final boolean close

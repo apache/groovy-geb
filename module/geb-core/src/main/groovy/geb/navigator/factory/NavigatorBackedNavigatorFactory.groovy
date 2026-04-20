@@ -18,15 +18,18 @@
  */
 package geb.navigator.factory
 
+import geb.navigator.DefaultNavigator
 import geb.navigator.Locator
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class NavigatorBackedNavigatorFactory extends AbstractNavigatorFactory {
 
     final Navigator base
 
     NavigatorBackedNavigatorFactory(Navigator navigator, InnerNavigatorFactory innerNavigatorFactory) {
-        super(navigator.browser, innerNavigatorFactory)
+        super(((DefaultNavigator) navigator).browser, innerNavigatorFactory)
         base = navigator
     }
 

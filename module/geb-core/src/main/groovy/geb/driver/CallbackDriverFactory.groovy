@@ -18,8 +18,10 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 
+@CompileStatic
 class CallbackDriverFactory implements DriverFactory {
 
     final private Closure callback
@@ -34,7 +36,7 @@ class CallbackDriverFactory implements DriverFactory {
             if (!(driver instanceof WebDriver)) {
                 throw new DriverCreationException("callback '${callback}' returned '$driver' which is not a WebDriver implementation")
             }
-            driver
+            (WebDriver) driver
         } catch (Throwable e) {
             throw new DriverCreationException("failed to create driver from callback '${callback}'", e)
         }

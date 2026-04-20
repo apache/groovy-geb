@@ -71,7 +71,7 @@ class WaitingSupportSpec extends WaitingSpec {
 
         then:
         WaitTimeoutException exception = thrown()
-        exception.cause in PowerAssertionError
+        exception.cause instanceof PowerAssertionError
         exception.cause.message.contains('!$("div").empty')
 
         where:

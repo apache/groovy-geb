@@ -22,12 +22,14 @@ import geb.Browser
 import geb.Page
 import geb.content.TemplateDerivedPageContent
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.NoSuchFrameException
 import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.WebElement
 
 import static groovy.lang.Closure.DELEGATE_FIRST
 
+@CompileStatic
 class DefaultFrameSupport implements FrameSupport {
 
     Browser browser
@@ -52,27 +54,52 @@ class DefaultFrameSupport implements FrameSupport {
         executeWithFrame(frameNavigator, page, block)
     }
 
-    <T> T withFrame(frame, Closure<T> block) {
+    <T> T withFrame(
+        Object frame,
+        @DelegatesTo(strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         executeWithFrame(frame, null, block)
     }
 
-    <T> T withFrame(Navigator frameNavigator, Closure<T> block) {
+    <T> T withFrame(
+        Navigator frameNavigator,
+        @DelegatesTo(strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         executeWithFrame(frameNavigator, null, block)
     }
 
-    <T> T withFrame(TemplateDerivedPageContent frame, Closure<T> block) {
+    <T> T withFrame(
+        TemplateDerivedPageContent frame,
+        @DelegatesTo(strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         def page = frame.templateParams.page
         page ? withFrame(frame, page, block) : withFrame(frame as Navigator, block)
     }
 
-    private <T> T executeWithFrame(frame, Page page, Closure<T> block) {
+    private <T> T executeWithFrame(
+        Object frame,
+        Page page,
+        @DelegatesTo(strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         def originalPage = browser.page
-        browser.driver.switchTo().frame(frame)
+        switch (frame) {
+            case Integer:
+                browser.driver.switchTo().frame((Integer) frame)
+                break
+            case String:
+                browser.driver.switchTo().frame((String) frame)
+                break
+            case WebElement:
+                browser.driver.switchTo().frame((WebElement) frame)
+                break
+            default:
+                throw new IllegalArgumentException("Unsupported frame reference: $frame")
+        }
         if (page) {
             browser.verifyAtImplicitly(page)
         }
         try {
-            Closure cloned = block.clone()
+            def cloned = (Closure) block.clone()
             cloned.delegate = browser
             cloned.resolveStrategy = DELEGATE_FIRST
             cloned.call()
@@ -91,7 +118,11 @@ class DefaultFrameSupport implements FrameSupport {
         }
     }
 
-    private <T> T executeWithFrame(Navigator frameNavigator, Page page, Closure<T> block) {
+    private <T> T executeWithFrame(
+        Navigator frameNavigator,
+        Page page,
+        @DelegatesTo(strategy = DELEGATE_FIRST) Closure<T> block
+    ) {
         WebElement element = frameNavigator.firstElement()
         if (element == null) {
             throw new NoSuchFrameException("No elements for given content: ${frameNavigator}")

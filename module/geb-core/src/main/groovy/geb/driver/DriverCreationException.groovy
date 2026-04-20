@@ -19,8 +19,10 @@
 package geb.driver
 
 import geb.error.GebException
+import groovy.transform.CompileStatic
 import groovy.transform.InheritConstructors
 
+@CompileStatic
 @InheritConstructors
 class DriverCreationException extends GebException {
 }

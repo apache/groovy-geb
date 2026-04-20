@@ -19,14 +19,18 @@
 package geb.content
 
 import geb.Browser
+import geb.Page
 import geb.error.ContentCountOutOfBoundsException
 import geb.error.RequiredPageContentNotPresent
 import geb.navigator.event.BrowserConfigurationDelegatingNavigatorEventListener
 import geb.navigator.Navigator
 import geb.navigator.event.DelegatingNavigatorEventListener
 import geb.navigator.event.NavigatorEventListener
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 import org.openqa.selenium.WebDriver
 
+@CompileStatic
 @SuppressWarnings("FieldName")
 class TemplateDerivedPageContent implements Navigator {
 
@@ -81,10 +85,19 @@ class TemplateDerivedPageContent implements Navigator {
     }
 
     Navigator click() {
-        def to = templateParams.toSingle ?: templateParams.toList
-        if (to) {
-            def toWait = _template.config.getWaitForParam(templateParams.toWait)
-            _navigator.click(to, toWait)
+        def targetSingle = templateParams.toSingle
+        def targetList = templateParams.toList
+        if (targetSingle != null || targetList != null) {
+            def wait = _template.config.getWaitForParam(templateParams.toWait)
+            if (targetSingle instanceof Class) {
+                _navigator.click((Class<? extends Page>) targetSingle, wait)
+            } else if (targetSingle instanceof Page) {
+                _navigator.click((Page) targetSingle, wait)
+            } else if (targetList != null) {
+                _navigator.click((List) targetList, wait)
+            } else {
+                _navigator.click([targetSingle], wait)
+            }
         } else {
             _navigator.click()
         }
@@ -95,15 +108,15 @@ class TemplateDerivedPageContent implements Navigator {
     }
 
     boolean asBoolean() {
-        _navigator.asBoolean()
+        _navigator
     }
 
     def methodMissing(String name, args) {
-        _navigator."$name"(*args)
+        InvokerHelper.invokeMethod(_navigator, name, args)
     }
 
     def propertyMissing(String name) {
-        _navigator[name]
+        InvokerHelper.getProperty(_navigator, name)
     }
 
     @Override
@@ -112,7 +125,7 @@ class TemplateDerivedPageContent implements Navigator {
     }
 
     def propertyMissing(String name, val) {
-        _navigator[name] = val
+        InvokerHelper.setProperty(_navigator, name, val)
     }
 
     @Override

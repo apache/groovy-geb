@@ -20,7 +20,9 @@ package geb.content
 
 import geb.Initializable
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class UninitializedPageContentSupport extends PageContentSupport {
     private final Initializable initializable
 

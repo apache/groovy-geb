@@ -20,12 +20,17 @@ package geb.junit
 
 import geb.junit.error.IncompatibleTestClass
 import geb.test.GebTestManager
+import groovy.transform.CompileStatic
 
+import java.lang.reflect.InvocationTargetException
+
+@CompileStatic
 class GebTestUtil {
     static GebTestManager getTestManager(Class<?> testClass) {
         try {
-            testClass.getTestManager() as GebTestManager
-        } catch (MissingMethodException e) {
+            def method = testClass.getMethod('getTestManager')
+            return (GebTestManager) method.invoke(null)
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new IncompatibleTestClass(e)
         }
     }

@@ -18,12 +18,15 @@
  */
 package geb.textmatching
 
+import groovy.transform.CompileStatic
+
 import java.util.regex.Pattern
 
+@CompileStatic
 class TextMatchingSupport {
 
     TextMatcher startsWith(CharSequence str) {
-        new PatternTextMatcher(Pattern.quote(str) + ".*")
+        new PatternTextMatcher(Pattern.quote(str.toString()) + ".*")
     }
 
     TextMatcher notStartsWith(CharSequence str) {
@@ -31,7 +34,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher contains(CharSequence str) {
-        new PatternTextMatcher(".*" + Pattern.quote(str) + ".*")
+        new PatternTextMatcher(".*" + Pattern.quote(str.toString()) + ".*")
     }
 
     TextMatcher notContains(CharSequence str) {
@@ -39,7 +42,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher endsWith(CharSequence str) {
-        new PatternTextMatcher(".*" + Pattern.quote(str))
+        new PatternTextMatcher(".*" + Pattern.quote(str.toString()))
     }
 
     TextMatcher notEndsWith(CharSequence str) {
@@ -47,7 +50,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher iStartsWith(CharSequence str) {
-        new PatternTextMatcher("(?i)" + Pattern.quote(str) + ".*")
+        new PatternTextMatcher("(?i)" + Pattern.quote(str.toString()) + ".*")
     }
 
     TextMatcher iNotStartsWith(CharSequence str) {
@@ -55,7 +58,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher iContains(CharSequence str) {
-        new PatternTextMatcher("(?i).*" + Pattern.quote(str) + ".*")
+        new PatternTextMatcher("(?i).*" + Pattern.quote(str.toString()) + ".*")
     }
 
     TextMatcher iNotContains(CharSequence str) {
@@ -63,7 +66,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher iEndsWith(CharSequence str) {
-        new PatternTextMatcher("(?i).*" + Pattern.quote(str))
+        new PatternTextMatcher("(?i).*" + Pattern.quote(str.toString()))
     }
 
     TextMatcher iNotEndsWith(CharSequence str) {
@@ -71,7 +74,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher containsWord(CharSequence str) {
-        new PatternTextMatcher("(^|.+\\s)" + Pattern.quote(str) + "(\$|\\s.+)")
+        new PatternTextMatcher("(^|.+\\s)" + Pattern.quote(str.toString()) + "(\$|\\s.+)")
     }
 
     TextMatcher notContainsWord(CharSequence str) {
@@ -79,7 +82,7 @@ class TextMatchingSupport {
     }
 
     TextMatcher iContainsWord(CharSequence str) {
-        new PatternTextMatcher("(?i)(^|.+\\s)" + Pattern.quote(str) + "(\$|\\s.+)")
+        new PatternTextMatcher("(?i)(^|.+\\s)" + Pattern.quote(str.toString()) + "(\$|\\s.+)")
     }
 
     TextMatcher iNotContainsWord(CharSequence str) {

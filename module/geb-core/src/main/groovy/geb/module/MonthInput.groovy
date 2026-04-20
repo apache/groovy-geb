@@ -18,8 +18,11 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
 import java.time.YearMonth
 
+@CompileStatic
 class MonthInput extends AbstractInput {
 
     final String inputType = 'month'

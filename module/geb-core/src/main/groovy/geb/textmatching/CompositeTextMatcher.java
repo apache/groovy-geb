@@ -18,6 +18,9 @@
  */
 package geb.textmatching;
 
+import groovy.transform.CompileStatic;
+
+@CompileStatic
 abstract class CompositeTextMatcher implements TextMatcher {
 
     protected final TextMatcher[] matchers;

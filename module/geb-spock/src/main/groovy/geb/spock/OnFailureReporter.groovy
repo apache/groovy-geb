@@ -19,10 +19,12 @@
 package geb.spock
 
 import geb.test.ManagedGebTest
+import groovy.transform.CompileStatic
 import org.opentest4j.IncompleteExecutionException
 import org.spockframework.runtime.extension.IMethodInterceptor
 import org.spockframework.runtime.extension.IMethodInvocation
 
+@CompileStatic
 class OnFailureReporter implements IMethodInterceptor {
     void intercept(IMethodInvocation invocation) throws Throwable {
         try {
@@ -30,7 +32,7 @@ class OnFailureReporter implements IMethodInterceptor {
         } catch (IncompleteExecutionException notACauseForReporting) {
             throw notACauseForReporting
         } catch (Throwable throwable) {
-            ManagedGebTest spec = invocation.instance
+            def spec = (ManagedGebTest) invocation.instance
             if (spec.testManager.reportingEnabled) {
                 try {
                     spec.testManager.reportFailure()

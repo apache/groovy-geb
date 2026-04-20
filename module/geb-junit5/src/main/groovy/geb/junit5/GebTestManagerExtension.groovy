@@ -20,8 +20,10 @@ package geb.junit5
 
 import geb.junit.GebTestUtil
 import geb.test.GebTestManager
+import groovy.transform.CompileStatic
 import org.junit.jupiter.api.extension.*
 
+@CompileStatic
 class GebTestManagerExtension implements BeforeEachCallback, AfterEachCallback, BeforeAllCallback, AfterAllCallback {
 
     @Override

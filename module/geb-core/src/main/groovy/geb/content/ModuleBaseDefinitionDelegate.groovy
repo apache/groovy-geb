@@ -22,8 +22,10 @@ import geb.Browser
 import geb.Module
 import geb.navigator.factory.NavigatorFactory
 import geb.textmatching.TextMatchingSupport
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver.TargetLocator
 
+@CompileStatic
 class ModuleBaseDefinitionDelegate {
 
     private final Map params

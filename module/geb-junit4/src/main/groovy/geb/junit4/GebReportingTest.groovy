@@ -20,7 +20,9 @@ package geb.junit4
 
 import geb.test.GebTestManager
 import geb.test.GebTestManagerBuilder
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class GebReportingTest extends GebTest {
 
     private final static GebTestManager TEST_MANAGER = new GebTestManagerBuilder().withReportingEnabled(true).build()

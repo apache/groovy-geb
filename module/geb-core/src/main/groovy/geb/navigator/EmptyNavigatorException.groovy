@@ -18,6 +18,9 @@
  */
 package geb.navigator
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class EmptyNavigatorException extends IllegalStateException {
 
     EmptyNavigatorException() {

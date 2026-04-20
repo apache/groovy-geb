@@ -20,10 +20,13 @@ package geb.spock
 
 import geb.test.GebTestManager
 import geb.test.ManagedGebTest
+import groovy.transform.CompileStatic
 import org.spockframework.runtime.extension.IGlobalExtension
 import org.spockframework.runtime.extension.IMethodInvocation
+import org.spockframework.runtime.model.MethodInfo
 import org.spockframework.runtime.model.SpecInfo
 
+@CompileStatic
 class GebExtension implements IGlobalExtension {
 
     @Override
@@ -47,7 +50,7 @@ class GebExtension implements IGlobalExtension {
     }
 
     private void addOnFailureReporter(SpecInfo spec) {
-        (spec.allFeatures*.featureMethod + spec.allFixtureMethods)
+        ((List<MethodInfo>) (spec.allFeatures*.featureMethod + spec.allFixtureMethods))
                 *.addInterceptor(new OnFailureReporter())
     }
 

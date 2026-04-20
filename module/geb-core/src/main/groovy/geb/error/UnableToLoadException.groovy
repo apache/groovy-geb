@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class UnableToLoadException extends GebException {
     UnableToLoadException(URL configLocation, String environment, Throwable cause) {
         super("Unable to load configuration @ '$configLocation' (with environment: $environment)", cause)

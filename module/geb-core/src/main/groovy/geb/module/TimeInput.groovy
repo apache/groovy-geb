@@ -18,8 +18,11 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
 import java.time.LocalTime
 
+@CompileStatic
 class TimeInput extends AbstractInput {
 
     final String inputType = "time"

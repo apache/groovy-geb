@@ -19,7 +19,9 @@
 package geb.download
 
 import geb.error.GebException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class DownloadException extends GebException {
 
     final HttpURLConnection connection

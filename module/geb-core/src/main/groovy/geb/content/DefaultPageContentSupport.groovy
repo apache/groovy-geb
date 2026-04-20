@@ -21,7 +21,9 @@ package geb.content
 import geb.error.UndefinedPageContentException
 import geb.navigator.Navigator
 import geb.navigator.factory.NavigatorFactory
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class DefaultPageContentSupport extends PageContentSupport {
 
     private final PageContentContainer owner
@@ -43,7 +45,7 @@ class DefaultPageContentSupport extends PageContentSupport {
     def getContent(String name, Object[] args) {
         def contentTemplate = contentTemplates[name]
         if (contentTemplate) {
-            contentTemplate.get(*args)
+            contentTemplate.get(args)
         } else {
             throw new UndefinedPageContentException(this, name)
         }

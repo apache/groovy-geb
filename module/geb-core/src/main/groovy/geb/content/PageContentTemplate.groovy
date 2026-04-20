@@ -25,7 +25,10 @@ import geb.error.RequiredPageValueNotPresent
 import geb.navigator.Navigator
 import geb.navigator.factory.NavigatorFactory
 import geb.waiting.WaitTimeoutException
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 
+@CompileStatic
 class PageContentTemplate {
 
     final Browser browser
@@ -35,7 +38,7 @@ class PageContentTemplate {
     final Closure factory
     final NavigatorFactory navigatorFactory
 
-    private cache = [:]
+    private Map cache = [:]
 
     PageContentTemplate(Browser browser, PageContentContainer owner, String name, Map<String, ?> params, Closure factory, NavigatorFactory navigatorFactory) {
         this.browser = browser
@@ -55,20 +58,20 @@ class PageContentTemplate {
     }
 
     def get(Object[] args) {
-        params.cache ? fromCache(*args) : create(*args)
+        params.cache ? fromCache(args) : create(args)
     }
 
     private create(Object[] args) {
         def createAction = {
-            def factoryReturn = invokeFactory(*args)
-            def creation = wrapFactoryReturn(factoryReturn, *args)
+            def factoryReturn = invokeFactory(args)
+            def creation = wrapFactoryReturn(factoryReturn, args)
             if (creation instanceof TemplateDerivedPageContent) {
                 if (params.required) {
                     creation.require()
                 }
                 creation.ensureWithinBounds(params.min, params.max)
             } else if (params.required && creation == null) {
-                throw new RequiredPageValueNotPresent(this, *args)
+                throw new RequiredPageValueNotPresent(this, args)
             }
             creation
         }
@@ -95,7 +98,7 @@ class PageContentTemplate {
     private fromCache(Object[] args) {
         def argsHash = Arrays.deepHashCode(args)
         if (!cache.containsKey(argsHash)) {
-            cache[argsHash] = create(*args)
+            cache[argsHash] = create(args)
         }
         cache[argsHash]
     }
@@ -103,7 +106,7 @@ class PageContentTemplate {
     private invokeFactory(Object[] args) {
         factory.delegate = createFactoryDelegate()
         factory.resolveStrategy = Closure.DELEGATE_FIRST
-        factory(*args)
+        InvokerHelper.invokeClosure(factory, args)
     }
 
     private createFactoryDelegate() {
@@ -126,7 +129,7 @@ class PageContentTemplate {
         waitCondition.resolveStrategy = Closure.DELEGATE_FIRST
         return {
             def element = createAction()
-            if (params.waitCondition(createAction())) {
+            if (waitCondition.call(element)) {
                 element
             }
         }
