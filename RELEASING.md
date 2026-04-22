@@ -44,12 +44,18 @@ limitations under the License.
 11. `git push` the version branch and tag to GitHub
 12. `read -s APACHE_PW` and enter your password at the prompt
 13. Run `./gradlew --no-build-cache publishJarsAndManual -x :integration:geb-gradle:publishPlugins -PapacheUser=jonnybot -PapachePassword="${APACHE_PW}"`
-14. Start the vote process on the groovy-dev mailing list. It will need at least 72 hours of remaining open and receive at least three affirmative votes from the Groovy PMC. See the [Apache Voting process](https://www.apache.org/foundation/voting.html) for more detail. Mention significant breaking changes if there are any.
-15. Assuming the vote passes (at least three +1 votes from the PMC), you can take the following steps to finalize the release.
-16. Email the vote thread to note that the vote has passed, with a final tally of the votes.
-17. Ask a member of the PMC to copy the artifacts from the staging directory in subversion to `groovy-release/geb/${VERSION}` and commit them to subversion, as above.
-18. Ask a member of the PMC to release the staging repository at https://repository.apache.org/#stagingRepositories
-19. Release the Gradle plugins with `./gradlew :integration:geb-gradle:publishPlugins`
+14. Verify the staged release. Run the automated verification script from the project root:
+    ```bash
+    etc/bin/verify.sh dev «version» /tmp/geb-«version»-verify
+    ```
+    This downloads the staged artifacts, verifies checksums and GPG signatures, checks for required files, and runs the RAT license audit. The individual scripts in `etc/bin/` can also be run separately — see their header comments for details.
+15. Verify the build is reproducible per [ASF Security policy](https://cwiki.apache.org/confluence/display/SECURITY/Reproducible+Builds) by running `etc/bin/test-reproducible-builds.sh`; this will run the build twice to ensure that the built outputs are identical.
+16. Start the vote process on the groovy-dev mailing list. It will need at least 72 hours of remaining open and receive at least three affirmative votes from the Groovy PMC. See the [Apache Voting process](https://www.apache.org/foundation/voting.html) for more detail. Mention significant breaking changes if there are any.
+17. Assuming the vote passes (at least three +1 votes from the PMC), you can take the following steps to finalize the release.
+18. Email the vote thread to note that the vote has passed, with a final tally of the votes.
+19. Ask a member of the PMC to copy the artifacts from the staging directory in subversion to `groovy-release/geb/${VERSION}` and commit them to subversion, as above.
+20. Ask a member of the PMC to release the staging repository at https://repository.apache.org/#stagingRepositories
+21. Release the Gradle plugins with `./gradlew :integration:geb-gradle:publishPlugins`
 
 # Post-release actions
 1. Bump the version to a snapshot of the next planned version.
@@ -58,11 +64,11 @@ limitations under the License.
 4. Commit with message 'Begin version «version»'
 5. Push (make sure you push the tag as well).
 6. Merge the release branch back into the master branch.
-6. Bump Geb versions in example projects: 
+6. Bump Geb versions in example projects:
     * [geb-example-gradle](https://github.com/geb/geb-example-gradle)
     * [geb-example-maven](https://github.com/geb/geb-example-maven)
 7. Update issues and milestones in GitHub tracker:
     * Find all unresolved issues in the tracker that have the fix version set to the recently released version and bulk edit them to have the fix version set to the next version.
     * Find the recently released milestone, change the version number if it's different from the one that was released and close it.
 8. Wait for the build of the next version to pass and the site including manual for the released version to be published.
-9. Send an email to the mailing list announcing the release. You can use [this one]() as a template. 
+9. Send an email to the mailing list announcing the release. You can use [this one]() as a template.
