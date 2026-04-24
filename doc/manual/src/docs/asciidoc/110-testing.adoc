@@ -37,6 +37,13 @@ Which is equivalent to...
 include::{snippets-dir}/testing/FunctionalSpec.groovy[tag=verbose,indent=0]
 ----
 
+[WARNING]
+====
+On a static nested class Groovy inserts synthetic variants of `propertyMissing` and `methodMissing` which will overwrite the versions in the superclasses and not forward to them. (See https://issues.apache.org/jira/browse/GROOVY-11823[GROOVY-11823])
+
+In this case the dynamic dispatching to browser does not work, and you have to use the slightly more verbose version with `browser...`.
+====
+
 === Configuration
 
 The browser instance is created by the testing integrations via use of `{geb-test-manager-api}`. The <<configuration, configuration mechanism>> allows you to control aspects such as the driver implementation and base URL.
