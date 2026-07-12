@@ -6,8 +6,9 @@ Date: 2026-07-11
 
 ## 1. Summary
 
-Add an optional module that lets Geb drive browsers through [Playwright for
-Java](https://playwright.dev/java/) instead of Selenium WebDriver. The goal is
+Explore and, if the spike validates the required seams, add an optional module
+that lets Geb drive browsers through [Playwright for Java](https://playwright.dev/java/)
+instead of Selenium WebDriver. The goal is
 to give Geb users Playwright's reliability model — auto-waiting, atomic
 "check-and-act" interactions, strict re-resolving locators — so that most
 hand-written `waitFor {}` blocks become unnecessary, while keeping Geb's
@@ -15,7 +16,7 @@ Page/Module/content DSL unchanged.
 
 ```groovy
 // GebConfig.groovy — the whole user-facing switch
-driver = "playwright:chromium"     // or a closure returning a configured Page/BrowserContext
+driver = "playwright:chromium"     // advanced configuration uses a geb-playwright builder
 ```
 
 ## 2. Background and a corrected premise
@@ -117,9 +118,10 @@ From an architecture audit of this repo (July 2026):
 
 ### Goals
 
-1. A published `geb-playwright` module: existing Geb suites switch backends by
-   changing `driver` config, with no changes to Pages, Modules, or content DSL
-   for the common path.
+1. A published `geb-playwright` module: suites using the backend-neutral subset
+   of Geb switch by changing `driver` config, with no changes to Pages, Modules,
+   or content DSL. Selenium escape hatches and documented semantic deltas may
+   require migration.
 2. Interactions (`click()`, `value()`, `<<`, module form controls) get
    Playwright auto-waiting: no `waitFor` needed for "element not there yet /
    still animating / covered by overlay" cases.
@@ -129,8 +131,9 @@ From an architecture audit of this repo (July 2026):
 4. Expose Playwright-only value-adds behind Geb-flavored APIs: network
    routing/interception, console/page-error capture, tracing, and built-in
    shadow-DOM piercing.
-5. Keep `geb-core` fully backward compatible for Selenium users. All new
-   abstractions are additive; Selenium remains the default backend.
+5. Keep existing Selenium source and runtime behavior backward compatible.
+   Selenium remains the default backend; new internal dispatch may be a
+   refactor rather than strictly additive.
 
 ### Non-goals
 
@@ -152,12 +155,13 @@ Three options were considered:
 | | Option A — Playwright-as-WebDriver adapter (Playwrightium-style) | Option B — abstract element type threaded through geb-core | Option C — backend SPI at the NavigatorFactory seam (chosen) |
 |---|---|---|---|
 | Shape | Implement `WebDriver`/`WebElement` over Playwright; inject via existing `driver` closure | New `GebElement` abstraction replaces `WebElement` throughout `Navigator`/`Locator`/factories | Generalize the *factory and dispatch* seam; ship a parallel `PlaywrightNavigator` implementing the existing `Navigator` interface |
-| Core changes | none | very large, breaks public API (`Navigator` leaks `WebElement`) | moderate, additive |
+| Core changes | none | very large, breaks public API (`Navigator` leaks `WebElement`) | moderate but cross-cutting; preserves existing public signatures |
 | Achieves auto-waiting | **No** — `DefaultNavigator` + `Wait` polling still drive everything; ElementHandle semantics forfeit Locator auto-retry | Yes | Yes |
 | Risk | low effort, misses the point | multi-release breaking migration | contained; the ~21 Selenium-typed `Navigator` methods handled by shim/unsupported |
 
-**Chosen: Option C**, with Option B's abstraction introduced *minimally and
-additively* where the seams require it, and Option A's shim reused *narrowly*
+**Provisional choice: Option C**, subject to P0 proving that the common API can
+be implemented without pervasive backend branches. Option B's abstraction is
+introduced *minimally* where the seams require it, and Option A's shim reused *narrowly*
 for the Selenium-typed leftovers of the `Navigator` interface (§6.6). Option B
 in full is the right eventual destination for a Geb major version, and Option
 C's interfaces are designed to become that migration's first step.
@@ -168,11 +172,12 @@ C's interfaces are designed to become that migration's first step.
 module/geb-playwright/                      # new published module
   geb-playwright.gradle                     # applies geb.api-module (+ geb.dockerised-test)
   src/main/groovy/geb/playwright/
-    PlaywrightDriverFactory.groovy          # driver-string + closure entry points
-    PlaywrightBrowserAdapter.groovy         # Browser-level ops (navigation, windows, cookies, js)
+    PlaywrightBackendProvider.groovy        # driver-string discovery + typed builder
+    PlaywrightBrowserBackend.groovy         # Browser capabilities, lifecycle, ownership
     navigator/
       PlaywrightNavigator.groovy            # implements geb.navigator.Navigator over Locator
       PlaywrightNavigatorFactory.groovy     # implements geb.navigator.factory.NavigatorFactory
+      PlaywrightQuery.groovy                # immutable page/frame/locator query plan
       SelectorTranslator.groovy             # Geb $/By/CssSelector -> Playwright selector strings
     waiting/
       PlaywrightWaitingSupport.groovy       # waitFor bridged to PW clocks (§6.4)
@@ -183,70 +188,86 @@ module/geb-playwright/                      # new published module
   src/test/...                              # cross-cutting spec suite (§8)
 ```
 
-`geb-core` gains a small number of additive seams (§6.1). Dependency
+`geb-core` gains backend-neutral seams (§6.1). Dependency
 direction: `geb-playwright` → `geb-core`; `geb-core` gains **no** Playwright
 dependency. Version added to `gradle/libs.versions.toml`
 (`com.microsoft.playwright:playwright`, Apache-2.0, currently 1.61.x).
 
 ## 6. Design details
 
-### 6.1 New seams in geb-core (additive, Selenium-neutral)
+### 6.1 New seams in geb-core (Selenium-neutral)
 
-The blocker today is that `NavigatorFactory`, `InnerNavigatorFactory`,
-`BasicLocator`, and `NavigableSupport` are hard-typed to
-`WebElement`/`By`/`SearchContext`/`WebDriver.TargetLocator`. Changes:
+The blocker is broader than `NavigatorFactory`: `Browser`, `Page`, driver
+creation/caching, frames, interactions, JavaScript, reporting, downloads, and
+navigation call WebDriver directly, while `NavigatorFactory`,
+`InnerNavigatorFactory`, `BasicLocator`, and `NavigableSupport` are hard-typed
+to `WebElement`/`By`/`SearchContext`/`WebDriver.TargetLocator`. P0 must produce
+a call-site inventory and validate the following candidate seams:
 
-1. **`geb.driver.BackendDriver`** (name TBD): a minimal interface for what
-   `Browser` actually needs — navigate, current URL, title, page source, quit,
-   window handles, cookies, JS execution, screenshot. `Browser` gets a
-   backend-neutral internal path; `getDriver()` keeps returning `WebDriver`
-   for Selenium and throws a descriptive error (or returns the shim, §6.6)
-   under Playwright. The `driver` config value may now also resolve to a
-   `BackendDriver` provider.
-2. **`Configuration.createNavigatorFactory(Browser)`** already honors a
-   `navigatorFactory` config closure — this is the injection point and needs
-   no signature change. `geb-playwright` registers itself here (wrapped so
-   users just set `driver = "playwright:..."`).
+1. **`geb.driver.BrowserBackend`** (name TBD): a capability-oriented internal
+   interface for navigation, lifecycle, pages/windows, frames, cookies,
+   JavaScript, screenshots, interactions, downloads, and active-element
+   lookup. Avoid one large WebDriver-shaped interface: optional capabilities
+   should fail through one consistent unsupported-capability exception.
+   `Browser.getDriver()` keeps returning `WebDriver` for Selenium and throws a
+   descriptive error under Playwright; a separate `getBackend()`/`backendAs()`
+   escape hatch exposes backend-specific APIs without pretending Playwright is
+   WebDriver. Existing `setDriver(WebDriver)` remains unchanged.
+2. **Backend discovery and creation**: `Configuration` currently accepts only
+   WebDriver instances/factories and knows a fixed set of driver short names.
+   Define a small provider SPI loaded with `ServiceLoader` (or an explicit
+   equivalent) that claims names such as `playwright:chromium`, creates the
+   backend, and supplies its navigator/waiting implementations. Define
+   duplicate-provider and unknown-option errors. `geb-core` must not refer to
+   Playwright classes. `Configuration.createNavigatorFactory(Browser)` remains
+   the navigator injection point, but is not by itself a registration
+   mechanism.
 3. **`NavigableSupport`**: replace the constructor's
    `WebDriver.TargetLocator` parameter with a small `FocusTracker` interface
    (Selenium impl delegates to `switchTo().activeElement()`).
-4. **Waiting seam**: introduce `geb.waiting.Waiter` interface extracted from
+4. **Waiting seam**: introduce a `geb.waiting.Waiter` interface extracted from
    `Wait` (same contract: `waitFor(Closure)` honoring timeout/interval and
    throwing `WaitTimeoutException`); `Configuration` gains a `waiterFactory`
    so a backend can substitute the implementation (§6.4).
 
-All four are additive; existing Selenium behavior and public API are
-untouched. These interfaces are deliberately the seed of the eventual
-Option-B refactor.
+Existing Selenium public signatures and behavior remain unchanged, but the
+internal routing needed to reach these seams is a material refactor. P1's
+acceptance criterion is behavioral and binary compatibility, verified with
+the full suite and a public-API compatibility check, not an “additive-only”
+claim. These interfaces are deliberately the seed of the eventual Option-B
+refactor.
 
 ### 6.2 The Navigator mapping — the heart of the design
 
-`PlaywrightNavigator` implements `geb.navigator.Navigator` backed by a
-**`com.microsoft.playwright.Locator`** (never an `ElementHandle`, except at
-the interop boundary), so every interaction inherits re-resolution, strictness
-control, and auto-waiting.
+`PlaywrightNavigator` implements `geb.navigator.Navigator` backed by an
+immutable **query plan**, materialized as a `Locator` for each operation (never
+an `ElementHandle`, except at the interop/snapshot boundary). The query plan
+must also represent page roots and frame roots because `FrameLocator` is not a
+`Locator`. This preserves re-resolution and auto-waiting without forcing
+backend types into `geb-core`.
 
 | Geb | Playwright | Notes |
 |---|---|---|
 | `$("css")`, content lookup | `page.locator(css)` | lazy — **no element resolution at `$` time**, unlike today (§6.3) |
 | chained `find` | `locator.locator(css)` | |
 | `$("css", 2)`, `first()`, `last()` | `locator.nth(n)/first()/last()` | |
-| `filter`/`not`/text predicates | `locator.filter(...)`, `:scope` CSS, engine composition | Geb attribute-map predicates compile to CSS/`hasText` where possible, else `filter` with a function |
+| `filter`/`not`/text predicates | CSS, `locator.filter(...)`, query-plan composition | Compile only predicates Playwright natively supports. Playwright has no arbitrary function-valued locator filter; unsupported regex/closure semantics require a lazy re-query plus JVM-side filtering, or become a documented P0 blocker. |
 | `click()` | `locator.click()` | full actionability: visible+stable+receives-events+enabled |
 | `value(v)` | `fill()` / `selectOption()` / `setChecked()` by element type | mirrors `DefaultNavigator.setInputValue` dispatch table |
 | `<<` (sendKeys) | `pressSequentially()` / `press()` | `geb.Keys` translated |
 | `displayed`, `text()`, `attr()` | `isVisible()`, `textContent()/innerText()`, `getAttribute()` | preserve Geb's exact semantics (e.g. Geb `text()` uses WebDriver's visible-text rules — closest is `innerText()`; document deltas) |
-| `moduleBase`, frames | `FrameLocator` composition | `withFrame` maps naturally |
+| `moduleBase`, frames | query-plan root + `FrameLocator` composition | Frame switching is scoped rather than global; P0 must verify nested frames and restoration semantics. |
 | `interact { }` DSL | `page.mouse()` / `page.keyboard()` | port `InteractDelegate` |
-| shadow DOM | free — CSS/text/role engines pierce open shadow roots | document as a behavior *improvement* |
+| shadow DOM | CSS/text/role engines pierce open shadow roots | XPath does not pierce shadow roots; document the selector-dependent delta. |
 | `size()`, `isEmpty()` | `locator.count()` | forces resolution — fine, these are queries |
 
-**Strictness policy**: Geb semantics are collection-like (`$("div").click()`
-on 3 matches clicks... actually Geb clicks *all* context elements for `<<`,
-first for click). We keep Geb semantics: single-element ops use
-`locator.first()` where Geb uses `firstElement()`, and multi-element ops
-iterate `locator.all()`. Strict mode surfaces as an opt-in config flag
-(`playwright { strictLocators = true }`) since it catches real bugs.
+**Strictness policy**: Geb semantics are collection-like and differ by method.
+P0 must derive a method-by-method cardinality table from `DefaultNavigator` and
+tests rather than applying one global rule. Compatibility mode applies
+`first()` only where Geb currently uses `firstElement()` and snapshots the
+current match set for genuinely multi-element operations. An opt-in strict
+mode rejects ambiguous single-element operations. The exact behavior and
+exception type are conformance-tested.
 
 ### 6.3 Laziness is a visible semantic change
 
@@ -258,9 +279,9 @@ lazy query. Consequences to spec and document:
 - Stale-element errors largely disappear (locators re-resolve); the
   `StaleElementReferenceException` handling paths become dead under this
   backend.
-- Code that relied on capturing "the element as it was" needs
-  `elementHandle()`-style escape hatch: provide `Navigator.snapshot()` (new,
-  optional-support method) or the interop shim.
+- Do not add `Navigator.snapshot()` until P0 identifies a concrete common-path
+  use case and semantics. An `ElementHandle` escape hatch belongs in the
+  Playwright-specific API; the interop shim handles Selenium-typed callers.
 
 ### 6.4 Waiting semantics
 
@@ -271,16 +292,20 @@ lazy query. Consequences to spec and document:
   loop runs — `Thread.sleep` would starve page/console/network handlers).
   Implementation: replace the sleep with `page.waitForTimeout(interval)`.
 - **Idiomatic replacement**: most `waitFor { thing.displayed }` becomes
-  unnecessary (auto-wait on the next action) or `thing.waitFor()` — expose
-  `Navigator.waitFor(state)` mapping to `Locator.waitFor(VISIBLE/ATTACHED/...)`,
-  which *is* pushed into the driver. Add to `Navigator` as a default-throwing
-  method implemented by both backends (Selenium impl delegates to `Wait`).
+  unnecessary because the next action waits. P0 should evaluate a
+  backend-neutral `Navigator.waitFor(state)` API against existing Geb waiting
+  semantics before adding it; a Playwright-specific form can map directly to
+  `Locator.waitFor(VISIBLE/ATTACHED/...)` without prematurely expanding the
+  core interface.
 - **`atCheckWaiting` / content `wait:` / `required:`**: unchanged contract,
   running on the new `Waiter`. `RequiredPageContentNotPresent` semantics
   preserved.
-- **Timeout unification**: Geb's `timeout`/`retryInterval` config maps onto
-  Playwright's `setDefaultTimeout` on the context, so one knob governs both
-  auto-wait and explicit waits.
+- **Timeout policy**: the Geb default timeout may initialize Playwright's
+  action timeout after seconds-to-milliseconds conversion. `retryInterval`
+  applies only to JVM polling. Per-call Geb waits must not mutate a shared
+  context default. Navigation timeout remains separate unless explicitly
+  configured. Add tests for precedence among Geb defaults, backend config,
+  and Playwright per-operation options.
 
 ### 6.5 Browser lifecycle and threading
 
@@ -297,10 +322,13 @@ thread**. Design rules:
 - Spock/JUnit parallel execution: supported at "one browser per thread"
   granularity — same as today. Document that a shared global browser is not
   possible with Playwright.
-- Browser reset (`resetBrowser()`): map "clear cookies/storage" to disposing
-  and recreating the `BrowserContext` (cheap in Playwright, ~ms) rather than
-  cookie-deletion calls — faster and more thorough. `quitDriverOnBrowserReset`
-  closes the context; full `quit()` closes browser + `Playwright` instance.
+- Preserve the distinction between `clearCookies()` and browser/test reset:
+  cookie clearing calls `BrowserContext.clearCookies()` and must not erase
+  local storage. A configured full-isolation reset may dispose and recreate an
+  owned context. Externally supplied contexts/pages are never closed unless
+  ownership was explicitly transferred. `quit()` closes only resources the
+  backend owns; P0 must define ownership for launch, connect, and advanced
+  builder modes.
 
 ### 6.6 Selenium-typed API surface: the interop shim
 
@@ -335,25 +363,31 @@ Selenium types. Policy:
 
 ## 7. Implementation phases
 
-Each phase is independently mergeable and CI-green.
+P0 is throwaway. Each subsequent phase is independently mergeable and
+CI-green, with no requirement to continue if its exit criteria fail.
 
-**P0 — Spike (throwaway, ~small)**
-Prototype `PlaywrightNavigator` for `$`, `click`, `value`, `text`, `displayed`
-plus a `GebConfig` wiring hack. Run ~20 representative geb-core specs against
-it. Exit criteria: validated selector translation approach and a list of
-`Navigator` methods with semantic deltas. Findings feed §6.2's mapping table.
+**P0 — Architecture spike and decision record (throwaway)**
+Prototype the complete vertical slice: backend discovery from
+`"playwright:chromium"`, owned lifecycle, navigation, `$`, one nested module,
+one frame, `click`, `value`, `text`, `displayed`, JavaScript, screenshot, and
+`waitFor`. Run a named representative subset of geb-core specs against it.
+Produce a call-site inventory, Navigator method/cardinality matrix, selector
+and predicate delta list, lifecycle ownership table, and measured list of core
+files changed. Exit criteria: maintainers explicitly accept Option C, or switch
+to Option B/stop. No production SPI is merged before this decision.
 
 **P1 — geb-core seams**
-The four additive changes of §6.1 (`BackendDriver`, `FocusTracker`, `Waiter` +
-`waiterFactory`, `Navigator.waitFor(state)`/`snapshot()` with Selenium
-implementations). Pure refactor for Selenium users; full existing suite must
-pass unchanged. This phase is valuable on its own (it *is* the start of the
-long-term decoupling) and should be reviewed by other maintainers before P2.
+Implement only the seams accepted by P0 (`BrowserBackend`, provider discovery,
+`FocusTracker`, and `Waiter` are candidates, not pre-approved API). This is a
+behavior-preserving refactor for Selenium users. Exit criteria: full existing
+suite passes unchanged, a binary/API compatibility check reports no unintended
+breaks, unknown/duplicate backend provider errors are tested, and maintainers
+review the public surface before P2.
 
 **P2 — geb-playwright core**
-Module skeleton, `PlaywrightDriverFactory` (driver strings + closure builder),
+Module skeleton, backend provider (driver strings + typed builder),
 `PlaywrightNavigator`/`PlaywrightNavigatorFactory`/`SelectorTranslator`,
-browser adapter (navigation, title/url/source, cookies-as-context-reset, js
+browser adapter (navigation, title/url/source, cookies, owned lifecycle, js
 evaluation, screenshots), threading guards (§6.5). Exit criteria: the
 cross-backend conformance suite (§8) passes for navigation, content DSL,
 pages, modules, form controls.
@@ -364,11 +398,13 @@ Playwright `Waiter` (event-loop-pumping), `atCheckWaiting`, content
 Exit criteria: geb-core's waiting and frame spec suites pass under the new
 backend (modulo a documented exclusion list).
 
-**P4 — compatibility + test infrastructure**
-`WebElementShim` opt-in interop; `GebTestManager` integration verified for
+**P4 — test infrastructure + optional compatibility**
+`GebTestManager` integration verified for
 spock/junit5/testng modules; containerized test tasks
 (`geb.dockerised-test` equivalents — Playwright's own Docker images or
-Testcontainers); flaky-page torture fixtures (§8.3).
+Testcontainers); flaky-page torture fixtures (§8.3). Implement
+`WebElementShim` only if P0/P2 usage evidence justifies its maintenance and
+semantic cost; it is not a release blocker for an experimental backend.
 
 **P5 — value-adds + docs + release**
 Network routing DSL, console capture into reports, tracing hooks. Manual
@@ -397,6 +433,10 @@ incubating/experimental in the next minor version.
    installs its own browsers; Linux runners need `playwright install --with-deps`
    or the MS Playwright Docker image). Keep it out of the cloud-browser
    matrices.
+6. **Lifecycle and capability specs**: launch/connect ownership, externally
+   supplied resource handling, context reset versus cookie clearing, browser
+   crash/failed startup cleanup, unsupported-capability errors, and provider
+   discovery conflicts.
 
 ## 9. Risks and mitigations
 
@@ -409,7 +449,10 @@ incubating/experimental in the next minor version.
 | Node child process in restricted CI environments | document; Playwright Docker image path; this is table stakes for every Playwright Java user |
 | Playwright protocol requires client/server version match for `connect()` | pin and document; version catalog entry |
 | Selenium Grid / cloud vendors unavailable | explicit non-goal; Playwright `connect()` to `launchServer` for remoting |
-| geb-core P1 refactor destabilizes Selenium users | P1 is additive-only, gated on full existing suite passing; separate review |
+| Backend routing refactor destabilizes Selenium users | Gate P1 on the full suite, API/binary compatibility check, and separate maintainer review |
+| Service/provider discovery is ambiguous or fails in shaded/module-path deployments | Specify classloader behavior; test classpath, module path if supported, duplicate providers, and missing module errors |
+| Advanced configuration leaks or double-closes Playwright resources | Typed builder plus an explicit ownership table; lifecycle failure-path specs |
+| Some Geb traversal/filter semantics require eager handles and lose auto-waiting | P0 method matrix; document per-method guarantees; treat common-path violations as an architecture stop condition |
 
 ## 10. Deferred / future directions
 
@@ -431,7 +474,7 @@ incubating/experimental in the next minor version.
   release. Also stacks a
   second event loop (Javet pumping) on the §6.5 threading constraints, and
   requires Javet's embedded Node LTS to satisfy playwright-core's minimum.
-  **Design accommodation now**: P2's `PlaywrightDriverFactory` must isolate
+  **Design accommodation now**: P2's `PlaywrightBackendProvider` must isolate
   "obtain a connected `Playwright` instance" behind a single provider
   interface so an embedded-driver transport can slot in later without
   touching the Navigator layer.
