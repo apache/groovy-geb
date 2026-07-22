@@ -137,8 +137,12 @@ class PlaywrightFacadeCoverageSpec extends Specification {
         driver.manage().window().minimize()
         driver.manage().window().fullscreen()
         driver.get(baseUrl)
-        driver.manage().addCookie(new Cookie.Builder('domain-cookie', 'value').domain('localhost').path('/').isHttpOnly(true).expiresOn(new Date(System.currentTimeMillis() + 60000)).build())
+        // Prefer URL-scoped cookies (Selenium current-document semantics). Explicit domain
+        // cookies are host-sensitive across localhost vs 127.0.0.1.
+        driver.manage().addCookie(new Cookie.Builder('domain-cookie', 'value').path('/').isHttpOnly(true).expiresOn(new Date(System.currentTimeMillis() + 60000)).build())
         driver.manage().addCookie(new Cookie('url-cookie', 'value'))
+        def httpOnlyCookie = driver.manage().getCookieNamed('domain-cookie')
+        def urlCookie = driver.manage().getCookieNamed('url-cookie')
         driver.get("$baseUrl/frames")
         driver.switchTo().frame(0)
         driver.switchTo().parentFrame()
@@ -159,8 +163,8 @@ class PlaywrightFacadeCoverageSpec extends Specification {
         doubleClickCount == '2'
         uploadValue.contains(upload.fileName.toString())
         driver.manage().window().position == new org.openqa.selenium.Point(4, 5)
-        driver.manage().getCookieNamed('domain-cookie').httpOnly
-        driver.manage().getCookieNamed('url-cookie').value == 'value'
+        httpOnlyCookie?.httpOnly
+        urlCookie?.value == 'value'
         newWindowUrl == 'about:blank'
 
         when:
