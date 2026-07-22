@@ -5,6 +5,7 @@
 
 Selenium remains Geb's default browser automation path. `geb-core` does not require Playwright unless you add this module and configure `PlaywrightDriver`.
 
+[[geb-direct-installation]]
 == Installation
 
 Add `org.apache.groovy.geb:geb-direct` with the same version as the rest of your Geb dependencies.
@@ -32,6 +33,7 @@ java -cp <playwright-jar> com.microsoft.playwright.CLI install chromium
 
 Replace `chromium` with `firefox` or `webkit` as needed. Install any operating-system dependencies required by Playwright in the CI image too.
 
+[[geb-direct-configuration]]
 == Configuration
 
 Configure the driver in `GebConfig.groovy` with `PlaywrightDriver.config`. The closure is a driver factory, so Geb can manage the driver's lifecycle like other configured drivers.
@@ -85,6 +87,7 @@ driver = {
 }
 ----
 
+[[geb-direct-webdriver-compatibility]]
 == WebDriver compatibility
 
 `PlaywrightWebDriver` implements `WebDriver`, `JavascriptExecutor`, `TakesScreenshot`, and `HasCapabilities`. The standard Geb DSL is therefore still the preferred way to navigate, select content, interact with elements, wait, and report.
@@ -93,6 +96,7 @@ The adapter supports navigation, title and URL lookup, page source, element look
 
 Every `PlaywrightWebDriver` creates one Playwright `BrowserContext`. Cookies, local storage, session storage, permissions, and related state are isolated from other driver instances.
 
+[[geb-direct-playwright-features]]
 == Playwright-specific features
 
 Use `PlaywrightBrowserSupport` when a test needs a Playwright feature that has no WebDriver equivalent. The support class accepts Geb's `browser` and returns the underlying Playwright Java objects where appropriate.
@@ -128,12 +132,14 @@ Use the raw `Page` and `BrowserContext` facades for Playwright's broader APIs:
 
 These Playwright calls are intentionally not portable to a Selenium-configured Geb run. Refer to the Playwright Java documentation for the detailed arguments, options, and platform restrictions of each API.
 
+[[geb-direct-traces-and-video]]
 == Traces and video
 
 Set `tracing = true` to start tracing with the driver. Add `PlaywrightTraceReporter` to a Geb `CompositeReporter` to write a trace archive when Geb takes a report. You can also start and stop tracing directly through `PlaywrightBrowserSupport.tracing(browser)`.
 
 Set `recordVideo = true` and choose a `videoDir` to record context video. Playwright makes the finished video available after the corresponding page or context closes.
 
+[[geb-direct-alerts-windows-frames]]
 == Alerts, windows, and frames
 
 Playwright dialogs are event-driven. The adapter records dialogs observed in the current context so `driver.switchTo().alert()` can provide a Selenium `Alert` with `accept`, `dismiss`, `getText`, and `sendKeys`. Use a direct Playwright dialog handler when a test needs exact event timing or more involved dialog handling.
@@ -142,6 +148,7 @@ Each Playwright page has a WebDriver window handle. `switchTo().newWindow()` cre
 
 The adapter supports `switchTo().frame(index)`, `frame(nameOrId)`, `frame(element)`, `parentFrame()`, and `defaultContent()`. For Playwright's frame locator API, use `PlaywrightBrowserSupport.page(browser).frameLocator(...)`.
 
+[[geb-direct-threading-and-test-skips]]
 == Threading and test skips
 
 Playwright Java is not thread-safe. Do not share a `PlaywrightWebDriver`, `BrowserContext`, or `Page` between threads. When parallel test workers use Geb's implicit driver cache, configure `cacheDriverPerThread = true`.
@@ -153,6 +160,7 @@ cacheDriverPerThread = true
 
 Browser-backed module tests can be skipped with either `-Dgeb.direct.playwright.skip=true` or the `PLAYWRIGHT_SKIP=true` environment variable. These flags only skip the module test suite. They do not remove the requirement to install browsers for an application that uses Geb Direct.
 
+[[geb-direct-limitations]]
 == Limitations
 
 Geb Direct is an initial integration focused on the WebDriver paths used by Geb and common CI workloads. It does not provide every feature of a full Selenium driver.
