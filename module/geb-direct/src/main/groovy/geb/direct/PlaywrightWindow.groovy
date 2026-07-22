@@ -25,7 +25,6 @@ class PlaywrightWindow implements WebDriver.Window {
     private static final Dimension FULLSCREEN_SIZE = new Dimension(1920, 1080)
     final PlaywrightWebDriver driver
     private Point logicalPosition = new Point(0, 0)
-    private Dimension previousSize
 
     PlaywrightWindow(PlaywrightWebDriver driver) { this.driver = driver }
     Dimension getSize() { def size = driver.page.viewportSize(); new Dimension(size.width, size.height) }
@@ -33,7 +32,13 @@ class PlaywrightWindow implements WebDriver.Window {
     // Playwright cannot move the native browser window, so preserve a logical position for WebDriver callers.
     Point getPosition() { new Point(logicalPosition.x, logicalPosition.y) }
     void setPosition(Point targetPosition) { logicalPosition = new Point(targetPosition.x, targetPosition.y) }
-    void maximize() { previousSize = getSize(); setSize(FULLSCREEN_SIZE) }
-    void minimize() { previousSize = getSize() }
+    // Best-effort: Playwright has no native maximize/minimize chrome control.
+    void maximize() { setSize(FULLSCREEN_SIZE) }
+
+    @SuppressWarnings('EmptyMethod')
+    void minimize() {
+        // Intentionally no-op: Playwright cannot minimize OS browser chrome.
+    }
+
     void fullscreen() { setSize(FULLSCREEN_SIZE) }
 }

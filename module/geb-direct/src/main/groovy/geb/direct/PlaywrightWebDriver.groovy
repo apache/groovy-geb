@@ -19,17 +19,11 @@
 package geb.direct
 
 import com.microsoft.playwright.*
+import com.microsoft.playwright.options.WaitForSelectorState
 import org.openqa.selenium.*
-import org.openqa.selenium.Capabilities
-import org.openqa.selenium.HasCapabilities
-import org.openqa.selenium.ImmutableCapabilities
-import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.TakesScreenshot
-import org.openqa.selenium.WebDriver
 import org.openqa.selenium.interactions.Interactive
 import org.openqa.selenium.interactions.Sequence
 import org.openqa.selenium.logging.Logs
-import com.microsoft.playwright.options.WaitForSelectorState
 
 /**
  * A single-threaded WebDriver facade over one Playwright BrowserContext.

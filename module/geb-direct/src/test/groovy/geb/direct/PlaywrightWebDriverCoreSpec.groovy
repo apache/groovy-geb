@@ -18,7 +18,6 @@
  */
 package geb.direct
 
-import com.microsoft.playwright.Locator
 import com.microsoft.playwright.PlaywrightException
 import geb.direct.support.PlaywrightSpecSupport
 import com.sun.net.httpserver.HttpServer

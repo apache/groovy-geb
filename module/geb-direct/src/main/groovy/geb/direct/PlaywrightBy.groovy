@@ -57,7 +57,9 @@ final class PlaywrightBy {
                 return "[name=\"${cssString(value)}\"]"
             case 'classname':
             case 'class name':
-                return ".${cssEscape(value)}"
+                // CSS class selectors reject identifiers starting with a digit; attribute
+                // matching preserves Selenium By.className semantics for those values.
+                return value ==~ /[A-Za-z_-][A-Za-z0-9_-]*/ ? ".${value}" : "[class~=\"${cssString(value)}\"]"
             case 'tagname':
             case 'tag name':
                 return value
@@ -70,10 +72,6 @@ final class PlaywrightBy {
             default:
                 throw new IllegalArgumentException("Unsupported locator strategy '${matcher.group(1)}'")
         }
-    }
-
-    private static String cssEscape(String value) {
-        value.replaceAll('([^a-zA-Z0-9_-])', '\\\\$1')
     }
 
     private static String cssString(String value) {

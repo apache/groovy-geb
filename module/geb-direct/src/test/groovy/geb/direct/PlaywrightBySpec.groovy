@@ -39,6 +39,7 @@ class PlaywrightBySpec extends Specification {
         'numeric id'         | By.id('123')                    | '[id="123"]'
         'name'               | By.name('email')                | '[name="email"]'
         'class name'         | By.className('menu-item')       | '.menu-item'
+        'numeric class name' | By.className('123item')         | '[class~="123item"]'
         'tag name'           | By.tagName('button')            | 'button'
         'exact link text'    | By.linkText('Continue')         | 'a:text-is("Continue")'
         'partial link text'  | By.partialLinkText('Contin')    | 'a:has-text("Contin")'

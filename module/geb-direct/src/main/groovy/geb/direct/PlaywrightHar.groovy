@@ -25,6 +25,19 @@ class PlaywrightHar {
     PlaywrightHar(PlaywrightWebDriver driver) { this.driver = driver }
     void routeFromHAR(Path path) { driver.context.routeFromHAR(path) }
     void routeFromHAR(String path) { routeFromHAR(Path.of(path)) }
+
+    /**
+     * Removes all routes on the context, including HAR routing and any
+     * {@link PlaywrightNetwork#route} handlers. Playwright does not expose
+     * path-specific HAR unroute; use {@link #unrouteAll()} for clarity.
+     */
+    @Deprecated
     @SuppressWarnings('UnusedMethodParameter')
-    void unrouteFromHAR(Path path) { driver.context.unrouteAll() }
+    void unrouteFromHAR(Path path) {
+        unrouteAll()
+    }
+
+    void unrouteAll() {
+        driver.context.unrouteAll()
+    }
 }
