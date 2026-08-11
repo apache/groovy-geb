@@ -19,10 +19,12 @@
 package geb.buildadapter
 
 import geb.BuildAdapter
+import groovy.transform.CompileStatic
 
 /**
  * Loads values via system properties.
  */
+@CompileStatic
 class SystemPropertiesBuildAdapter implements BuildAdapter {
 
     static public final String BASE_URL_PROPERTY_NAME = "geb.build.baseUrl"

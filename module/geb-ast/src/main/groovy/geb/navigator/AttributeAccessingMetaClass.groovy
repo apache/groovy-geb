@@ -18,9 +18,12 @@
  */
 package geb.navigator
 
+import groovy.transform.CompileStatic
+
 /**
  * A delegating meta class implementation that intercepts field access using the .@ operator and sends it to getProperty("@$name")
  */
+@CompileStatic
 class AttributeAccessingMetaClass extends DelegatingMetaClass {
 
     AttributeAccessingMetaClass(MetaClass delegate) {

@@ -18,9 +18,12 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
+
 /**
  * Delegates to the backing reporter for each of the currently opened windows.
  */
+@CompileStatic
 class MultiWindowReporter implements Reporter {
 
     @Delegate

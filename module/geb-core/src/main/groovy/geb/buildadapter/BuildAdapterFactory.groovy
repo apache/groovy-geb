@@ -19,10 +19,12 @@
 package geb.buildadapter
 
 import geb.BuildAdapter
+import groovy.transform.CompileStatic
 
 /**
  * Loads the {@link BuildAdapter} implementation class to be used.
  */
+@CompileStatic
 class BuildAdapterFactory {
 
     /**
@@ -33,7 +35,7 @@ class BuildAdapterFactory {
     /**
      * The build adapter to use.
      * <p>
-     * If the system property {@code geb.build.adapter} is set, the class by that name is loaded, instatied with no args, and returned.
+     * If the system property {@code geb.build.adapter} is set, the class by that name is loaded, instantiated with no args, and returned.
      * Otherwise, an instance of {@link geb.buildadapter.SystemPropertiesBuildAdapter} will be returned.
      * <p>
      *
@@ -43,7 +45,7 @@ class BuildAdapterFactory {
     static BuildAdapter getBuildAdapter(ClassLoader classLoader) throws ClassNotFoundException {
         def className = System.getProperty(ADAPTER_PROPERTY_NAME)
         if (className) {
-            classLoader.loadClass(className).getConstructor().newInstance()
+            (BuildAdapter) classLoader.loadClass(className).getConstructor().newInstance()
         } else {
             new SystemPropertiesBuildAdapter()
         }

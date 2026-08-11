@@ -19,7 +19,9 @@
 package geb.js
 
 import geb.Initializable
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class UninitializedAlertAndConfirmSupport implements AlertAndConfirmSupport {
     private final Initializable initializable
 

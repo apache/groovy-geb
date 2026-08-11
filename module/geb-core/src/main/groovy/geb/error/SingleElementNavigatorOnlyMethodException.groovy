@@ -18,8 +18,11 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
 import java.lang.reflect.Method
 
+@CompileStatic
 class SingleElementNavigatorOnlyMethodException extends GebException {
 
     SingleElementNavigatorOnlyMethodException(Method singleElementMethod, int navigatorSize) {

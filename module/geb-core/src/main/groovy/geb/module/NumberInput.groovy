@@ -18,6 +18,9 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class NumberInput extends NumberLikeInput {
 
     final String inputType = "number"

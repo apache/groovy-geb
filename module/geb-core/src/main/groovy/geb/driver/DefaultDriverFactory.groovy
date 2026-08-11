@@ -18,9 +18,12 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class DefaultDriverFactory extends NameBasedDriverFactory {
 
     DefaultDriverFactory(ClassLoader classLoader) {
-        super(classLoader, DriverRegistry.knownDriverClassNamesInPreferenceOrder.join(NameBasedDriverFactory.DRIVER_SEPARATOR))
+        super(classLoader, DriverRegistry.knownDriverClassNamesInPreferenceOrder.join(DRIVER_SEPARATOR))
     }
 }

@@ -22,9 +22,11 @@ import geb.Initializable
 import geb.Page
 import geb.content.TemplateDerivedPageContent
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 
 import static groovy.lang.Closure.DELEGATE_FIRST
 
+@CompileStatic
 class UninitializedFrameSupport implements FrameSupport {
     private final Initializable initializable
 

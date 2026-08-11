@@ -19,9 +19,11 @@
 package geb.driver
 
 import com.google.common.collect.ImmutableMap
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
+@CompileStatic
 class LambdaTestDriverFactory extends CloudDriverFactory {
 
     public static final String LOCAL_IDENTIFIER_CAPABILITY = "LT:Options.tunnelName"
@@ -39,7 +41,11 @@ class LambdaTestDriverFactory extends CloudDriverFactory {
     }
 
     WebDriver create(String specification, String username, String password, String localId, Map<String, Object> capabilities = [:]) {
-        def mergedCapabilities = ImmutableMap.builder().putAll(capabilities).put(LOCAL_IDENTIFIER_CAPABILITY, localId).build()
+        def mergedCapabilities = ImmutableMap
+            .builder()
+            .putAll(capabilities)
+            .put(LOCAL_IDENTIFIER_CAPABILITY, localId)
+            .build() as Map<String, Object>
         create(specification, username, password, mergedCapabilities)
     }
 

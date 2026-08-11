@@ -21,9 +21,11 @@ package geb.content
 import geb.Initializable
 import geb.Module
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class UninitializedNavigableSupport implements Navigable {
 
     private final Initializable initializable

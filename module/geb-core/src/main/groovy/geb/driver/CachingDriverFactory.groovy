@@ -18,11 +18,13 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 
+@CompileStatic
 class CachingDriverFactory implements DriverFactory {
 
-    static private final CACHE = new SimpleCache<Cache<WebDriver>>()
+    static private final Cache<Cache<WebDriver>> CACHE = new SimpleCache<Cache<WebDriver>>()
 
     private final Cache<WebDriver> cache
     private final DriverFactory innerFactory
@@ -71,7 +73,7 @@ class CachingDriverFactory implements DriverFactory {
                 addShutdownHook {
                     try {
                         driver.quit()
-                    } catch (Throwable e) {
+                    } catch (Throwable ignore) {
                     }
                 }
             }

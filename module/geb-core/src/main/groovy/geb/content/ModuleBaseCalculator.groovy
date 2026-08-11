@@ -23,8 +23,10 @@ import geb.Module
 import geb.error.InvalidPageContent
 import geb.navigator.Navigator
 import geb.navigator.factory.NavigatorFactory
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver.TargetLocator
 
+@CompileStatic
 class ModuleBaseCalculator {
 
     static NavigatorFactory calculate(
@@ -32,13 +34,13 @@ class ModuleBaseCalculator {
             Map params = [:]
     ) {
         def moduleClass = module.getClass()
-        def moduleBaseDefinition = moduleClass.base
+        def moduleBaseDefinition = (Closure) moduleClass['base']
         if (!moduleBaseDefinition) {
             navigatorFactory
         } else {
             // Clone it because the same closure may be used
             // via through a subclass and have a different base
-            def moduleBaseDefinitionClone = moduleBaseDefinition.clone()
+            def moduleBaseDefinitionClone = (Closure) moduleBaseDefinition.clone()
             moduleBaseDefinitionClone.delegate = new ModuleBaseDefinitionDelegate(browser, module, navigatorFactory, targetLocator, params)
             moduleBaseDefinitionClone.resolveStrategy = Closure.DELEGATE_FIRST
             def moduleBase = moduleBaseDefinitionClone()
@@ -47,7 +49,7 @@ class ModuleBaseCalculator {
                 throw new InvalidPageContent("The static 'base' parameter of module class $moduleClass did not return a Navigator")
             }
 
-            navigatorFactory.relativeTo(moduleBase)
+            navigatorFactory.relativeTo((Navigator) moduleBase)
         }
     }
 

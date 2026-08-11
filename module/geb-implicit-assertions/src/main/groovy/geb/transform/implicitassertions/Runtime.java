@@ -20,11 +20,13 @@ package geb.transform.implicitassertions;
 
 import groovy.lang.MetaClass;
 import groovy.lang.MetaMethod;
+import groovy.transform.CompileStatic;
 import org.codehaus.groovy.runtime.InvokerHelper;
 
+@CompileStatic
 public abstract class Runtime {
 
-    private static ThreadLocal<Object> recordedValue = new ThreadLocal<>();
+    private static final ThreadLocal<Object> recordedValue = new ThreadLocal<>();
 
     @SuppressWarnings("UnusedDeclaration")
     public static boolean isVoidMethod(Object target, String method, Object... args) {
@@ -59,7 +61,7 @@ public abstract class Runtime {
     @SuppressWarnings("UnusedDeclaration")
     public static Object retrieveRecordedValue() {
         Object value = recordedValue.get();
-        recordedValue.set(null);
+        recordedValue.remove();
         return value;
     }
 

@@ -66,7 +66,7 @@ class PauseSpec extends GebSpecWithCallbackServer {
     @InheritConstructors
     private static class ThreadSafeScriptExecutionDriverConfigurationLoader extends ConfigurationLoader {
         @Override
-        protected createConf(ConfigObject rawConfig, GroovyClassLoader classLoader) {
+        protected Configuration createConf(ConfigObject rawConfig, GroovyClassLoader classLoader) {
             new ThreadSafeScriptExecutionDriverConfiguration(rawConfig, properties, createBuildAdapter(classLoader), classLoader)
         }
     }

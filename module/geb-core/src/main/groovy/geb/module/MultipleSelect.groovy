@@ -19,15 +19,17 @@
 package geb.module
 
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class MultipleSelect extends FormElement {
 
     List<String> getSelected() {
-        navigator.value()
+        navigator.value() as List<String>
     }
 
     List<String> getSelectedText() {
-        selected.collect { $("option", value: it) }*.text()
+        selected.collect { $('option', value: it) }*.text()
     }
 
     void setSelected(List<String> selectedTextOrValues) {

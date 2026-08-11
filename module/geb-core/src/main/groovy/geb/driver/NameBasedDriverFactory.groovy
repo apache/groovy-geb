@@ -18,9 +18,11 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebDriver
 import geb.error.UnableToLoadAnyDriversException
 
+@CompileStatic
 class NameBasedDriverFactory implements DriverFactory {
 
     public static final String DRIVER_SEPARATOR = ":"
@@ -36,7 +38,7 @@ class NameBasedDriverFactory implements DriverFactory {
     WebDriver getDriver() {
         def potentials = getPotentialDriverClassNames()
 
-        def driverClass
+        Class driverClass
         for (potential in potentials) {
             driverClass = attemptToLoadDriverClass(potential)
             if (driverClass) {
@@ -45,21 +47,21 @@ class NameBasedDriverFactory implements DriverFactory {
         }
 
         if (driverClass) {
-            driverClass.getConstructor().newInstance()
+            (WebDriver) driverClass.getConstructor().newInstance()
         } else {
             throw new UnableToLoadAnyDriversException(potentials as String[])
         }
     }
 
-    protected attemptToLoadDriverClass(String driverClassName) {
+    protected Class attemptToLoadDriverClass(String driverClassName) {
         try {
             classLoader.loadClass(driverClassName)
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignore) {
             null
         }
     }
 
-    protected getPotentialDriverClassNames() {
+    protected List<String> getPotentialDriverClassNames() {
         driverNames.split(DRIVER_SEPARATOR).collect {
             DriverRegistry.translateFromShortNameIfRequired(it)
         }

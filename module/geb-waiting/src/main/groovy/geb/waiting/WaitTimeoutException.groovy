@@ -19,6 +19,7 @@
 package geb.waiting
 
 import geb.error.GebAssertionError
+import groovy.transform.CompileStatic
 
 import static java.lang.System.lineSeparator
 
@@ -27,6 +28,7 @@ import static java.lang.System.lineSeparator
  *
  * The {@code cause} of the exception will be the exception thrown while waiting.
  */
+@CompileStatic
 class WaitTimeoutException extends GebAssertionError {
 
     final Object lastEvaluationValue

@@ -20,6 +20,7 @@ package geb.testng
 
 import geb.test.GebTestManager
 import geb.test.ManagedGebTest
+import groovy.transform.CompileStatic
 import org.testng.IClassListener
 import org.testng.ITestClass
 import org.testng.ITestContext
@@ -28,6 +29,7 @@ import org.testng.ITestResult
 
 import java.util.function.Consumer
 
+@CompileStatic
 class GebTestListener implements IClassListener, ITestListener {
 
     @Override

@@ -18,8 +18,10 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.support.Color
 
+@CompileStatic
 class ColorInput extends AbstractInput {
 
     final String inputType = 'color'

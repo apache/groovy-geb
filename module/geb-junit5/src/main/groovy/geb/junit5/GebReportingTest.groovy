@@ -21,8 +21,10 @@ package geb.junit5
 import geb.test.GebTestManager
 import geb.test.GebTestManagerBuilder
 import geb.transform.DynamicallyDispatchesToBrowser
+import groovy.transform.CompileStatic
 import org.junit.jupiter.api.extension.ExtendWith
 
+@CompileStatic
 @DynamicallyDispatchesToBrowser
 @ExtendWith(GebTestManagerExtension)
 class GebReportingTest {

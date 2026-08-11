@@ -20,9 +20,11 @@ package geb.content
 
 import geb.Module
 import geb.Page
+import groovy.transform.CompileStatic
 
 import java.beans.Introspector
 
+@CompileStatic
 class PageContentNames {
 
     private static final Set<String> NOT_ALLOWED_PAGE_NAMES = getNotAllowedContentNames(Page)

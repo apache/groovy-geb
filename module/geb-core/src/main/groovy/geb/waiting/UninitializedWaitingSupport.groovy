@@ -19,7 +19,9 @@
 package geb.waiting
 
 import geb.Initializable
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class UninitializedWaitingSupport implements WaitingSupport {
     private final Initializable initializable
 

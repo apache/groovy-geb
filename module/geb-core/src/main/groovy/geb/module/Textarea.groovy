@@ -19,7 +19,9 @@
 package geb.module
 
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class Textarea extends FormElement {
 
     void setText(String text) {

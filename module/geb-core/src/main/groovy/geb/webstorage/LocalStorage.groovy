@@ -19,7 +19,9 @@
 package geb.webstorage
 
 import geb.js.JavascriptInterface
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class LocalStorage implements WebStorage {
 
     private final JavascriptInterface js

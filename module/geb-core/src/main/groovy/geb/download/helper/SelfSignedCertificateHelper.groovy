@@ -18,9 +18,12 @@
  */
 package geb.download.helper
 
+import groovy.transform.CompileStatic
+
 import javax.net.ssl.*
 import java.security.KeyStore
 
+@CompileStatic
 class SelfSignedCertificateHelper {
     URL keystoreUrl
     String keystoreFilePassword

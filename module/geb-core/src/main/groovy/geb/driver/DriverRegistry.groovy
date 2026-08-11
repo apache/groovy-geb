@@ -19,7 +19,9 @@
 package geb.driver
 
 import geb.error.UnknownDriverShortNameException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class DriverRegistry {
 
     private static final Map<String, String> DRIVERS = [

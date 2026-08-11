@@ -18,9 +18,12 @@
  */
 package geb.js
 
+import geb.navigator.DefaultNavigator
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 import geb.navigator.Navigator
 
+@CompileStatic
 class JQueryAdapter {
 
     private final Navigator navigator
@@ -32,20 +35,20 @@ class JQueryAdapter {
     def methodMissing(String name, args) {
         def result = callJQueryMethod(name, args)
         if (result instanceof WebElement) {
-            navigator.browser.navigatorFactory.createFromWebElements(Collections.singletonList(result))
+            ((DefaultNavigator) navigator).browser.navigatorFactory.createFromWebElements(Collections.singletonList((WebElement) result))
         } else if (result instanceof List) {
-            navigator.browser.navigatorFactory.createFromWebElements(result)
+            ((DefaultNavigator) navigator).browser.navigatorFactory.createFromWebElements((List<WebElement>) result)
         } else {
             result
         }
     }
 
     private callJQueryMethod(String name, args) {
-        def browser = navigator.browser
+        def browser = ((DefaultNavigator) navigator).browser
         def elements = navigator.allElements()
 
         if (elements) {
-            browser.js.exec(*elements, "EOE", *args, """
+            browser.js.exec([elements, "EOE", args, """
                 var elements = new Array();
                 var callArgs = new Array();
                 var collectingElements = true;
@@ -65,7 +68,7 @@ class JQueryAdapter {
                 var o = jQuery(elements);
                 var r = o.${name}.apply(o, callArgs);
                 return (r instanceof jQuery) ? r.toArray() : r;
-            """)
+            """].flatten().toArray(new Object[0]))
         } else {
             null
         }

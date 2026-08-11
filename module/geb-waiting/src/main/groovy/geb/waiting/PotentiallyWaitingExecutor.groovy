@@ -18,6 +18,9 @@
  */
 package geb.waiting
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class PotentiallyWaitingExecutor {
 
     private final Wait wait

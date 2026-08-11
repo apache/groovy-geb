@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class UnableToSetElementException extends GebException {
     UnableToSetElementException(String element) {
         super("Unable to set the value of element $element as it is not a valid form element")

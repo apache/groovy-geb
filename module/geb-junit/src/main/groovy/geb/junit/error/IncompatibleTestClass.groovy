@@ -20,7 +20,9 @@ package geb.junit.error
 
 import geb.error.GebException
 import geb.test.GebTestManager
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class IncompatibleTestClass extends GebException {
 
     IncompatibleTestClass(Exception e) {

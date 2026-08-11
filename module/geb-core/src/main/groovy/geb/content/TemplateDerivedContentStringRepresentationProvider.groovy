@@ -18,6 +18,9 @@
  */
 package geb.content
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class TemplateDerivedContentStringRepresentationProvider implements StringRepresentationProvider {
 
     private final PageContentTemplate template

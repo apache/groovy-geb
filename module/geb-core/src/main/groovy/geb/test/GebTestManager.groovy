@@ -21,6 +21,7 @@ package geb.test
 import geb.Browser
 import geb.Configuration
 import geb.ConfigurationLoader
+import groovy.transform.CompileStatic
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
@@ -36,6 +37,7 @@ import static geb.report.ReporterSupport.toTestReportLabel
  * are called on the same thread, even if the thread executed some test inbetween.
  * There should also only be one instance for all tests of a class even if run in parallel.
  */
+@CompileStatic
 class GebTestManager {
 
     private final Map<Class<?>, AtomicInteger> testCounters = new ConcurrentHashMap<>()
@@ -47,9 +49,9 @@ class GebTestManager {
 
     protected final ThreadLocal<Browser> browser = new ThreadLocal<>()
     private final ThreadLocal<Configuration> configuration = ThreadLocal.withInitial { new ConfigurationLoader().conf }
-    private final ThreadLocal<Deque<Class<?>>> testClass = ThreadLocal.withInitial { new ArrayDeque() }
-    private final ThreadLocal<Deque<Integer>> perTestReportCounter = ThreadLocal.withInitial { new ArrayDeque() }
-    private final ThreadLocal<Deque<Integer>> testCounter = ThreadLocal.withInitial { new ArrayDeque() }
+    private final ThreadLocal<ArrayDeque<Class<?>>> testClass = ThreadLocal.withInitial { new ArrayDeque<Class<?>>() }
+    private final ThreadLocal<ArrayDeque<Integer>> perTestReportCounter = ThreadLocal.withInitial { new ArrayDeque<Integer>() }
+    private final ThreadLocal<ArrayDeque<Integer>> testCounter = ThreadLocal.withInitial { new ArrayDeque<Integer>() }
     private final ThreadLocal<String> currentTestName = new ThreadLocal<>()
 
     GebTestManager(
@@ -163,7 +165,7 @@ class GebTestManager {
 
     private Browser createBrowser() {
         def browser = browserCreator.get()
-        currentTestClass?.with(browserConfigurers.&get)?.accept(browser)
+        ((Consumer<Browser>) currentTestClass?.with(browserConfigurers.&get))?.accept(browser)
         browser
     }
 

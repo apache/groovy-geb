@@ -21,7 +21,9 @@ package geb.content
 import geb.Page
 import geb.TemplateOptionsConfiguration
 import geb.error.InvalidPageContent
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class PageContentTemplateParams {
 
     private static final String MAX = 'max'
@@ -94,7 +96,9 @@ class PageContentTemplateParams {
     }
 
     private void extractParams(Map<String, ?> params) {
-        def paramsToProcess = params == null ? Collections.emptyMap() : new HashMap<String, Object>(params)
+        def paramsToProcess = params == null ?
+            Collections.emptyMap() as Map<String, Object> :
+            new HashMap<String, Object>(params)
 
         cache = toBoolean(paramsToProcess, 'cache', config.cache)
 
@@ -133,20 +137,31 @@ class PageContentTemplateParams {
         }
     }
 
-    private void extractBounds(Map paramsToProcess) {
+    private void extractBounds(Map<String, ?> paramsToProcess) {
         if (paramsToProcess.containsKey(TIMES)) {
             throwIfOptionSpecifiedWithTimes(paramsToProcess, MAX)
             throwIfOptionSpecifiedWithTimes(paramsToProcess, MIN)
         }
-        if (paramsToProcess.containsKey(MIN) && paramsToProcess.containsKey(MAX) && paramsToProcess[MIN] > paramsToProcess[MAX]) {
+        if (paramsToProcess.containsKey(MIN) && paramsToProcess.containsKey(MAX) && ((Integer) paramsToProcess[MIN]) > ((Integer) paramsToProcess[MAX])) {
             throwInvalidContent('''contains 'max' option that is lower than the 'min' option''')
         }
         def times = paramsToProcess.remove(TIMES)
         def notRequired = paramsToProcess[REQUIRED] == false || (!paramsToProcess.containsKey(REQUIRED) && config.required.present && !config.required.get())
         def explicitlyRequired = paramsToProcess[REQUIRED]
         def defaultMin = notRequired ? 0 : (explicitlyRequired ? 1 : config.min.orElse(1))
-        def timesMin = times != null ? minTimes(times) : defaultMin
-        def timesMax = times != null ? maxTimes(times) : config.max.orElse(Integer.MAX_VALUE)
+        int timesMin = defaultMin
+        int timesMax = config.max.orElse(Integer.MAX_VALUE)
+        if (times != null) {
+            if (times instanceof Integer) {
+                timesMin = minTimes(times as Integer)
+                timesMax = maxTimes(times as Integer)
+            } else if (times instanceof IntRange) {
+                timesMin = minTimes(times as IntRange)
+                timesMax = maxTimes(times as IntRange)
+            } else {
+                throwInvalidTimesOption()
+            }
+        }
         max = toNonNegativeInt(paramsToProcess, MAX, timesMax)
         min = toNonNegativeInt(paramsToProcess, MIN, Math.min(max, timesMin))
     }
@@ -178,7 +193,7 @@ class PageContentTemplateParams {
 
     private Class<? extends Page> extractPage(Map<String, ?> params) {
         def pageParam = params.remove("page")
-        if (pageParam && (!(pageParam instanceof Class) || !Page.isAssignableFrom(pageParam))) {
+        if (pageParam && (!(pageParam instanceof Class) || !Page.isAssignableFrom((Class) pageParam))) {
             throwInvalidContent("contains 'page' content parameter that is not a class that extends Page: $pageParam")
         }
         pageParam as Class<? extends Page>
@@ -205,10 +220,10 @@ class PageContentTemplateParams {
 
     private int toNonNegativeInt(Map<String, ?> params, String key, int defaultValue) {
         def value = params.containsKey(key) ? params.remove(key) : defaultValue
-        if (!(value in Integer && value >= 0)) {
+        if (!(value in Integer && ((Integer) value) >= 0)) {
             throwInvalidContent("contains '$key' option that is not a non-negative integer")
         }
-        value
+        value as int
     }
 
     private int minTimes(int times) {

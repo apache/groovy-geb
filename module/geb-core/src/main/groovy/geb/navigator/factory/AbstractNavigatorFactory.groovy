@@ -21,11 +21,13 @@ package geb.navigator.factory
 import geb.Browser
 import geb.collection.FilteringIterable
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
 import jodd.util.collection.CompositeIterator
 import org.openqa.selenium.WebElement
 
 import java.util.function.Supplier
 
+@CompileStatic
 abstract class AbstractNavigatorFactory implements NavigatorFactory {
 
     private final Browser browser
@@ -47,7 +49,7 @@ abstract class AbstractNavigatorFactory implements NavigatorFactory {
     }
 
     Navigator createFromNavigators(Iterable<Navigator> navigators) {
-        def notNullNavigators = navigators.findAll { it != null }
+        def notNullNavigators = navigators.findAll() as List<Navigator>
         def elements = { new CompositeIterator(notNullNavigators*.elementIterator() as Iterator[]) } as Iterable<WebElement>
 
         createFromWebElements(elements)

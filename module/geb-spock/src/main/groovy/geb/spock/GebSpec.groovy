@@ -21,8 +21,10 @@ package geb.spock
 import geb.test.GebTestManager
 import geb.test.ManagedGebTest
 import geb.transform.DynamicallyDispatchesToBrowser
+import groovy.transform.CompileStatic
 import spock.lang.Specification
 
+@CompileStatic
 @DynamicallyDispatchesToBrowser
 class GebSpec extends Specification implements ManagedGebTest {
 

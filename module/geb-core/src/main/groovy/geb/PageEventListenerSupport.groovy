@@ -18,10 +18,13 @@
  */
 package geb
 
+import groovy.transform.CompileStatic
+
 /**
  * A No-op implementation of {@link geb.PageEventListener}.
  * Useful as a base class for listener implementations which only want to be notified of a subset of page events.
  */
+@CompileStatic
 class PageEventListenerSupport implements PageEventListener {
     @Override
     void beforeAtCheck(Browser browser, Page page) {

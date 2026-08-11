@@ -20,7 +20,10 @@ package geb.content
 
 import geb.Module
 import geb.navigator.Navigator
+import groovy.transform.CompileStatic
+import org.codehaus.groovy.runtime.InvokerHelper
 
+@CompileStatic
 class PageContentTemplateFactoryDelegate {
 
     private static final String MODULE_METHOD_NAME = "module"
@@ -37,11 +40,11 @@ class PageContentTemplateFactoryDelegate {
     }
 
     def methodMissing(String name, args) {
-        template.owner."$name"(*args)
+        InvokerHelper.invokeMethod(template.owner, name, args)
     }
 
     def propertyMissing(String name) {
-        template.owner."$name"
+        InvokerHelper.getProperty(template.owner, name)
     }
 
     def module(Map params, Class<? extends Module> moduleClass) {

@@ -19,7 +19,9 @@
 package geb.error
 
 import geb.content.PageContentTemplate
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class RequiredPageValueNotPresent extends GebAssertionError {
 
     final PageContentTemplate template

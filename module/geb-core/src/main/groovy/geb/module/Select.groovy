@@ -19,7 +19,9 @@
 package geb.module
 
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class Select extends FormElement {
 
     String getSelectedText() {

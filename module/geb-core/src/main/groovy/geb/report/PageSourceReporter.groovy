@@ -19,13 +19,15 @@
 package geb.report
 
 import geb.Browser
+import groovy.transform.CompileStatic
 
 /**
  * Writes the source content of the browser's current page as a html file.
  */
+@CompileStatic
 class PageSourceReporter extends ReporterSupport {
 
-    static public final NO_PAGE_SOURCE_SUBSTITUTE = "-- no page source --"
+    static public final String NO_PAGE_SOURCE_SUBSTITUTE = "-- no page source --"
 
     @Override
     void writeReport(ReportState reportState) {
@@ -34,15 +36,15 @@ class PageSourceReporter extends ReporterSupport {
         notifyListeners(reportState, [file])
     }
 
-    protected getReportFile(ReportState reportState) {
+    protected File getReportFile(ReportState reportState) {
         getFile(reportState.outputDir, reportState.label, getPageSourceFileExtension(reportState.browser))
     }
 
-    protected writePageSource(File file, Browser browser) {
+    protected void writePageSource(File file, Browser browser) {
         file.write(getPageSource(browser))
     }
 
-    protected getPageSource(Browser browser) {
+    protected String getPageSource(Browser browser) {
         browser.driver.pageSource ?: NO_PAGE_SOURCE_SUBSTITUTE
     }
 
@@ -50,7 +52,7 @@ class PageSourceReporter extends ReporterSupport {
      * Here to allow smarter calculation of the extension if necessary
      */
     @SuppressWarnings("UnusedMethodParameter")
-    protected getPageSourceFileExtension(Browser browser) {
+    protected String getPageSourceFileExtension(Browser browser) {
         "html"
     }
 

@@ -18,9 +18,12 @@
  */
 package geb.report
 
+import groovy.transform.CompileStatic
+
 /**
  * Delegates to one or more other reporters.
  */
+@CompileStatic
 class CompositeReporter implements Reporter {
 
     private final List<Reporter> reporters

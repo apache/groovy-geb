@@ -20,12 +20,14 @@ package geb.navigator
 
 import geb.error.InvalidCssSelectorException
 import geb.error.UnsupportedFilteringCssSelectorException
+import groovy.transform.CompileStatic
 import jodd.csselly.CSSelly
 import jodd.csselly.CSSellyException
 import jodd.csselly.CssSelector as JoddCssSelector
 import jodd.csselly.selector.AttributeSelector
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class CssSelector {
 
     private static final String CSS_SELECTOR_SPECIAL_CHARS_PATTERN = '[ !"#$%&\'\\(\\)*+,./:;<=>?@\\[\\]^`\\{|\\}~\\\\]'
@@ -75,7 +77,9 @@ class CssSelector {
     }
 
     private static boolean matchesAttributes(WebElement element, JoddCssSelector selector) {
-        List<AttributeSelector> attributeSelectors = (0..<selector.selectorsCount()).collect { selector.getSelector(it) }
+        def attributeSelectors = (0..<selector.selectorsCount()).collect { int index ->
+            (AttributeSelector) selector.getSelector(index)
+        }
         attributeSelectors.every { attributeSelector ->
             def attributeValue = element.getAttribute(attributeSelector.name)
 

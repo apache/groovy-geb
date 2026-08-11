@@ -21,7 +21,9 @@ package geb.content
 import geb.Browser
 import geb.error.InvalidPageContent
 import geb.navigator.factory.NavigatorFactory
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class PageContentTemplateBuilder {
 
     final Browser browser
@@ -50,7 +52,7 @@ class PageContentTemplateBuilder {
             throw new IllegalArgumentException("$startAt is not a subclass of $stopAt")
         }
 
-        def templatesDefinitions = []
+        List<Closure> templatesDefinitions = []
         def clazz = startAt
 
         while (clazz != stopAt) {
@@ -66,7 +68,8 @@ class PageContentTemplateBuilder {
                 if (!(templatesDefinition instanceof Closure)) {
                     throw new IllegalArgumentException("'$property' static property of class $clazz should be a Closure")
                 }
-                templatesDefinitions << templatesDefinition.clone()
+                def clone = (Closure) (templatesDefinition as Closure).clone()
+                templatesDefinitions << clone
             }
 
             clazz = clazz.superclass
@@ -79,41 +82,42 @@ class PageContentTemplateBuilder {
         container.unwrap()[name]
     }
 
-    def methodMissing(String name, args) {
+    def methodMissing(String name, def args) {
         def definition = null
-        def params = null
+        Map<String, ?> params = null
+        def argsList = args as List
 
         if (PageContentNames.isNotAllowed(container.unwrap(), name)) {
             throwInvalidContent(name, "uses a not allowed content name: '$name'. Please use another name.")
         }
 
-        if (args.size() == 0) {
+        if (argsList.size() == 0) {
             throwInvalidContent(name, "contains no definition")
-        } else if (args.size() == 1) {
-            if ((args[0] instanceof Map)) {
-                params = args[0]
+        } else if (argsList.size() == 1) {
+            if ((argsList[0] instanceof Map)) {
+                params = argsList[0] as Map<String, ?>
             } else {
-                definition = args[0]
+                definition = argsList[0]
             }
-        } else if (args.size() == 2) {
-            params = args[0]
-            definition = args[1]
+        } else if (argsList.size() == 2) {
+            params = argsList[0] as Map<String, ?>
+            definition = argsList[1]
         }
 
         if (params != null && !(params instanceof Map)) {
-            throwBadInvocationError(name, args)
+            throwBadInvocationError(name, argsList)
         }
         if (definition != null) {
             if (!(definition instanceof Closure)) {
-                throwBadInvocationError(name, args)
+                throwBadInvocationError(name, argsList)
             }
         } else {
             if (params?.aliases == null) {
-                throwBadInvocationError(name, args)
+                throwBadInvocationError(name, argsList)
             }
         }
 
-        def template = create(name, params, definition)
+        def template = create(name, params, definition as Closure)
         templates[name] = template
         template
     }
@@ -122,11 +126,11 @@ class PageContentTemplateBuilder {
         throw new InvalidPageContent(container.unwrap(), name, message)
     }
 
-    private throwBadInvocationError(name, args) {
+    private throwBadInvocationError(String name, List args) {
         throwInvalidContent(name, "is invalid, params must be either a Closure, or Map and Closure (args were: ${args*.class})")
     }
 
-    private PageContentTemplate create(name, params, definition) {
+    private PageContentTemplate create(String name, Map<String, ?> params, Closure definition) {
         def aliasedName = params?.aliases
         if (aliasedName) {
             if (!templates[aliasedName]) {

@@ -20,8 +20,6 @@ package geb.junit4
 
 import geb.Browser
 import geb.test.CallbackHttpServer
-import geb.test.GebTestManager
-import geb.test.GebTestManagerBuilder
 import geb.test.browsers.Chrome
 import geb.test.browsers.RequiresRealBrowser
 import org.junit.After
@@ -61,15 +59,6 @@ class AutoClearWebStorageSpec extends Specification {
 
 @Category(DoNotRunFromGradle)
 class WebStorageModifyingTest extends GebTest {
-
-    private final static GebTestManager TEST_MANAGER = new GebTestManagerBuilder()
-        .withBrowserCreator { new Browser() }
-        .build()
-
-    @Delegate(includes = ["getBrowser"])
-    static GebTestManager getTestManager() {
-        TEST_MANAGER
-    }
 
     def server = new CallbackHttpServer(browser.config)
 

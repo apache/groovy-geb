@@ -19,11 +19,13 @@
 
 package geb.transform.implicitassertions;
 
+import groovy.transform.CompileStatic;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.control.messages.SyntaxErrorMessage;
 import org.codehaus.groovy.syntax.SyntaxException;
 
+@CompileStatic
 public abstract class ImplicitAssertionsTransformationUtil {
 
     public static void reportError(ASTNode node, String message, SourceUnit sourceUnit) {

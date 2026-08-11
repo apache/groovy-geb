@@ -18,6 +18,9 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class UrlInput extends TextLikeInput {
 
     final String inputType = "url"

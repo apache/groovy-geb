@@ -19,10 +19,12 @@
 package geb.test
 
 import geb.Browser
+import groovy.transform.CompileStatic
 
 import java.util.function.Predicate
 import java.util.function.Supplier
 
+@CompileStatic
 class GebTestManagerBuilder {
 
     private Supplier<Browser> browserCreator

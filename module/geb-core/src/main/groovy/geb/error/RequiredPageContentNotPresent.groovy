@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class RequiredPageContentNotPresent extends GebAssertionError {
 
     final Object content

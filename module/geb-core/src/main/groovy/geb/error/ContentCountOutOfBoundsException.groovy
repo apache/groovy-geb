@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class ContentCountOutOfBoundsException extends GebException {
     ContentCountOutOfBoundsException(Object content, String boundText, String actual) {
         super("Page content '$content' should return a navigator with $boundText but has returned a navigator with $actual")

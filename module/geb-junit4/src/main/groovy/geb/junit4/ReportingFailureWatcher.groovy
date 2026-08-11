@@ -19,9 +19,11 @@
 package geb.junit4
 
 import geb.Browser
+import groovy.transform.CompileStatic
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+@CompileStatic
 class ReportingFailureWatcher extends TestWatcher {
 
     private final GebReportingTest test
@@ -35,8 +37,10 @@ class ReportingFailureWatcher extends TestWatcher {
     @Override
     protected void failed(Throwable e, Description description) {
         if (browser?.config?.reportOnTestFailureOnly) {
-            browser.report(test.effectiveReportLabel('failure'))
+            // TODO: The effectiveReportLabel method was removed from GebReportingTest in
+            //  https://github.com/apache/groovy-geb/commit/9da4360db04f846558dd720e4cd878f5296eaf42#diff-9adad49cb4ab674064363bcce3d7a0bfb3777b98a6964b58932965c2b8842848
+            // browser.report(test.effectiveReportLabel('failure'))
+            browser.report(test.getClass().simpleName + "." + description.methodName + "-failure")
         }
     }
-
 }

@@ -21,8 +21,10 @@ package geb.js
 import geb.Configuration
 import geb.waiting.PotentiallyWaitingExecutor
 import geb.waiting.Wait
+import groovy.transform.CompileStatic
 import org.openqa.selenium.NoSuchWindowException
 
+@CompileStatic
 class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
 
     private final static UNKNOWN = -1
@@ -37,7 +39,7 @@ class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
     def withAlert(Map params = [:], Closure actions) {
         def message = captureAlert(actions, params.wait)
         if (message == null) {
-            throw new AssertionError("no browser alert() was raised")
+            throw new AssertionError((Object) "no browser alert() was raised")
         } else if (message == UNKNOWN) {
             true
         } else {
@@ -48,7 +50,7 @@ class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
     void withNoAlert(Closure actions) {
         def message = captureAlert(actions)
         if (message != null && message != UNKNOWN) {
-            throw new AssertionError("an unexpected browser alert() was raised (message: $message)")
+            throw new AssertionError((Object) "an unexpected browser alert() was raised (message: $message)")
         }
     }
 
@@ -59,7 +61,7 @@ class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
     def withConfirm(Map params = [:], boolean ok = true, Closure actions) {
         def message = captureConfirm(ok, actions, params.wait)
         if (message == null) {
-            throw new AssertionError("no browser confirm() was raised")
+            throw new AssertionError((Object) "no browser confirm() was raised")
         } else if (message == UNKNOWN) {
             true
         } else {
@@ -70,7 +72,7 @@ class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
     void withNoConfirm(Closure actions) {
         def message = captureConfirm(false, actions)
         if (message != null && message != UNKNOWN) {
-            throw new AssertionError("an unexpected browser confirm() was raised (message: $message)")
+            throw new AssertionError((Object) "an unexpected browser confirm() was raised (message: $message)")
         }
     }
 
@@ -82,7 +84,7 @@ class DefaultAlertAndConfirmSupport implements AlertAndConfirmSupport {
             throw new IllegalStateException("javascriptInterfaceFactory did not return a JavascriptInterface")
         }
 
-        js
+        js as JavascriptInterface
     }
 
     private getInstallGebStorageScript() {

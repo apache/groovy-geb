@@ -19,7 +19,9 @@
 package geb.module
 
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 
+@CompileStatic
 abstract class AbstractInput extends FormElement {
 
     abstract String getInputType()

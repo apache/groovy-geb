@@ -18,10 +18,12 @@
  */
 package geb.transform.implicitassertions
 
+import groovy.transform.CompileStatic
 import org.codehaus.groovy.ast.expr.ConstantExpression
 import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.MapExpression
 
+@CompileStatic
 class ConfigurableByNameImplicitlyAssertedMethodCallMatcher implements ImplicitlyAssertedMethodCallMatcher {
 
     private final ByNameImplicitlyAssertedMethodCallMatcher byNameMatcher
@@ -37,10 +39,10 @@ class ConfigurableByNameImplicitlyAssertedMethodCallMatcher implements Implicitl
 
     private boolean implicitAssertionsDisabled(List<Expression> expressions) {
         if (expressions) {
-            if (expressions.first() in MapExpression) {
+            if (expressions.first() instanceof MapExpression) {
                 def mapExpression = expressions.first() as MapExpression
                 mapExpression.mapEntryExpressions.any {
-                    if (it.keyExpression in ConstantExpression && it.valueExpression in ConstantExpression) {
+                    if (it.keyExpression instanceof ConstantExpression && it.valueExpression instanceof ConstantExpression) {
                         def key = it.keyExpression as ConstantExpression
                         def value = it.valueExpression as ConstantExpression
 

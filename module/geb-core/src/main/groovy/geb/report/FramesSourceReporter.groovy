@@ -18,9 +18,13 @@
  */
 package geb.report
 
+import geb.navigator.Locator
+import groovy.transform.CompileStatic
+
 /**
  * Writes the source content of each top level frame of the browser's current page as a html files.
  */
+@CompileStatic
 class FramesSourceReporter implements Reporter {
 
     @Delegate
@@ -28,7 +32,7 @@ class FramesSourceReporter implements Reporter {
 
     @Override
     void writeReport(ReportState reportState) {
-        def browser = reportState.browser
+        def browser = reportState.browser as Locator
         def frames = browser.find('frame') + browser.find('iframe')
         (0..<frames.size()).each { index ->
             reportFrameSource(reportState, index)

@@ -18,10 +18,12 @@
  */
 package geb.driver
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.Capabilities
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
+@CompileStatic
 abstract class CloudDriverFactory {
 
     protected static final String VENDOR_PREFIX_DELIMETER = "."
@@ -50,10 +52,13 @@ abstract class CloudDriverFactory {
         }
         capabilities.putAll(additionalCapabilities)
 
-        def desiredCapabilities = remoteDriverOperations.softLoadRemoteDriverClass('DesiredCapabilities').getConstructor().newInstance()
+        def desiredCapabilities = remoteDriverOperations
+            .softLoadRemoteDriverClass('DesiredCapabilities')
+            .getConstructor()
+            .newInstance() as DesiredCapabilities
         configureCapabilities(username, key, desiredCapabilities)
         capabilities.each { capability, value ->
-            desiredCapabilities.setCapability(capability, value)
+            desiredCapabilities.setCapability(capability as String, value)
         }
 
         remoteWebDriverClass.getConstructor(URL, Capabilities).newInstance(url, makeW3cCompliant(desiredCapabilities))
@@ -69,8 +74,8 @@ abstract class CloudDriverFactory {
 
         sourceCapabilities.each { key, value ->
             if (key.contains(VENDOR_PREFIX_DELIMETER)) {
-                def (prefix, newKey) = key.tokenize(VENDOR_PREFIX_DELIMETER)
-                compliantCapabilities[prefix][newKey] = value
+                def tuple = key.tokenize(VENDOR_PREFIX_DELIMETER)
+                compliantCapabilities[tuple[0]][tuple[1]] = value
             } else {
                 compliantCapabilities[key] = value
             }

@@ -18,12 +18,15 @@
  */
 package geb.url
 
+import groovy.transform.CompileStatic
+
 import static com.google.common.net.UrlEscapers.urlFormParameterEscaper
 
 /**
  * A marker class wrapping around a {@code String} that can be used with {@link geb.Page#to(java.util.Map, geb.url.UrlFragment, java.lang.Object)} for navigating to page urls that contain a fragment
  * identifier.
  */
+@CompileStatic
 class UrlFragment {
 
     private final String fragment

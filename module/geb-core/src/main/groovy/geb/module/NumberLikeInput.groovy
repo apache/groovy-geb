@@ -18,6 +18,9 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 abstract class NumberLikeInput extends AbstractInput {
 
     void setNumber(Number number) {

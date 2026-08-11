@@ -20,6 +20,7 @@ package geb
 
 import geb.buildadapter.BuildAdapterFactory
 import geb.error.UnableToLoadException
+import groovy.transform.CompileStatic
 
 /**
  * Manages the process of creating {@link geb.Configuration} objects, which control the runtime behaviour of Geb.
@@ -35,6 +36,7 @@ import geb.error.UnableToLoadException
  * @see geb.Configuration
  * @see geb.Browser
  */
+@CompileStatic
 class ConfigurationLoader {
 
     final String environment
@@ -200,10 +202,10 @@ class ConfigurationLoader {
     }
 
     protected Class tryToLoadClass(String className, ClassLoader loader) {
-        def loaded
+        Class loaded = null
         try {
             loaded = loader.loadClass(className)
-        } catch (ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException ignored) {
             // just return null if the class could not be found
         }
         loaded
@@ -288,7 +290,7 @@ class ConfigurationLoader {
     }
 
     protected ConfigObject loadRawConfig(ConfigSlurper slurper, URL source) {
-        def configClass
+        Class configClass
         try {
             configClass = slurper.classLoader.parseClass(source.text)
             loadRawConfig(slurper, configClass)
@@ -332,7 +334,7 @@ class ConfigurationLoader {
      *
      * @see geb.Configuration#Configuration(groovy.util.ConfigObject, java.util.Properties, geb.BuildAdapter, java.lang.ClassLoader)
      */
-    protected createConf(ConfigObject rawConfig, GroovyClassLoader classLoader) {
+    protected Configuration createConf(ConfigObject rawConfig, GroovyClassLoader classLoader) {
         new Configuration(rawConfig, properties, createBuildAdapter(classLoader), classLoader)
     }
 

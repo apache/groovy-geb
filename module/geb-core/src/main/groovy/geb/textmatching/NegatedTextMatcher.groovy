@@ -18,6 +18,9 @@
  */
 package geb.textmatching
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class NegatedTextMatcher implements TextMatcher {
 
     final TextMatcher matcher

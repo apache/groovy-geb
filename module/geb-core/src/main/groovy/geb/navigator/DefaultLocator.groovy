@@ -18,8 +18,10 @@
  */
 package geb.navigator
 
+import groovy.transform.CompileStatic
 import org.openqa.selenium.By
 
+@CompileStatic
 class DefaultLocator implements Locator {
 
     @Delegate

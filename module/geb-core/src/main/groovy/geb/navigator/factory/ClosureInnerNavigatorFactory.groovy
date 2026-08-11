@@ -20,8 +20,10 @@ package geb.navigator.factory
 
 import geb.navigator.Navigator
 import geb.Browser
+import groovy.transform.CompileStatic
 import org.openqa.selenium.WebElement
 
+@CompileStatic
 class ClosureInnerNavigatorFactory implements InnerNavigatorFactory {
 
     private final Closure<Navigator> closure

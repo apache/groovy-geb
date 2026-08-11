@@ -19,7 +19,9 @@
 package geb.report
 
 import geb.Browser
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class ReportState {
 
     final Browser browser

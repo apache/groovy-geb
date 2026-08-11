@@ -18,8 +18,10 @@
  */
 package geb
 
+import groovy.transform.CompileStatic
 import groovy.transform.builder.Builder
 
+@CompileStatic
 class WithNewWindowConfiguration {
 
     final Optional<Boolean> close

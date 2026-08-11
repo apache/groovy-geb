@@ -18,11 +18,14 @@
  */
 package geb.waiting
 
+import groovy.transform.CompileStatic
+
 /**
  * A wrapper that is always falsey when evaluated and holds a Throwable that was returned from last closure evaluation in a waitFor() call.
  *
  * @see geb.waiting.WaitingSupport
  */
+@CompileStatic
 class UnknownWaitForEvaluationResult {
     /** holds a Throwable that was returned from last closure evaluation in a waitFor() call */
     Throwable thrown

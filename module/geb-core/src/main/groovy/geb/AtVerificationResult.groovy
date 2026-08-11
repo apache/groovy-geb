@@ -18,8 +18,11 @@
  */
 package geb
 
+import groovy.transform.CompileStatic
+
 import static org.codehaus.groovy.runtime.StackTraceUtils.deepSanitize
 
+@CompileStatic
 class AtVerificationResult {
     private final AssertionError errorThrown
     private final boolean atResult

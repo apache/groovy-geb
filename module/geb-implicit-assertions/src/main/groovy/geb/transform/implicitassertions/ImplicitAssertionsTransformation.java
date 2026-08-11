@@ -18,6 +18,7 @@
  */
 package geb.transform.implicitassertions;
 
+import groovy.transform.CompileStatic;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.control.CompilePhase;
@@ -25,6 +26,7 @@ import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.transform.ASTTransformation;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
 
+@CompileStatic
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
 public class ImplicitAssertionsTransformation implements ASTTransformation {
     public void visit(ASTNode[] astNodes, SourceUnit sourceUnit) {

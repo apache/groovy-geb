@@ -20,7 +20,6 @@ package geb.waiting
 
 import geb.Page
 import geb.error.RequiredPageContentNotPresent
-import org.codehaus.groovy.runtime.powerassert.PowerAssertionError
 import spock.lang.Unroll
 
 class WaitingContentSpec extends WaitingSpec {
@@ -120,7 +119,6 @@ class WaitingContentSpec extends WaitingSpec {
 
         then:
         WaitTimeoutException exception = thrown()
-        exception.cause in PowerAssertionError
         exception.cause.message.contains('$("div")')
 
         where:

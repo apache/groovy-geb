@@ -43,7 +43,9 @@ import geb.textmatching.TextMatchingSupport
 import geb.waiting.DefaultWaitingSupport
 import geb.waiting.UninitializedWaitingSupport
 import geb.waiting.WaitingSupport
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class Module implements Navigator, PageContentContainer, Initializable, WaitingSupport {
 
     static base = null
@@ -118,7 +120,7 @@ class Module implements Navigator, PageContentContainer, Initializable, WaitingS
     }
 
     boolean asBoolean() {
-        getInitializedNavigator().asBoolean()
+        getInitializedNavigator()
     }
 
     @Override
@@ -169,6 +171,9 @@ class Module implements Navigator, PageContentContainer, Initializable, WaitingS
     boolean equals(Object obj) {
         if (obj instanceof Navigator) {
             allElements() == obj.allElements()
+        }
+        else {
+            super.equals(obj)
         }
     }
 

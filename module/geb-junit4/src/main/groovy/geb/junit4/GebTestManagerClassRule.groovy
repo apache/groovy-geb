@@ -18,12 +18,14 @@
  */
 package geb.junit4
 
+import groovy.transform.CompileStatic
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 import static geb.junit.GebTestUtil.getTestManager
 
+@CompileStatic
 class GebTestManagerClassRule implements TestRule {
 
     @Override

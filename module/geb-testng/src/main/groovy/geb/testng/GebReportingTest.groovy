@@ -22,7 +22,9 @@ import geb.test.GebTestManager
 import geb.test.GebTestManagerBuilder
 import geb.test.ManagedGebTest
 import geb.transform.DynamicallyDispatchesToBrowser
+import groovy.transform.CompileStatic
 
+@CompileStatic
 @DynamicallyDispatchesToBrowser
 class GebReportingTest implements ManagedGebTest {
 

@@ -19,7 +19,9 @@
 package geb.spock
 
 import geb.test.GebTestManager
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class GebReportingSpec extends GebSpec {
 
     private final static GebTestManager TEST_MANAGER = new SpockGebTestManagerBuilder()

@@ -18,6 +18,9 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class UnknownDriverShortNameException extends GebException {
 
     UnknownDriverShortNameException(String unknown, String[] knowns) {

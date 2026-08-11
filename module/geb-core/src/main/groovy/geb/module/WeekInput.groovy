@@ -18,8 +18,10 @@
  */
 package geb.module
 
+import groovy.transform.CompileStatic
 import org.threeten.extra.YearWeek
 
+@CompileStatic
 class WeekInput extends AbstractInput {
 
     final String inputType = "week"

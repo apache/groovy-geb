@@ -18,9 +18,12 @@
  */
 package geb.error
 
+import groovy.transform.CompileStatic
+
 /**
  * @deprecated As of 8.0.1, this class is no longer used.
  */
+@CompileStatic
 @Deprecated(since = '8.0.1', forRemoval = true)
 class WebStorageNotSupportedException extends GebException {
     WebStorageNotSupportedException() {

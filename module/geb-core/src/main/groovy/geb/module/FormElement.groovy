@@ -20,6 +20,7 @@ package geb.module
 
 import geb.Module
 import geb.error.InvalidModuleBaseException
+import groovy.transform.CompileStatic
 
 /**
  * A module that can be used to access common properties of form elements. Serves as a base for more specialised modules modeling form elements.
@@ -27,9 +28,10 @@ import geb.error.InvalidModuleBaseException
  * An attempt to initialize this module with a base other than a {@code button}, {@code input}, {@code option}, {@code select} or {@code textarea} will result in an
  * {@link geb.error.InvalidModuleBaseException}.
  */
+@CompileStatic
 class FormElement extends Module {
 
-    private final static SUPPORTED_TAGS = ['button', 'input', 'option', 'select', 'textarea']
+    private final static List<String> SUPPORTED_TAGS = ['button', 'input', 'option', 'select', 'textarea']
     private final static String DISABLED = "disabled"
     private final static String READONLY = "readonly"
     private final static String TRUE = "true"

@@ -23,10 +23,13 @@ import geb.CompositePageEventListener
 import geb.Page
 import geb.PageEventListener
 import geb.PageEventListenerSupport
+import org.codehaus.groovy.runtime.InvokerHelper
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class BindingUpdater {
 
-    static public final FORWARDED_BROWSER_METHODS = [
+    static public final List<String> FORWARDED_BROWSER_METHODS = [
             "getPage", "getDriver", "getAugmentedDriver", "getNavigatorFactory", "getConfig", "getSessionStorage", "getLocalStorage", "getBaseUrl", "getCurrentUrl", "getJs",
             "getAvailableWindows", "getCurrentWindow", "getReportGroupDir",
             "setDriver", "setBaseUrl",
@@ -41,7 +44,7 @@ class BindingUpdater {
             "close", "quit"
     ].asImmutable()
 
-    static public final FORWARDED_PAGE_METHODS = [
+    static public final List<String> FORWARDED_PAGE_METHODS = [
             "init",
             /$/, "find",
             "module",
@@ -75,9 +78,9 @@ class BindingUpdater {
      * Populates the binding and starts the updater updating the binding as necessary.
      */
     BindingUpdater initialize() {
-        binding.browser = browser
-        binding.js = browser.js
-        binding.config = browser.config
+        binding.setVariable('browser', browser)
+        binding.setVariable('js', browser.js)
+        binding.setVariable('config', browser.config)
 
         FORWARDED_BROWSER_METHODS.each {
             binding.setVariable(it, new InvocationForwarding(it, browser))
@@ -107,6 +110,7 @@ class BindingUpdater {
         this
     }
 
+    @CompileStatic
     private class BindingUpdatingPageEventListener extends PageEventListenerSupport {
         @Override
         void pageWillChange(Browser browser, Page oldPage, Page newPage) {
@@ -124,6 +128,7 @@ class BindingUpdater {
         }
     }
 
+    @CompileStatic
     private static class InvocationForwarding extends Closure {
         private final String methodName
         private final Object target
@@ -135,8 +140,8 @@ class BindingUpdater {
             target = theTarget
         }
 
-        protected doCall(Object[] args) {
-            target."$methodName"(*args)
+        protected Object doCall(Object[] args) {
+            InvokerHelper.invokeMethod(target, methodName, args)
         }
     }
 

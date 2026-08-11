@@ -18,8 +18,11 @@
  */
 package geb.textmatching
 
+import groovy.transform.CompileStatic
+
 import java.util.regex.Pattern
 
+@CompileStatic
 class PatternTextMatcher implements TextMatcher {
     final Pattern pattern
 
