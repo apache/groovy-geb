@@ -27,7 +27,7 @@ testcontainers = "1.21.3"
 htmlUnitDriver = "4.13.0"
 spock = "2.3-groovy-4.0"
 threeTen = "1.8.0"
-micronaut = "3.10.1" # Micronaut 3 is still supports Java 11
+micronaut = "3.10.1" # Micronaut 3 still supports Java 11
 
 [libraries]
 asciidoctorj = 'org.asciidoctor:asciidoctorj:2.5.13'
