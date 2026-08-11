@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew --no-daemon rat checkLicense depUp
         timeout-minutes: 60
       - name: Upload reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-reports
