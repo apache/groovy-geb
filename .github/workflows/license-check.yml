@@ -35,6 +35,8 @@ jobs:
           java-version: 21
           check-latest: true
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-provider: basic
       - name: Check licenses and dependencies
         run: ./gradlew --no-daemon rat checkLicense depUp
         timeout-minutes: 60

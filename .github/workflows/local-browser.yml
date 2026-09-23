@@ -39,6 +39,8 @@ jobs:
           java-version: ${{ matrix.java }}
           check-latest: true
       - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          cache-provider: basic
       - name: Build and run tests
         run: ./gradlew --no-daemon --max-workers 4 --parallel -p module -Pci localChromeTest -x rat # rat in separate workflow for fast feedback
         timeout-minutes: 60
