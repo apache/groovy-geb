@@ -1,0 +1,86 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+plugins {
+    id 'geb.api-module'
+    id 'jacoco'
+}
+
+dependencies {
+    api project(':module:geb-core')
+    api libs.playwright
+    api libs.selenium.api
+
+    testImplementation project(':internal:test-support-spock')
+    testImplementation libs.jetty.server
+    testImplementation libs.jetty.servlet
+    testRuntimeOnly libs.junit.platform.launcher
+}
+
+def playwrightTestsSkipped = {
+    System.getProperty('geb.direct.playwright.skip') == 'true' ||
+        System.getenv('PLAYWRIGHT_SKIP') == 'true'
+}
+
+tasks.named('test') {
+    // Allow CI or local runs without Playwright browser binaries:
+    //   -Dgeb.direct.playwright.skip=true  or  PLAYWRIGHT_SKIP=true
+    def skip = System.getProperty('geb.direct.playwright.skip')
+    if (skip != null) {
+        systemProperty 'geb.direct.playwright.skip', skip
+    }
+}
+
+tasks.register('installPlaywrightBrowsers', JavaExec) {
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.microsoft.playwright.CLI'
+    args = ['install', 'chromium']
+}
+
+jacocoTestReport {
+    dependsOn tasks.named('test')
+
+    reports {
+        html.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn tasks.named('jacocoTestReport')
+    // Browserless skip mode exercises almost no adapter code; do not fail check there.
+    onlyIf { !playwrightTestsSkipped() }
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.85
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('jacocoTestCoverageVerification')
+}
+
+publishing.publications.main.pom {
+    name = 'Geb Direct (Playwright)'
+    description = 'Optional Playwright-backed driver for Geb. Provides BrowserContext isolation, locator auto-waiting, tracing, video, and network interception while preserving the existing Geb DSL and default Selenium WebDriver path.'
+}
