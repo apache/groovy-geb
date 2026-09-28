@@ -68,6 +68,11 @@ class RetryFixturesExtension implements IAnnotationDrivenExtension<RetryFixtures
                 Class<? extends Annotation> annotationType() {
                     Retry
                 }
+
+                @Override
+                Class<? extends Throwable>[] skipRetryExceptions() {
+                    return null
+                }
             })
         )
     }

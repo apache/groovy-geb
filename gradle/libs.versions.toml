@@ -25,7 +25,7 @@ selenium = "4.49.0"
 remote-driver = "3.141.59"
 testcontainers = "1.21.3"
 htmlUnitDriver = "4.13.0"
-spock = "2.3-groovy-4.0"
+spock = "2.4-groovy-4.0"
 threeTen = "1.8.0"
 micronaut = "3.10.1" # Micronaut 3 still supports Java 11
 
