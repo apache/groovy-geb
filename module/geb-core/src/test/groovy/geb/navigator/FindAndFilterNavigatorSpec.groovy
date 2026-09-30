@@ -168,8 +168,8 @@ class FindAndFilterNavigatorSpec extends GebSpecWithCallbackServer {
     def "find by visibility"() {
         given:
         html {
-            p(class: "displayed")
-            p(class: "hidden", style: "display: none;")
+            p(class: "displayed", "Some visible content")
+            p(class: "hidden", style: "display: none;", "Some hidden content")
         }
 
         expect:
