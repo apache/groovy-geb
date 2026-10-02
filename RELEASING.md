@@ -64,9 +64,7 @@ limitations under the License.
 4. Commit with message 'Begin version «version»'
 5. Push (make sure you push the tag as well).
 6. Merge the release branch back into the master branch.
-6. Bump Geb versions in example projects:
-    * [geb-example-gradle](https://github.com/geb/geb-example-gradle)
-    * [geb-example-maven](https://github.com/geb/geb-example-maven)
+6. Bump the Geb version in `geb-examples/geb-gradle/geb-gradle.gradle`, then verify the example with its CI workflow.
 7. Update issues and milestones in GitHub tracker:
     * Find all unresolved issues in the tracker that have the fix version set to the recently released version and bulk edit them to have the fix version set to the next version.
     * Find the recently released milestone, change the version number if it's different from the one that was released and close it.
