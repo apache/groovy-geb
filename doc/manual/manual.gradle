@@ -103,6 +103,7 @@ asciidoctorj {
         'groovy-version'          : libs.versions.groovy.get(),
         'sauce-connect-version'   : libs.versions.sauceConnect.get(),
         'home-page'               : 'groovy.apache.org/geb/',
+        'geb-examples-url'        : 'https://github.com/apache/groovy-geb/tree/master/geb-examples',
         docinfo1                  : true,
         linkcss                   : true,
         stylesheet                : 'css/style.css',

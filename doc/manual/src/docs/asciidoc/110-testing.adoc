@@ -129,7 +129,9 @@ The following table illustrates the specific JARs and class names for various te
 
 The following projects can be used as starting references:
 
-* link:https://github.com/geb/geb-example-gradle[geb-example-gradle]
+* link:{geb-examples-url}/geb-gradle[geb-gradle] - Spock tests in a Gradle build
+* link:{geb-examples-url}/geb-junit5[geb-junit5] - JUnit 5 tests in a Gradle build
+* link:{geb-examples-url}/geb-maven[geb-maven] - Spock tests in a Maven build
 
 [[cucumber-jvm]]
 == Cucumber (Cucumber-JVM)

@@ -83,7 +83,7 @@ tasks.test {
 
 There is a Gradle example project available.
 
-* link:https://github.com/geb/geb-example-gradle[geb-example-gradle]
+* link:{geb-examples-url}/geb-gradle[geb-gradle]
 
 == Maven
 
@@ -159,4 +159,4 @@ Below is a valid `pom.xml` file for working with Geb for testing (with Spock).
 
 There is a Maven example project available.
 
-* link:https://github.com/geb/geb-example-maven[geb-example-maven]
+* link:{geb-examples-url}/geb-maven[geb-maven]
