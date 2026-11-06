@@ -252,10 +252,11 @@ class PlaywrightWebDriverCoreSpec extends Specification {
         driver = PlaywrightSpecSupport.driver()
         driver.get(PlaywrightSpecSupport.url(server))
         def input = driver.findElement(By.cssSelector('#name'))
+        def metaKey = System.getProperty('os.name').toLowerCase().contains('mac') ? Keys.META : Keys.CONTROL
 
         when:
         input.sendKeys('hello')
-        input.sendKeys(Keys.chord(Keys.CONTROL, 'a'))
+        input.sendKeys(Keys.chord(metaKey, 'a'))
         input.sendKeys(Keys.BACK_SPACE)
         input.sendKeys('Geb')
 
