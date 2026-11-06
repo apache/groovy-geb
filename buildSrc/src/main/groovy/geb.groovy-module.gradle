@@ -26,8 +26,15 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(21)
     }
+    // Built with JDK 21, but shipped as Java 11 bytecode against the Java 11 API
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 11
 }
 
 configurations {
@@ -52,6 +59,7 @@ codenarcTasks.configureEach {
 tasks.withType(GroovyCompile).configureEach {
     groovyOptions.forkOptions.memoryMaximumSize = '256m'
     groovyOptions.parameters = true
+    options.release = 11
 }
 
 tasks.withType(Test).configureEach {
