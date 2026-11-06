@@ -28,7 +28,7 @@ testcontainers = "1.21.4"
 htmlUnitDriver = "4.13.0"
 spock = "2.4-groovy-4.0"
 threeTen = "1.8.0"
-micronaut = "3.10.1" # Micronaut 3 still supports Java 11
+micronaut = "4.10.23"
 
 [libraries]
 asciidoctorj = 'org.asciidoctor:asciidoctorj:2.5.13'
@@ -36,7 +36,6 @@ cglib = 'cglib:cglib:2.2'
 codenarcGroovy4 = 'org.codenarc:CodeNarc:3.6.0-groovy-4.0'
 codenarc = 'org.codenarc:CodeNarc:2.2.0'
 commons-fileupload = 'commons-fileupload:commons-fileupload:1.5'
-gebSpockGroovy25 = 'org.gebish:geb-spock:4.0'
 grolifant = 'org.ysb33r.gradle:grolifant80:4.0.0'
 groovy-bom = { module = 'org.apache.groovy:groovy-bom', version.ref = 'groovy' }
 groovy25 = 'org.codehaus.groovy:groovy-all:2.5.23'
@@ -50,10 +49,11 @@ jsoup = 'org.jsoup:jsoup:1.19.1'
 junit-platform-launcher = 'org.junit.platform:junit-platform-launcher:1.12.0'
 junit-platform-testkit = 'org.junit.platform:junit-platform-testkit:1.12.0'
 junit4 = { module = 'junit:junit', version.ref = 'junit4' }
-micronaut-bom = { module = 'io.micronaut:micronaut-bom', version.ref = 'micronaut' }
+micronaut-bom = { module = 'io.micronaut.platform:micronaut-platform', version.ref = 'micronaut' }
 micronaut-inject-groovy = { module = 'io.micronaut:micronaut-inject-groovy' }
 micronaut-runtime-groovy = { module = 'io.micronaut.groovy:micronaut-runtime-groovy' }
 micronaut-http-client = { module = 'io.micronaut:micronaut-http-client' }
+micronaut-jackson-databind = { module = 'io.micronaut.serde:micronaut-serde-jackson' }
 micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
 logback-classic = { module = "ch.qos.logback:logback-classic" }
 

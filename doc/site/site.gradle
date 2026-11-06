@@ -24,6 +24,14 @@ plugins {
     id "geb.spock-2-module"
     id 'org.ajoberstar.grgit' version '5.3.0' // to publish website to asf-git branch
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+tasks.withType(JavaCompile).configureEach { options.release = 17 }
+tasks.withType(GroovyCompile).configureEach { options.release = 17 }
+
 repositories {
     mavenCentral()
 }
@@ -43,9 +51,9 @@ manuals {
 }
 
 dependencies {
-    testImplementation libs.spockCoreGroovy25
     testImplementation libs.jsoup
-    testImplementation libs.gebSpockGroovy25
+    testImplementation project(':module:geb-spock')
+    testRuntimeOnly libs.junit.platform.launcher
     testImplementation libs.htmlUnitDriver
     currentManual project(path: ":doc:manual", configuration: "manual")
     testImplementation(platform(libs.micronaut.bom))
@@ -53,6 +61,7 @@ dependencies {
     testImplementation(libs.micronaut.runtime.groovy)
     testImplementation(libs.micronaut.http.client)
     testImplementation(libs.micronaut.http.server.netty)
+    testImplementation(libs.micronaut.jackson.databind)
     testImplementation(libs.logback.classic)
 }
 
