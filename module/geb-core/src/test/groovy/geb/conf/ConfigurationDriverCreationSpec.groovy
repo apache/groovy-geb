@@ -22,6 +22,7 @@ import geb.Configuration
 import geb.driver.DriverCreationException
 import geb.error.UnableToLoadAnyDriversException
 import geb.error.UnknownDriverShortNameException
+import groovy.transform.CompileStatic
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import spock.lang.Issue
 import spock.lang.Shared
@@ -39,14 +40,7 @@ class ConfigurationDriverCreationSpec extends Specification {
 
     def setupSpec() {
         // We have to suppress the ie driver on the classpath
-        classLoader = new ClassLoader(getClass().classLoader) {
-            @Override
-            protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-                name.startsWith('org.openqa.selenium.ie.') ?
-                findClass(name) :
-                super.loadClass(name, resolve)
-            }
-        }
+        classLoader = new IeSuppressingClassLoader(getClass().classLoader)
 
         originalContextClassLoader = Thread.currentThread().contextClassLoader
         Thread.currentThread().contextClassLoader = classLoader
@@ -188,3 +182,13 @@ class ConfigurationDriverCreationSpec extends Specification {
         thrown(DriverCreationException)
     }
 }
+
+ @CompileStatic
+ class IeSuppressingClassLoader extends ClassLoader {
+     IeSuppressingClassLoader(ClassLoader parent) { super(parent) }
+
+     @Override
+     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+         name.startsWith('org.openqa.selenium.ie.') ? findClass(name) : super.loadClass(name, resolve)
+     }
+ }
