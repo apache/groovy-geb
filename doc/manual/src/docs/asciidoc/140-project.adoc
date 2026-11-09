@@ -104,7 +104,34 @@ mailto:geb-dev-unsubscribe@groovy.apache.org[Unsubscribe]
 
 This page lists the more important changes between versions of Geb.
 
-=== {geb-version}
+=== 8.1.0
+
+==== 🚀 New features
+* Add the `geb-testcontainers` module for running browsers in containers managed by Testcontainers, with annotation-driven configuration and `ContainerGebSpec` base class.
+* Add the experimental `geb-playwright` module providing a Playwright-backed `WebDriver` adapter.
+* Add Gradle, Maven and JUnit 5 Geb example projects and update the documentation links to them.
+* Add a Geb/Spock AI agent skill.
+
+==== 🐛 Fixes
+* Fix a parallel execution regression by reverting an earlier driver caching change and removing driver cache clearing from `@BeforeAll`/`@AfterAll` methods in the JUnit 5 integration.
+* Fix the find by visibility feature test for Selenium 4.45.
+
+==== 📚 Documentation
+* Add a warning about static nested classes and magic browser dispatching.
+* Update the release guide to use the verification scripts.
+
+==== ⚙️ Dependencies
+* Update Groovy to 4.0.33.
+* Update Selenium to 4.49.0.
+* Update Spock to 2.4-groovy-4.0.
+* Update Testcontainers to 1.21.4 so that Docker-based tests run on Docker 29.
+* Update the Gradle wrapper (build dependency).
+* Update Gradle plugin IDs (build dependency).
+
+==== 🔄️ Changes
+* Allow the MIT Zero Attribution license in the license audit (used by the example projects).
+* Pin GitHub Actions to commit SHAs, group dependabot updates, add CodeQL scanning and remove the remaining CircleCI jobs (build and project infrastructure).
+* Build using Java 21, compile to Java 11 for backward-compatibility.
 
 === 8.0.1
 
