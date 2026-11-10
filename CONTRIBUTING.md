@@ -24,7 +24,10 @@ To become a committer, you need to sign the [Apache Individual Contributor Agree
 
 ## Build Environment
 
-Running the build requires a Java 11+ environment and the tests require a [compatible container runtime](https://java.testcontainers.org/supported_docker_environment/) to be installed, such as:
+Running the build requires a Java 21+ environment. The [Foojay Toolchains Plugin](https://github.com/gradle/foojay-toolchains) helps resolve Java 21 to ease environment setup.
+We still compile to Java 11 compatible bytecode for consumers.
+
+The tests require a [compatible container runtime](https://java.testcontainers.org/supported_docker_environment/) to be installed, such as:
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [OrbStack](https://orbstack.dev/) - macOS only
