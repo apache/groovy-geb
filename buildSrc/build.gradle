@@ -20,6 +20,7 @@
 plugins {
 	id 'groovy'
 	id 'groovy-gradle-plugin'
+	id 'org.gradlex.reproducible-builds' version '1.0'
 }
 
 java {
