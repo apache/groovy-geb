@@ -22,30 +22,13 @@ import geb.Browser
 import geb.Configuration
 import geb.ConfigurationLoader
 import geb.spock.GebReportingSpec
-import geb.spock.RetryFixtures
 import geb.spock.SpockGebTestManagerBuilder
 import geb.transform.DynamicallyDispatchesToBrowser
-import groovy.transform.InheritConstructors
-import org.openqa.selenium.TimeoutException
-import org.openqa.selenium.WebDriverException
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
-import org.spockframework.runtime.extension.builtin.RetryConditionContext
-import spock.lang.Retry
 
-import java.util.function.Predicate
 import java.util.function.Supplier
 
-import static spock.lang.Retry.Mode.SETUP_FEATURE_CLEANUP
-
 @DynamicallyDispatchesToBrowser
-// Work around https://github.com/SeleniumHQ/selenium/issues/9528
-@Retry(
-    mode = SETUP_FEATURE_CLEANUP,
-    condition = GebSpec.RetryCondition
-)
-@RetryFixtures(
-    condition = GebSpec.RetryCondition
-)
 class GebSpec extends GebReportingSpec {
 
     private static final GebTestManager TEST_MANAGER = managerBuilder()
@@ -71,36 +54,5 @@ class GebSpec extends GebReportingSpec {
     protected static GebTestManagerBuilder managerBuilder() {
         new SpockGebTestManagerBuilder()
             .withReportingEnabled(true)
-    }
-
-    @InheritConstructors
-    static class RetryCondition extends Closure<Boolean> {
-        boolean doCall() {
-            def failure = (delegate as RetryConditionContext).failure
-
-            isCausedByTimeout(failure) || isCausedByEmptyResponse(failure)
-        }
-
-        protected boolean isCausedByTimeout(Throwable throwable) {
-            anyCauseMatches(throwable) { it instanceof TimeoutException }
-        }
-
-        protected boolean isCausedByEmptyResponse(Throwable throwable) {
-            anyCauseMatches(throwable) {
-                it instanceof WebDriverException &&
-                    it.message.startsWith("Expected to read a START_MAP but instead have: END.")
-            }
-        }
-
-        private boolean anyCauseMatches(Throwable rootThrowable, Predicate<Throwable> predicate) {
-            def causeRecurringPredicate = new Predicate<Throwable>() {
-                @Override
-                boolean test(Throwable throwable) {
-                    predicate.test(throwable) || (throwable.cause && test(throwable.cause))
-                }
-            }
-
-            causeRecurringPredicate.test(rootThrowable)
-        }
     }
 }
